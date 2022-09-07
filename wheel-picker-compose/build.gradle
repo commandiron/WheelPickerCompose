@@ -26,6 +26,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += [
+                "-Xopt-in=dev.chrisbanes.snapper.ExperimentalSnapperApi",
+        ]
     }
     buildFeatures {
         compose true

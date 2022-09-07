@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import java.text.DateFormatSymbols
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -38,14 +39,15 @@ fun WheelDatePicker(
     )
     val selectedDayOfMonth = remember { mutableStateOf(0)}
 
-    val monthTexts = listOf(
-        "January", "February", "March", "April", "May", "June", "July", "August",
-        "September", "October", "November", "December"
-    )
+    val monthTexts: List<String> = if(size.width < 250.dp){
+        DateFormatSymbols().shortMonths.toList()
+    }else{
+        DateFormatSymbols().months.toList()
+    }
     val selectedMonth = remember { mutableStateOf(0)}
 
-    val yearRange = 100
     var yearTexts = listOf<String>()
+    val yearRange = 100
     for(i in 0 until (yearRange * 2) + 1){
         yearTexts = yearTexts + (localDateNow.year - yearRange + i).toString()
     }
