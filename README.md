@@ -54,7 +54,7 @@ WheelDateTimePicker(
 </td>
 <td>  
     
-<img src="art/spinwheel_2.gif" width="256" height="256">
+<img src="https://user-images.githubusercontent.com/50905347/189139818-59f470d0-be88-48e7-9fbe-31c9e5b45c5f.gif" width="256" height="256">
     
 </td>
 </tr>
