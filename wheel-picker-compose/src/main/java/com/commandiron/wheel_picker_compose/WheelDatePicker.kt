@@ -3,6 +3,7 @@ package com.commandiron.wheel_picker_compose
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -35,7 +36,7 @@ fun WheelDatePicker(
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished : (snappedDate: LocalDate?) -> Unit
+    onScrollFinished : (snappedDate: LocalDate?) -> Unit = {}
 ) {
     val localDateNow = LocalDate.now()
 

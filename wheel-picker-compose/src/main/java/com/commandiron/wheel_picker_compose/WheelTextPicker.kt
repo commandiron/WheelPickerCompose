@@ -24,7 +24,7 @@ fun WheelTextPicker(
     selectorEnabled: Boolean = true,
     selectorShape: Shape = RoundedCornerShape(0.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-    onScrollFinished : (snappedIndex: Int) -> Unit
+    onScrollFinished : (snappedIndex: Int) -> Unit = {}
 ) {
     WheelPicker(
         modifier = modifier,
