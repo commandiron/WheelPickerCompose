@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
 android {
@@ -43,4 +44,18 @@ dependencies {
     implementation "androidx.compose.material3:material3:1.0.0-alpha15"
 
     implementation "dev.chrisbanes.snapper:snapper:0.3.0"
+}
+
+afterEvaluate {
+    publishing{
+        publications {
+            release(MavenPublication){
+                from components.release
+
+                groupId = 'com.github.commandiron'
+                artifactId = 'wheel-picker-compose'
+                version = '1.0'
+            }
+        }
+    }
 }
