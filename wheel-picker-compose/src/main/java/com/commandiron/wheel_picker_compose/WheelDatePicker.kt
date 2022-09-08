@@ -33,10 +33,14 @@ fun WheelDatePicker(
 ) {
     val localDateNow = LocalDate.now()
 
-    val dayTexts = listOf(
-        "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17",
-        "18","19","20","21","22","23","24","25","26","27","28","29","30","31"
-    )
+    val dayTexts = remember {
+        mutableStateOf(
+            listOf(
+                "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17",
+                "18","19","20","21","22","23","24","25","26","27","28","29","30","31"
+            )
+        )
+    }
     val selectedDayOfMonth = remember { mutableStateOf(0)}
 
     val monthTexts: List<String> = if(size.width < 250.dp){
@@ -64,10 +68,10 @@ fun WheelDatePicker(
         Row {
             WheelTextPicker(
                 size = DpSize(size.width / 3, size.height),
-                texts = dayTexts,
+                texts = dayTexts.value,
                 selectedIndex = localDateNow.dayOfMonth - 1,
                 onScrollFinished = { selectedIndex ->
-                    selectedDayOfMonth.value = dayTexts[selectedIndex].toInt()
+                    selectedDayOfMonth.value = dayTexts.value[selectedIndex].toInt()
                     try {
                         onScrollFinished(
                             LocalDate.of(
@@ -89,6 +93,7 @@ fun WheelDatePicker(
                 selectedIndex = localDateNow.month.value - 1,
                 onScrollFinished = { selectedIndex ->
                     selectedMonth.value = selectedIndex + 1
+                    dayTexts.value = calculateDayTexts(selectedMonth.value, selectedYear.value)
                     try {
                         onScrollFinished(
                             LocalDate.of(
@@ -110,6 +115,7 @@ fun WheelDatePicker(
                 selectedIndex = yearRange,
                 onScrollFinished = { selectedIndex ->
                     selectedYear.value = yearTexts[selectedIndex].toInt()
+                    dayTexts.value = calculateDayTexts(selectedMonth.value, selectedYear.value)
                     try {
                         onScrollFinished(
                             LocalDate.of(
@@ -126,5 +132,32 @@ fun WheelDatePicker(
                 selectorEnabled = false
             )
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun calculateDayTexts(month: Int, year: Int): List<String> {
+
+    val isLeapYear = LocalDate.of(year, month, 1).isLeapYear
+
+    val month31day = (1..31).toList().map { it.toString() }
+    val month30day = (1..30).toList().map { it.toString() }
+    val month29day = (1..29).toList().map { it.toString() }
+    val month28day = (1..28).toList().map { it.toString() }
+
+    return when(month){
+        1 -> { month31day }
+        2 -> { if(isLeapYear) month29day else month28day }
+        3 -> { month31day }
+        4 -> { month30day }
+        5 -> { month31day }
+        6 -> { month30day }
+        7 -> { month31day }
+        8 -> { month31day }
+        9 -> { month30day }
+        10 -> { month31day }
+        11 -> { month30day }
+        12 -> { month31day }
+        else -> { emptyList() }
     }
 }

@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     contentAlignment = Alignment.Center
                 ) {
                     WheelDatePicker { snappedDate ->
-                        println(snappedDate)
+//                        println(snappedDate)
                     }
                 }
             }

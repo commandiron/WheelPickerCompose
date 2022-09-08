@@ -33,7 +33,7 @@ fun WheelPicker(
 
     val layoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
     val snappedIndex = remember { mutableStateOf(selectedIndex)}
-    LaunchedEffect(lazyListState.isScrollInProgress) {
+    LaunchedEffect(lazyListState.isScrollInProgress, count) {
         if (!lazyListState.isScrollInProgress) {
             val snappedItem = layoutInfo.currentItem
             snappedItem?.let {  snapperLayoutItemInfo ->
@@ -46,7 +46,6 @@ fun WheelPicker(
             }
         }
     }
-
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
