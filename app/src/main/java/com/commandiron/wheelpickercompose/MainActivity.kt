@@ -12,10 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.commandiron.wheel_picker_compose.WheelDatePicker
-import com.commandiron.wheel_picker_compose.WheelPicker
-import com.commandiron.wheel_picker_compose.WheelTextPicker
-import com.commandiron.wheel_picker_compose.WheelTimePicker
+import com.commandiron.wheel_picker_compose.*
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
 import java.time.LocalDateTime
 
@@ -30,12 +27,17 @@ class MainActivity : ComponentActivity() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
+                    WheelDateTimePicker { snappedDate, snappedTime ->
+                        println(snappedDate)
+                        println(snappedTime)
+                    }
+                    Spacer(modifier = Modifier.height(32.dp))
                     WheelDatePicker { snappedDate ->
 //                        println(snappedDate)
                     }
                     Spacer(modifier = Modifier.height(32.dp))
                     WheelTimePicker { snappedTime ->
-                        println(snappedTime)
+//                        println(snappedTime)
                     }
                 }
             }

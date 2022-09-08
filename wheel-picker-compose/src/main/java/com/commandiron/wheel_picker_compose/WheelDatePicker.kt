@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import java.text.DateFormatSymbols
@@ -26,6 +28,9 @@ import java.time.LocalDate
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
     size: DpSize = DpSize(256.dp, 128.dp),
+    textStyle: TextStyle = MaterialTheme.typography.titleMedium,
+    textColor: Color = LocalContentColor.current,
+    selectorEnabled: Boolean = true,
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
@@ -51,17 +56,22 @@ fun WheelDatePicker(
     val selectedYear = remember { mutableStateOf(0)}
 
     Box(modifier = modifier, contentAlignment = Alignment.Center){
-        Surface(
-            modifier = Modifier
-                .size(size.width, size.height / 3),
-            shape = selectorShape,
-            color = selectorColor,
-            border = selectorBorder
-        ) {}
+        if(selectorEnabled){
+            Surface(
+                modifier = Modifier
+                    .size(size.width, size.height / 3),
+                shape = selectorShape,
+                color = selectorColor,
+                border = selectorBorder
+            ) {}
+        }
         Row {
             WheelTextPicker(
                 size = DpSize(size.width / 3, size.height),
                 texts = dayTexts.value,
+                textStyle = textStyle,
+                textColor = textColor,
+                selectorEnabled = false,
                 selectedIndex = localDateNow.dayOfMonth - 1,
                 onScrollFinished = { selectedIndex ->
                     selectedDayOfMonth.value = dayTexts.value[selectedIndex].toInt()
@@ -77,12 +87,14 @@ fun WheelDatePicker(
                         e.printStackTrace()
                         onScrollFinished(null)
                     }
-                },
-                selectorEnabled = false
+                }
             )
             WheelTextPicker(
                 size = DpSize(size.width / 3, size.height),
                 texts = monthTexts,
+                textStyle = textStyle,
+                textColor = textColor,
+                selectorEnabled = false,
                 selectedIndex = localDateNow.month.value - 1,
                 onScrollFinished = { selectedIndex ->
                     selectedMonth.value = selectedIndex + 1
@@ -99,12 +111,14 @@ fun WheelDatePicker(
                         e.printStackTrace()
                         onScrollFinished(null)
                     }
-                },
-                selectorEnabled = false
+                }
             )
             WheelTextPicker(
                 size = DpSize(size.width / 3, size.height),
                 texts = yearTexts,
+                textStyle = textStyle,
+                textColor = textColor,
+                selectorEnabled = false,
                 selectedIndex = yearRange,
                 onScrollFinished = { selectedIndex ->
                     selectedYear.value = yearTexts[selectedIndex].toInt()
@@ -121,8 +135,7 @@ fun WheelDatePicker(
                         e.printStackTrace()
                         onScrollFinished(null)
                     }
-                },
-                selectorEnabled = false
+                }
             )
         }
     }
