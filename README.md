@@ -27,5 +27,7 @@ dependencies {
 
 ## Usage
 ```kotlin  
-
+WheelDateTimePicker { snappedDate, snappedTime -> }
+WheelDatePicker { snappedDate -> }
+WheelTimePicker { snappedTime -> }
 ```
