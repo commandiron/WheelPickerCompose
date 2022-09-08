@@ -36,25 +36,26 @@ dependencies {
 ## Features
 
 <table>
-    <tr>
-        <td>
+<tr>
+<td>
             
-            ```kotlin  
-            WheelDateTimePicker(
-                size = DpSize(200.dp, 100.dp),
-                textStyle = MaterialTheme.typography.titleSmall,
-                textColor = Color(0xFFffc300),
-                infiniteLoopEnabled = true,
-                selectorEnabled = true,
-                selectorShape = RoundedCornerShape(0.dp),
-                selectorColor = Color(0xFFf1faee).copy(alpha = 0.2f),
-                selectorBorder = BorderStroke(2.dp, Color(0xFFf1faee))
-            ) { snappedDate, snappedTime -> }
-            ```
-            
-        </td>
-        <td>  
-            <img src="art/spinwheel_2.gif" width="256" height="256">
-        </td>
-    </tr>
+```kotlin  
+WheelDateTimePicker(
+    size = DpSize(200.dp, 100.dp),
+    textStyle = MaterialTheme.typography.titleSmall,
+    textColor = Color(0xFFffc300),
+    infiniteLoopEnabled = true,
+    selectorEnabled = true,
+    selectorShape = RoundedCornerShape(0.dp),
+    selectorColor = Color(0xFFf1faee).copy(alpha = 0.2f),
+    selectorBorder = BorderStroke(2.dp, Color(0xFFf1faee))
+) { snappedDate, snappedTime -> }
+```
+</td>
+<td>  
+    
+<img src="art/spinwheel_2.gif" width="256" height="256">
+    
+</td>
+</tr>
 </table>
