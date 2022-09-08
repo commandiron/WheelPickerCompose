@@ -1,5 +1,7 @@
 # WheelPickerCompose [![](https://jitpack.io/v/commandiron/WheelPickerCompose.svg)](https://jitpack.io/#commandiron/WheelPickerCompose)
 
+Add Wheel Picker in Android Jetpack Compose.
+
 ## Usage
 |Picker|Usage|
 |------|-----|
@@ -29,7 +31,7 @@ dependencyResolutionManagement {
 3. Add dependency
 ```groovy
 dependencies {
-        implementation 'com.github.commandiron:WheelPickerCompose:1.0'
+        implementation 'com.github.commandiron:WheelPickerCompose:1.0.1'
 }
 ```
 
