@@ -1,6 +1,6 @@
 # WheelPickerCompose [![](https://jitpack.io/v/commandiron/WheelPickerCompose.svg)](https://jitpack.io/#commandiron/WheelPickerCompose)
 
-Add Bubble Navigation Bar in Android Jetpack Compose.
+Add Wheel Picker in Android Jetpack Compose.
 
 ## Usage
 |Picker|Usage|
