@@ -30,6 +30,7 @@ fun WheelDatePicker(
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
+    infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = true,
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
@@ -71,6 +72,7 @@ fun WheelDatePicker(
                 texts = dayTexts.value,
                 textStyle = textStyle,
                 textColor = textColor,
+                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 selectedIndex = localDateNow.dayOfMonth - 1,
                 onScrollFinished = { selectedIndex ->
@@ -94,6 +96,7 @@ fun WheelDatePicker(
                 texts = monthTexts,
                 textStyle = textStyle,
                 textColor = textColor,
+                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 selectedIndex = localDateNow.month.value - 1,
                 onScrollFinished = { selectedIndex ->
@@ -118,6 +121,7 @@ fun WheelDatePicker(
                 texts = yearTexts,
                 textStyle = textStyle,
                 textColor = textColor,
+                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 selectedIndex = yearRange,
                 onScrollFinished = { selectedIndex ->

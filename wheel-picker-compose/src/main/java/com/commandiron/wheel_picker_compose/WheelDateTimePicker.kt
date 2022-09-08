@@ -31,6 +31,7 @@ fun WheelDateTimePicker(
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
+    infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = true,
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
@@ -54,6 +55,7 @@ fun WheelDateTimePicker(
                 size = DpSize(size.width * 2 / 3, size.height),
                 textStyle = textStyle,
                 textColor = textColor,
+                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 onScrollFinished = {
                     localDate.value = it
@@ -64,6 +66,7 @@ fun WheelDateTimePicker(
                 size = DpSize(size.width / 3, size.height),
                 textStyle = textStyle,
                 textColor = textColor,
+                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 onScrollFinished = {
                     localTime.value = it

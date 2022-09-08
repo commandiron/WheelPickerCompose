@@ -29,6 +29,7 @@ fun WheelTimePicker(
     size: DpSize = DpSize(128.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
+    infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = true,
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
@@ -67,6 +68,7 @@ fun WheelTimePicker(
                 texts = hourTexts,
                 textStyle = textStyle,
                 textColor = textColor,
+                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectedIndex = localTimeNow.hour,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
@@ -89,6 +91,7 @@ fun WheelTimePicker(
                 texts = minuteTexts,
                 textStyle = textStyle,
                 textColor = textColor,
+                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectedIndex = localTimeNow.minute,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
