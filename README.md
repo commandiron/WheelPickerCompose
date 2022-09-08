@@ -1,4 +1,4 @@
-# WheelPickerCompose
+# WheelPickerCompose [![](https://jitpack.io/v/commandiron/WheelPickerCompose.svg)](https://jitpack.io/#commandiron/WheelPickerCompose)
 
 ## How it looks
 
