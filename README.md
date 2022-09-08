@@ -30,4 +30,5 @@ dependencies {
 WheelDateTimePicker { snappedDate, snappedTime -> }
 WheelDatePicker { snappedDate -> }
 WheelTimePicker { snappedTime -> }
+WheelTimePicker { snappedTime -> }
 ```
