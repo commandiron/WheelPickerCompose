@@ -4,6 +4,7 @@
 |Picker|Usage|
 |------|-----|
 |<img src="https://user-images.githubusercontent.com/50905347/189122534-72e2140f-e5cf-414c-897d-36e6876555a1.gif" width="256" height="256">|```WheelDateTimePicker { snappedDate, snappedTime -> }```|
+|<img src="https://user-images.githubusercontent.com/50905347/189122534-72e2140f-e5cf-414c-897d-36e6876555a1.gif" width="256" height="256">|```WheelDatePicker { snappedDate -> }```|
 
 ## Setup
 1. Open the file `settings.gradle` (it looks like that)
@@ -30,7 +31,6 @@ dependencies {
 
 ## Features
 ```kotlin  
-WheelDatePicker { snappedDate -> }
 WheelTimePicker { snappedTime -> }
 WheelTextPicker(texts = listOf("Test 1", "Test 2", "Test 3")) { snappedTime -> }
 WheelPicker(count = 3) { index, snappedIndex -> }
