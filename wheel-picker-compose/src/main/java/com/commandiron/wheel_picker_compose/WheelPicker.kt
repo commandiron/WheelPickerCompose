@@ -1,5 +1,6 @@
 package com.commandiron.wheel_picker_compose
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -24,6 +25,7 @@ fun WheelPicker(
     selectorEnabled: Boolean = false,
     selectorShape: Shape = RoundedCornerShape(0.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+    selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
     onScrollFinished : (snappedIndex: Int) -> Unit = {},
     content: @Composable BoxScope.(index: Int, snappedIndex: Int) -> Unit
 ) {
@@ -60,7 +62,8 @@ fun WheelPicker(
                 modifier = Modifier
                     .size(size.width, size.height / 3),
                 shape = selectorShape,
-                color = selectorColor
+                color = selectorColor,
+                border = selectorBorder
             ) {}
         }
         LazyColumn(

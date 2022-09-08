@@ -1,5 +1,6 @@
 package com.commandiron.wheel_picker_compose
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -22,8 +23,9 @@ fun WheelTextPicker(
     textColor: Color = LocalContentColor.current,
     infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = true,
-    selectorShape: Shape = RoundedCornerShape(0.dp),
+    selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+    selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
     onScrollFinished : (snappedIndex: Int) -> Unit = {}
 ) {
     WheelPicker(
@@ -35,6 +37,7 @@ fun WheelTextPicker(
         selectorEnabled = selectorEnabled,
         selectorShape = selectorShape,
         selectorColor = selectorColor,
+        selectorBorder = selectorBorder,
         onScrollFinished = onScrollFinished
     ){ index, snappedIndex ->
         Text(

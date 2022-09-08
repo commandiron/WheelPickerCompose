@@ -5,14 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.*
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
 
@@ -31,15 +28,14 @@ class MainActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Center
                     ) {
                         WheelDateTimePicker { snappedDate, snappedTime -> }
-                        WheelDatePicker { snappedDate -> }
-                        WheelTimePicker { snappedTime -> }
-                        WheelTextPicker(texts = listOf("Test 1", "Test 2", "Test 3"))
-                        WheelPicker(count = 6) { index, snappedIndex ->
-                            Card(Modifier.size(128.dp).padding(8.dp)) {}
-                        }
+//                        WheelDatePicker { snappedDate -> }
+//                        WheelTimePicker { snappedTime -> }
+//                        WheelTextPicker(texts = (1..6).map { it.toString() })
+//                        WheelPicker(count = 6) { index, snappedIndex ->
+//                            Card(Modifier.size(128.dp).padding(8.dp)) {}
+//                        }
                     }
                 }
-
             }
         }
     }
