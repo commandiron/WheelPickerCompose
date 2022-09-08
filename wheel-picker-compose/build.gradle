@@ -54,7 +54,7 @@ afterEvaluate {
 
                 groupId = 'com.github.commandiron'
                 artifactId = 'wheel-picker-compose'
-                version = '1.0'
+                version = '1.0.1'
             }
         }
     }
