@@ -28,6 +28,9 @@ dependencies {
 ```
 
 ## Usage
+|Picker|Usage|
+|------|-----|
+|<img src="https://user-images.githubusercontent.com/50905347/189122534-72e2140f-e5cf-414c-897d-36e6876555a1.gif" width="256" height="256">|```WheelDateTimePicker()```|
 ```kotlin  
 WheelDateTimePicker { snappedDate, snappedTime -> }
 WheelDatePicker { snappedDate -> }
