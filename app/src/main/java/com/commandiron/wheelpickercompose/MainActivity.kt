@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.WheelDatePicker
 import com.commandiron.wheel_picker_compose.WheelPicker
 import com.commandiron.wheel_picker_compose.WheelTextPicker
+import com.commandiron.wheel_picker_compose.WheelTimePicker
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
 import java.time.LocalDateTime
 
@@ -24,12 +25,17 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WheelPickerComposeTheme {
-                Box(
+                Column(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     WheelDatePicker { snappedDate ->
 //                        println(snappedDate)
+                    }
+                    Spacer(modifier = Modifier.height(32.dp))
+                    WheelTimePicker { snappedTime ->
+                        println(snappedTime)
                     }
                 }
             }

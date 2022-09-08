@@ -33,14 +33,7 @@ fun WheelDatePicker(
 ) {
     val localDateNow = LocalDate.now()
 
-    val dayTexts = remember {
-        mutableStateOf(
-            listOf(
-                "1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17",
-                "18","19","20","21","22","23","24","25","26","27","28","29","30","31"
-            )
-        )
-    }
+    val dayTexts = remember { mutableStateOf((1..31).toList().map { it.toString() }) }
     val selectedDayOfMonth = remember { mutableStateOf(0)}
 
     val monthTexts: List<String> = if(size.width < 250.dp){
