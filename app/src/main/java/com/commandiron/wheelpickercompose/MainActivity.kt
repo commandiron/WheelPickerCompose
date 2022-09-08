@@ -28,8 +28,8 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center
                 ) {
                     WheelDateTimePicker { snappedDate, snappedTime ->
-                        println(snappedDate)
-                        println(snappedTime)
+//                        println(snappedDate)
+//                        println(snappedTime)
                     }
                     Spacer(modifier = Modifier.height(32.dp))
                     WheelDatePicker { snappedDate ->

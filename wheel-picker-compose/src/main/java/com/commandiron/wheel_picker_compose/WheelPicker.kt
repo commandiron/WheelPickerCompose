@@ -20,6 +20,7 @@ fun WheelPicker(
     size: DpSize = DpSize(128.dp, 128.dp),
     selectedIndex: Int = 0,
     count: Int,
+    infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = false,
     selectorShape: Shape = RoundedCornerShape(0.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
@@ -38,7 +39,11 @@ fun WheelPicker(
             val snappedItem = layoutInfo.currentItem
             snappedItem?.let {  snapperLayoutItemInfo ->
                 if(snapperLayoutItemInfo.offset == 0){
-                    snappedIndex.value = snapperLayoutItemInfo.index
+                    if(infiniteLoopEnabled){
+                        snappedIndex.value = snapperLayoutItemInfo.index % count
+                    }else{
+                        snappedIndex.value = snapperLayoutItemInfo.index
+                    }
                 }else{
                     snappedIndex.value = snapperLayoutItemInfo.index + 1
                 }
@@ -68,7 +73,8 @@ fun WheelPicker(
                 lazyListState = lazyListState
             )
         ){
-            items(count){ index ->
+            items(if(infiniteLoopEnabled) Int.MAX_VALUE else count){ indexInLazyColumn ->
+                val index = indexInLazyColumn % count
                 Box(
                     modifier = Modifier
                         .height(size.height / 3)
