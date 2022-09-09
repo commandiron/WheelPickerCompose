@@ -3,7 +3,6 @@ package com.commandiron.wheel_picker_compose
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -29,6 +28,7 @@ import java.time.LocalTime
 @Composable
 fun WheelDateTimePicker(
     modifier: Modifier = Modifier,
+    currentDateTime: LocalDateTime = LocalDateTime.now(),
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
@@ -37,10 +37,10 @@ fun WheelDateTimePicker(
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished : (snappedDate: LocalDate?, snappedTime: LocalTime?) -> Unit = { snappedDate, snappedTime -> }
+    onScrollFinished : (snappedDate: LocalDate, snappedTime: LocalTime) -> Unit = { snappedDate, snappedTime -> }
 ) {
-    val localDate = remember { mutableStateOf<LocalDate?>(LocalDate.now())}
-    val localTime = remember { mutableStateOf<LocalTime?>(LocalTime.now())}
+    val currentDate = remember { mutableStateOf<LocalDate>(currentDateTime.toLocalDate())}
+    val currentTime = remember { mutableStateOf<LocalTime>(currentDateTime.toLocalTime())}
     Box(modifier = modifier, contentAlignment = Alignment.Center){
         if(selectorEnabled){
             Surface(
@@ -53,25 +53,27 @@ fun WheelDateTimePicker(
         }
         Row {
             WheelDatePicker(
+                currentDate = currentDateTime.toLocalDate(),
                 size = DpSize(size.width * 2 / 3, size.height),
                 textStyle = textStyle,
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 onScrollFinished = {
-                    localDate.value = it
-                    onScrollFinished(localDate.value, localTime.value)
+                    currentDate.value = it
+                    onScrollFinished(currentDate.value, currentTime.value)
                 }
             )
             WheelTimePicker(
+                currentTime = currentDateTime.toLocalTime(),
                 size = DpSize(size.width / 3, size.height),
                 textStyle = textStyle,
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 onScrollFinished = {
-                    localTime.value = it
-                    onScrollFinished(localDate.value, localTime.value)
+                    currentTime.value = it
+                    onScrollFinished(currentDate.value, currentTime.value)
                 }
             )
         }

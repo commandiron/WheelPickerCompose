@@ -27,6 +27,7 @@ import java.time.LocalTime
 @Composable
 fun WheelTimePicker(
     modifier: Modifier = Modifier,
+    currentTime: LocalTime = LocalTime.now(),
     size: DpSize = DpSize(128.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
@@ -35,10 +36,8 @@ fun WheelTimePicker(
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished : (snappedTime: LocalTime?) -> Unit = {}
+    onScrollFinished : (snappedTime: LocalTime) -> Unit = {}
 ) {
-    val localTimeNow = LocalTime.now()
-
     val hourTexts: List<String> = listOf(
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
         "15", "16", "17", "18", "19", "20", "21", "22", "23"
@@ -70,7 +69,7 @@ fun WheelTimePicker(
                 textStyle = textStyle,
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
-                selectedIndex = localTimeNow.hour,
+                selectedIndex = currentTime.hour,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
                     selectedHour.value = selectedIndex
@@ -83,7 +82,6 @@ fun WheelTimePicker(
                         )
                     }catch (e: Exception){
                         e.printStackTrace()
-                        onScrollFinished(null)
                     }
                 }
             )
@@ -93,7 +91,7 @@ fun WheelTimePicker(
                 textStyle = textStyle,
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
-                selectedIndex = localTimeNow.minute,
+                selectedIndex = currentTime.minute,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
                     selectedMinute.value = selectedIndex
@@ -106,7 +104,6 @@ fun WheelTimePicker(
                         )
                     }catch (e: Exception){
                         e.printStackTrace()
-                        onScrollFinished(null)
                     }
                 }
             )

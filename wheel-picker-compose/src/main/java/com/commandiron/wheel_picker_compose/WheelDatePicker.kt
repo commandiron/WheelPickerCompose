@@ -3,7 +3,6 @@ package com.commandiron.wheel_picker_compose
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -28,6 +27,7 @@ import java.time.LocalDate
 @Composable
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
+    currentDate: LocalDate = LocalDate.now(),
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
@@ -36,10 +36,8 @@ fun WheelDatePicker(
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished : (snappedDate: LocalDate?) -> Unit = {}
+    onScrollFinished : (snappedDate: LocalDate) -> Unit = {}
 ) {
-    val localDateNow = LocalDate.now()
-
     val dayTexts = remember { mutableStateOf((1..31).toList().map { it.toString() }) }
     val selectedDayOfMonth = remember { mutableStateOf(0)}
 
@@ -53,7 +51,7 @@ fun WheelDatePicker(
     var yearTexts = listOf<String>()
     val yearRange = 100
     for(i in 0 until (yearRange * 2) + 1){
-        yearTexts = yearTexts + (localDateNow.year - yearRange + i).toString()
+        yearTexts = yearTexts + (currentDate.year - yearRange + i).toString()
     }
     val selectedYear = remember { mutableStateOf(0)}
 
@@ -75,7 +73,7 @@ fun WheelDatePicker(
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
-                selectedIndex = localDateNow.dayOfMonth - 1,
+                selectedIndex = currentDate.dayOfMonth - 1,
                 onScrollFinished = { selectedIndex ->
                     selectedDayOfMonth.value = dayTexts.value[selectedIndex].toInt()
                     try {
@@ -88,7 +86,6 @@ fun WheelDatePicker(
                         )
                     }catch (e: Exception){
                         e.printStackTrace()
-                        onScrollFinished(null)
                     }
                 }
             )
@@ -99,7 +96,7 @@ fun WheelDatePicker(
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
-                selectedIndex = localDateNow.month.value - 1,
+                selectedIndex = currentDate.month.value - 1,
                 onScrollFinished = { selectedIndex ->
                     selectedMonth.value = selectedIndex + 1
                     dayTexts.value = calculateDayTexts(selectedMonth.value, selectedYear.value)
@@ -113,7 +110,6 @@ fun WheelDatePicker(
                         )
                     }catch (e: Exception){
                         e.printStackTrace()
-                        onScrollFinished(null)
                     }
                 }
             )
@@ -138,7 +134,6 @@ fun WheelDatePicker(
                         )
                     }catch (e: Exception){
                         e.printStackTrace()
-                        onScrollFinished(null)
                     }
                 }
             )
