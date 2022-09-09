@@ -99,7 +99,7 @@ fun WheelDatePicker(
                 selectedIndex = currentDate.month.value - 1,
                 onScrollFinished = { selectedIndex ->
                     selectedMonth.value = selectedIndex + 1
-                    dayTexts.value = calculateDayTexts(selectedMonth.value, selectedYear.value)
+                    dayTexts.value = calculateMonthDayTexts(selectedMonth.value, selectedYear.value)
                     try {
                         onScrollFinished(
                             LocalDate.of(
@@ -123,7 +123,7 @@ fun WheelDatePicker(
                 selectedIndex = yearRange,
                 onScrollFinished = { selectedIndex ->
                     selectedYear.value = yearTexts[selectedIndex].toInt()
-                    dayTexts.value = calculateDayTexts(selectedMonth.value, selectedYear.value)
+                    dayTexts.value = calculateMonthDayTexts(selectedMonth.value, selectedYear.value)
                     try {
                         onScrollFinished(
                             LocalDate.of(
@@ -142,7 +142,7 @@ fun WheelDatePicker(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun calculateDayTexts(month: Int, year: Int): List<String> {
+private fun calculateMonthDayTexts(month: Int, year: Int): List<String> {
 
     val isLeapYear = LocalDate.of(year, month, 1).isLeapYear
 

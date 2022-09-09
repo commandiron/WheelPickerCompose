@@ -39,8 +39,8 @@ fun WheelDateTimePicker(
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
     onScrollFinished : (snappedDate: LocalDate, snappedTime: LocalTime) -> Unit = { snappedDate, snappedTime -> }
 ) {
-    val currentDate = remember { mutableStateOf<LocalDate>(currentDateTime.toLocalDate())}
-    val currentTime = remember { mutableStateOf<LocalTime>(currentDateTime.toLocalTime())}
+    val currentDate = remember { mutableStateOf<LocalDate>(currentDateTime.toLocalDate()) }
+    val currentTime = remember { mutableStateOf<LocalTime>(currentDateTime.toLocalTime()) }
     Box(modifier = modifier, contentAlignment = Alignment.Center){
         if(selectorEnabled){
             Surface(
