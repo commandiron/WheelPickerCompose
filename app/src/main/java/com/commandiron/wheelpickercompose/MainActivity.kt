@@ -38,9 +38,7 @@ class MainActivity : ComponentActivity() {
                         WheelTimePicker { snappedTime -> }
                         WheelTextPicker(texts = (1..6).map { it.toString() })
                         WheelPicker(count = 6) { index, snappedIndex ->
-                            Card(Modifier
-                                .size(128.dp)
-                                .padding(8.dp)) {}
+                            Card(Modifier.size(128.dp).padding(8.dp)) {}
                         }
 //                        WheelDateTimePicker(
 //                            size = DpSize(200.dp, 100.dp),

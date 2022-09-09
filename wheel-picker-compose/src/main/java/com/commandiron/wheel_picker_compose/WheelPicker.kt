@@ -1,8 +1,10 @@
 package com.commandiron.wheel_picker_compose
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -14,10 +16,14 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.snapper.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.launch
 
 @Composable
 fun WheelPicker(
     modifier: Modifier = Modifier,
+    lazyListState: LazyListState = rememberLazyListState(),
     size: DpSize = DpSize(128.dp, 128.dp),
     selectedIndex: Int = 0,
     count: Int,
@@ -26,11 +32,10 @@ fun WheelPicker(
     selectorShape: Shape = RoundedCornerShape(0.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished : (snappedIndex: Int) -> Unit = {},
-    content: @Composable BoxScope.(index: Int, snappedIndex: Int) -> Unit
+    onScrollFinished: (snappedIndex: Int) -> Unit = {},
+    content: @Composable BoxScope.(index: Int, snappedIndex: Int) -> Unit,
 ) {
-    val lazyListState = rememberLazyListState()
-    LaunchedEffect(key1 = Unit){
+    LaunchedEffect(key1 = selectedIndex){
         lazyListState.scrollToItem(selectedIndex)
     }
 
@@ -87,6 +92,41 @@ fun WheelPicker(
                     content(index, snappedIndex.value)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun LazyListState.isScrollingUp(): Boolean {
+    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
+    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
+    return remember(this) {
+        derivedStateOf {
+            if (previousIndex != firstVisibleItemIndex) {
+                previousIndex > firstVisibleItemIndex
+            } else {
+                previousScrollOffset >= firstVisibleItemScrollOffset
+            }.also {
+                previousIndex = firstVisibleItemIndex
+                previousScrollOffset = firstVisibleItemScrollOffset
+            }
+        }
+    }.value
+}
+
+fun LazyListState.disableScrolling(scope: CoroutineScope) {
+    scope.launch {
+        scroll(scrollPriority = MutatePriority.PreventUserInput) {
+            // Await indefinitely, blocking scrolls
+            awaitCancellation()
+        }
+    }
+}
+
+fun LazyListState.reenableScrolling(scope: CoroutineScope) {
+    scope.launch {
+        scroll(scrollPriority = MutatePriority.PreventUserInput) {
+            // Do nothing, just cancel the previous indefinite "scroll"
         }
     }
 }
