@@ -1,7 +1,6 @@
 package com.commandiron.wheel_picker_compose
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -18,12 +17,8 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.snapper.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.launch
 
 @Composable
 fun WheelPicker(
@@ -32,7 +27,6 @@ fun WheelPicker(
     size: DpSize = DpSize(128.dp, 128.dp),
     selectedIndex: Int = 0,
     count: Int,
-    scrollDirection: ScrollDirection? = null,
     infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = false,
     selectorShape: Shape = RoundedCornerShape(0.dp),
@@ -80,8 +74,7 @@ fun WheelPicker(
         LazyColumn(
             modifier = Modifier
                 .height(size.height)
-                .width(size.width)
-                .nestedScroll(getNestedScrollConnection(scrollDirection)),
+                .width(size.width),
             state = lazyListState,
             contentPadding = PaddingValues(vertical = size.height / 3),
             flingBehavior = rememberSnapperFlingBehavior(
@@ -101,71 +94,4 @@ fun WheelPicker(
             }
         }
     }
-}
-
-@Composable
-private fun LazyListState.isScrollingUp(): Boolean {
-    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
-    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
-    return remember(this) {
-        derivedStateOf {
-            if (previousIndex != firstVisibleItemIndex) {
-                previousIndex > firstVisibleItemIndex
-            } else {
-                previousScrollOffset >= firstVisibleItemScrollOffset
-            }.also {
-                previousIndex = firstVisibleItemIndex
-                previousScrollOffset = firstVisibleItemScrollOffset
-            }
-        }
-    }.value
-}
-
-fun LazyListState.disableScrolling(scope: CoroutineScope) {
-    scope.launch {
-        scroll(scrollPriority = MutatePriority.PreventUserInput) {
-            // Await indefinitely, blocking scrolls
-            awaitCancellation()
-        }
-    }
-}
-
-fun LazyListState.reenableScrolling(scope: CoroutineScope) {
-    scope.launch {
-        scroll(scrollPriority = MutatePriority.PreventUserInput) {
-            // Do nothing, just cancel the previous indefinite "scroll"
-        }
-    }
-}
-
-@Composable
-fun getNestedScrollConnection(scrollDirection: ScrollDirection? = null): NestedScrollConnection{
-    return remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
-                if(scrollDirection == null){
-                    return super.onPreScroll(available, source)
-                }else{
-                    if(scrollDirection == ScrollDirection.DOWN){
-                        return if (delta < 0) {
-                            Offset.Zero
-                        } else {
-                            Offset(available.x, available.y)
-                        }
-                    }else{
-                        return if (delta < 0) {
-                            Offset(available.x, available.y)
-                        } else {
-                            Offset.Zero
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-enum class ScrollDirection {
-    UP, DOWN
 }
