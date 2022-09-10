@@ -11,9 +11,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.snapper.*
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +32,7 @@ fun WheelPicker(
     size: DpSize = DpSize(128.dp, 128.dp),
     selectedIndex: Int = 0,
     count: Int,
+    scrollDirection: ScrollDirection? = null,
     infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = false,
     selectorShape: Shape = RoundedCornerShape(0.dp),
@@ -74,7 +80,8 @@ fun WheelPicker(
         LazyColumn(
             modifier = Modifier
                 .height(size.height)
-                .width(size.width),
+                .width(size.width)
+                .nestedScroll(getNestedScrollConnection(scrollDirection)),
             state = lazyListState,
             contentPadding = PaddingValues(vertical = size.height / 3),
             flingBehavior = rememberSnapperFlingBehavior(
@@ -129,4 +136,36 @@ fun LazyListState.reenableScrolling(scope: CoroutineScope) {
             // Do nothing, just cancel the previous indefinite "scroll"
         }
     }
+}
+
+@Composable
+fun getNestedScrollConnection(scrollDirection: ScrollDirection? = null): NestedScrollConnection{
+    return remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val delta = available.y
+                if(scrollDirection == null){
+                    return super.onPreScroll(available, source)
+                }else{
+                    if(scrollDirection == ScrollDirection.DOWN){
+                        return if (delta < 0) {
+                            Offset.Zero
+                        } else {
+                            Offset(available.x, available.y)
+                        }
+                    }else{
+                        return if (delta < 0) {
+                            Offset(available.x, available.y)
+                        } else {
+                            Offset.Zero
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+enum class ScrollDirection {
+    UP, DOWN
 }
