@@ -10,12 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.snapper.*
@@ -25,22 +21,18 @@ fun WheelPicker(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     size: DpSize = DpSize(128.dp, 128.dp),
-    selectedIndex: Int = 0,
+    startIndex: Int = 0,
     count: Int,
     infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = false,
     selectorShape: Shape = RoundedCornerShape(0.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished: (snappedIndex: Int) -> Unit = {},
+    onScrollFinished: (snappedIndex: Int) -> Int? = {null},
     content: @Composable BoxScope.(index: Int, snappedIndex: Int) -> Unit,
 ) {
-    LaunchedEffect(key1 = selectedIndex){
-        lazyListState.scrollToItem(selectedIndex)
-    }
-
     val layoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
-    val snappedIndex = remember { mutableStateOf(selectedIndex)}
+    val snappedIndex = remember { mutableStateOf(startIndex)}
     LaunchedEffect(lazyListState.isScrollInProgress, count) {
         if (!lazyListState.isScrollInProgress) {
             val snappedItem = layoutInfo.currentItem
@@ -54,9 +46,17 @@ fun WheelPicker(
                 }else{
                     snappedIndex.value = snapperLayoutItemInfo.index + 1
                 }
-                onScrollFinished(snappedIndex.value)
+                onScrollFinished(snappedIndex.value)?.let {
+                    lazyListState.scrollToItem(it)
+                    snappedIndex.value = it
+                }
             }
         }
+    }
+    LaunchedEffect(key1 = startIndex){
+        lazyListState.scrollToItem(startIndex)
+        snappedIndex.value = startIndex
+        onScrollFinished(snappedIndex.value)
     }
     Box(
         modifier = modifier,

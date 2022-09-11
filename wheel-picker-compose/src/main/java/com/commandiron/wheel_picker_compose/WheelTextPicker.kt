@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun WheelTextPicker(
     modifier: Modifier = Modifier,
     size: DpSize = DpSize(128.dp, 128.dp),
-    selectedIndex: Int = 0,
+    startIndex: Int = 0,
     texts: List<String>,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
@@ -26,12 +26,12 @@ fun WheelTextPicker(
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished : (snappedIndex: Int) -> Unit = {}
+    onScrollFinished: (snappedIndex: Int) -> Int? = {null},
 ) {
     WheelPicker(
         modifier = modifier,
         size = size,
-        selectedIndex = selectedIndex,
+        startIndex = startIndex,
         count = texts.size,
         infiniteLoopEnabled = infiniteLoopEnabled,
         selectorEnabled = selectorEnabled,

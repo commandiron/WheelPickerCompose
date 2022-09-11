@@ -28,6 +28,7 @@ import java.time.LocalDate
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
     currentDate: LocalDate = LocalDate.now(),
+    disableBackwards: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
@@ -73,9 +74,18 @@ fun WheelDatePicker(
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
-                selectedIndex = currentDate.dayOfMonth - 1,
+                startIndex = currentDate.dayOfMonth - 1,
                 onScrollFinished = { selectedIndex ->
-                    selectedDayOfMonth.value = dayTexts.value[selectedIndex].toInt()
+                    selectedDayOfMonth.value =
+                        if(disableBackwards){
+                            if(selectedIndex < currentDate.dayOfMonth - 1 ) {
+                                currentDate.dayOfMonth
+                            }else{
+                                selectedIndex + 1
+                            }
+                        }else{
+                            selectedIndex + 1
+                        }
                     try {
                         onScrollFinished(
                             LocalDate.of(
@@ -86,6 +96,11 @@ fun WheelDatePicker(
                         )
                     }catch (e: Exception){
                         e.printStackTrace()
+                    }
+                    if(disableBackwards && selectedIndex < currentDate.dayOfMonth - 1 ) {
+                        return@WheelTextPicker currentDate.dayOfMonth - 1
+                    }else{
+                        return@WheelTextPicker selectedIndex
                     }
                 }
             )
@@ -96,9 +111,18 @@ fun WheelDatePicker(
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
-                selectedIndex = currentDate.month.value - 1,
+                startIndex = currentDate.month.value - 1,
                 onScrollFinished = { selectedIndex ->
-                    selectedMonth.value = selectedIndex + 1
+                    selectedMonth.value =
+                        if(disableBackwards){
+                            if(selectedIndex < currentDate.month.value - 1 ) {
+                                currentDate.month.value
+                            }else{
+                                selectedIndex + 1
+                            }
+                        }else{
+                            selectedIndex + 1
+                        }
                     dayTexts.value = calculateMonthDayTexts(selectedMonth.value, selectedYear.value)
                     try {
                         onScrollFinished(
@@ -111,6 +135,11 @@ fun WheelDatePicker(
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
+                    if(disableBackwards && selectedIndex < currentDate.month.value - 1 ) {
+                        return@WheelTextPicker currentDate.month.value - 1
+                    }else{
+                        return@WheelTextPicker selectedIndex
+                    }
                 }
             )
             WheelTextPicker(
@@ -120,9 +149,18 @@ fun WheelDatePicker(
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
-                selectedIndex = yearRange,
+                startIndex = yearRange,
                 onScrollFinished = { selectedIndex ->
-                    selectedYear.value = yearTexts[selectedIndex].toInt()
+                    selectedYear.value =
+                        if(disableBackwards){
+                            if(yearTexts[selectedIndex].toInt() < currentDate.year ) {
+                                yearTexts[yearRange].toInt()
+                            }else{
+                                yearTexts[selectedIndex].toInt()
+                            }
+                        }else{
+                            yearTexts[selectedIndex].toInt()
+                        }
                     dayTexts.value = calculateMonthDayTexts(selectedMonth.value, selectedYear.value)
                     try {
                         onScrollFinished(
@@ -134,6 +172,11 @@ fun WheelDatePicker(
                         )
                     }catch (e: Exception){
                         e.printStackTrace()
+                    }
+                    if(disableBackwards && yearTexts[selectedIndex].toInt() < currentDate.year ) {
+                        return@WheelTextPicker yearRange
+                    }else{
+                        return@WheelTextPicker selectedIndex
                     }
                 }
             )

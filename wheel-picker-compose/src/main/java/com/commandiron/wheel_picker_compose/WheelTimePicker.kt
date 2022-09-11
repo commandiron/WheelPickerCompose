@@ -28,6 +28,7 @@ import java.time.LocalTime
 fun WheelTimePicker(
     modifier: Modifier = Modifier,
     currentTime: LocalTime = LocalTime.now(),
+    disableBackwards: Boolean = false,
     size: DpSize = DpSize(128.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
@@ -42,7 +43,7 @@ fun WheelTimePicker(
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
         "15", "16", "17", "18", "19", "20", "21", "22", "23"
     )
-    val selectedHour = remember { mutableStateOf(0) }
+    val selectedHour = remember { mutableStateOf(currentTime.hour) }
 
     val minuteTexts: List<String> = listOf(
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
@@ -69,10 +70,17 @@ fun WheelTimePicker(
                 textStyle = textStyle,
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
-                selectedIndex = currentTime.hour,
+                startIndex = currentTime.hour,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
-                    selectedHour.value = selectedIndex
+                    selectedHour.value =
+                        if(disableBackwards){
+                            if(selectedIndex < currentTime.hour ) {
+                                currentTime.hour
+                            } else selectedIndex
+                        }else{
+                            selectedIndex
+                        }
                     try {
                         onScrollFinished(
                             LocalTime.of(
@@ -83,6 +91,15 @@ fun WheelTimePicker(
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
+                    if(disableBackwards){
+                        if(selectedIndex < currentTime.hour ) {
+                            return@WheelTextPicker currentTime.hour
+                        }else{
+                            return@WheelTextPicker selectedIndex
+                        }
+                    }else{
+                        return@WheelTextPicker selectedIndex
+                    }
                 }
             )
             WheelTextPicker(
@@ -91,10 +108,17 @@ fun WheelTimePicker(
                 textStyle = textStyle,
                 textColor = textColor,
                 infiniteLoopEnabled = infiniteLoopEnabled,
-                selectedIndex = currentTime.minute,
+                startIndex = currentTime.minute,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
-                    selectedMinute.value = selectedIndex
+                    selectedMinute.value =
+                        if(disableBackwards){
+                            if(selectedIndex < currentTime.minute ) {
+                                currentTime.minute
+                            } else selectedIndex
+                        }else{
+                            selectedIndex
+                        }
                     try {
                         onScrollFinished(
                             LocalTime.of(
@@ -104,6 +128,15 @@ fun WheelTimePicker(
                         )
                     }catch (e: Exception){
                         e.printStackTrace()
+                    }
+                    if(disableBackwards){
+                        if(selectedIndex < currentTime.minute ) {
+                            return@WheelTextPicker currentTime.minute
+                        }else{
+                            return@WheelTextPicker selectedIndex
+                        }
+                    }else{
+                        return@WheelTextPicker selectedIndex
                     }
                 }
             )

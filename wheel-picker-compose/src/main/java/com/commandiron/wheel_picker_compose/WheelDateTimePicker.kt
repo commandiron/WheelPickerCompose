@@ -29,6 +29,8 @@ import java.time.LocalTime
 fun WheelDateTimePicker(
     modifier: Modifier = Modifier,
     currentDateTime: LocalDateTime = LocalDateTime.now(),
+    disableDateBackwards: Boolean = false,
+    disableTimeBackwards: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
@@ -54,6 +56,7 @@ fun WheelDateTimePicker(
         Row {
             WheelDatePicker(
                 currentDate = currentDateTime.toLocalDate(),
+                disableBackwards = disableDateBackwards,
                 size = DpSize(size.width * 2 / 3, size.height),
                 textStyle = textStyle,
                 textColor = textColor,
@@ -66,6 +69,7 @@ fun WheelDateTimePicker(
             )
             WheelTimePicker(
                 currentTime = currentDateTime.toLocalTime(),
+                disableBackwards = disableTimeBackwards,
                 size = DpSize(size.width / 3, size.height),
                 textStyle = textStyle,
                 textColor = textColor,
