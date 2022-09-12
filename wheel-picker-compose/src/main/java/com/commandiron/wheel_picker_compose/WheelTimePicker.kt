@@ -28,11 +28,10 @@ import java.time.LocalTime
 fun WheelTimePicker(
     modifier: Modifier = Modifier,
     currentTime: LocalTime = LocalTime.now(),
-    disableBackwards: Boolean = false,
+    disablePastTime: Boolean = false,
     size: DpSize = DpSize(128.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
-    infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = true,
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
@@ -69,18 +68,19 @@ fun WheelTimePicker(
                 texts = hourTexts,
                 textStyle = textStyle,
                 textColor = textColor,
-                infiniteLoopEnabled = infiniteLoopEnabled,
                 startIndex = currentTime.hour,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
-                    selectedHour.value =
-                        if(disableBackwards){
-                            if(selectedIndex < currentTime.hour ) {
-                                currentTime.hour
-                            } else selectedIndex
-                        }else{
-                            selectedIndex
+                    selectedHour.value = selectedIndex
+                    val selectedTime = LocalTime.of(selectedHour.value, selectedMinute.value)
+                    val isTimeBefore = isTimeBefore(selectedTime, currentTime)
+
+                    if(disablePastTime){
+                        if(isTimeBefore){
+                            selectedHour.value = currentTime.hour
                         }
+                    }
+
                     try {
                         onScrollFinished(
                             LocalTime.of(
@@ -91,15 +91,7 @@ fun WheelTimePicker(
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
-                    if(disableBackwards){
-                        if(selectedIndex < currentTime.hour ) {
-                            return@WheelTextPicker currentTime.hour
-                        }else{
-                            return@WheelTextPicker selectedIndex
-                        }
-                    }else{
-                        return@WheelTextPicker selectedIndex
-                    }
+                    return@WheelTextPicker selectedHour.value
                 }
             )
             WheelTextPicker(
@@ -107,18 +99,19 @@ fun WheelTimePicker(
                 texts = minuteTexts,
                 textStyle = textStyle,
                 textColor = textColor,
-                infiniteLoopEnabled = infiniteLoopEnabled,
                 startIndex = currentTime.minute,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
-                    selectedMinute.value =
-                        if(disableBackwards){
-                            if(selectedIndex < currentTime.minute ) {
-                                currentTime.minute
-                            } else selectedIndex
-                        }else{
-                            selectedIndex
+                    selectedMinute.value = selectedIndex
+                    val selectedTime = LocalTime.of(selectedHour.value, selectedMinute.value)
+                    val isTimeBefore = isTimeBefore(selectedTime, currentTime)
+
+                    if(disablePastTime){
+                        if(isTimeBefore){
+                            selectedMinute.value = currentTime.minute
                         }
+                    }
+
                     try {
                         onScrollFinished(
                             LocalTime.of(
@@ -129,15 +122,8 @@ fun WheelTimePicker(
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
-                    if(disableBackwards){
-                        if(selectedIndex < currentTime.minute ) {
-                            return@WheelTextPicker currentTime.minute
-                        }else{
-                            return@WheelTextPicker selectedIndex
-                        }
-                    }else{
-                        return@WheelTextPicker selectedIndex
-                    }
+
+                    return@WheelTextPicker selectedMinute.value
                 }
             )
         }
@@ -152,6 +138,11 @@ fun WheelTimePicker(
             )
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun isTimeBefore(time: LocalTime, currentTime: LocalTime): Boolean{
+    return time.isBefore(currentTime)
 }
 
 

@@ -11,6 +11,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -22,32 +23,32 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import java.text.DateFormatSymbols
 import java.time.LocalDate
+import java.time.LocalTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
     currentDate: LocalDate = LocalDate.now(),
-    disableBackwards: Boolean = false,
+    disablePastDate: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
-    infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = true,
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished : (snappedDate: LocalDate) -> Unit = {}
+    onScrollFinished: (snappedDate: LocalDate) -> Unit = {},
 ) {
     val dayTexts = remember { mutableStateOf((1..31).toList().map { it.toString() }) }
-    val selectedDayOfMonth = remember { mutableStateOf(0)}
+    val selectedDayOfMonth = remember { mutableStateOf(1)}
 
     val monthTexts: List<String> = if(size.width < 250.dp){
         DateFormatSymbols().shortMonths.toList()
     }else{
         DateFormatSymbols().months.toList()
     }
-    val selectedMonth = remember { mutableStateOf(0)}
+    val selectedMonth = remember { mutableStateOf(1)}
 
     var yearTexts = listOf<String>()
     val yearRange = 100
@@ -72,21 +73,20 @@ fun WheelDatePicker(
                 texts = dayTexts.value,
                 textStyle = textStyle,
                 textColor = textColor,
-                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 startIndex = currentDate.dayOfMonth - 1,
                 onScrollFinished = { selectedIndex ->
-                    selectedDayOfMonth.value =
-                        if(disableBackwards){
-                            if(selectedIndex < currentDate.dayOfMonth - 1 ) {
-                                currentDate.dayOfMonth
-                            }else{
-                                selectedIndex + 1
-                            }
-                        }else{
-                            selectedIndex + 1
-                        }
                     try {
+                        selectedDayOfMonth.value = selectedIndex + 1
+                        val selectedDate = LocalDate.of(selectedYear.value, selectedMonth.value, selectedDayOfMonth.value)
+                        val isDateBefore = isDateBefore(selectedDate, currentDate)
+
+                        if(disablePastDate){
+                            if(isDateBefore){
+                                selectedDayOfMonth.value = currentDate.dayOfMonth
+                            }
+                        }
+
                         onScrollFinished(
                             LocalDate.of(
                                 selectedYear.value,
@@ -97,11 +97,7 @@ fun WheelDatePicker(
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
-                    if(disableBackwards && selectedIndex < currentDate.dayOfMonth - 1 ) {
-                        return@WheelTextPicker currentDate.dayOfMonth - 1
-                    }else{
-                        return@WheelTextPicker selectedIndex
-                    }
+                    return@WheelTextPicker selectedDayOfMonth.value - 1
                 }
             )
             WheelTextPicker(
@@ -109,22 +105,22 @@ fun WheelDatePicker(
                 texts = monthTexts,
                 textStyle = textStyle,
                 textColor = textColor,
-                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 startIndex = currentDate.month.value - 1,
                 onScrollFinished = { selectedIndex ->
-                    selectedMonth.value =
-                        if(disableBackwards){
-                            if(selectedIndex < currentDate.month.value - 1 ) {
-                                currentDate.month.value
-                            }else{
-                                selectedIndex + 1
-                            }
-                        }else{
-                            selectedIndex + 1
-                        }
-                    dayTexts.value = calculateMonthDayTexts(selectedMonth.value, selectedYear.value)
                     try {
+                        dayTexts.value = calculateMonthDayTexts(selectedIndex + 1, selectedYear.value)
+
+                        selectedMonth.value = selectedIndex + 1
+                        val selectedDate = LocalDate.of(selectedYear.value, selectedMonth.value, selectedDayOfMonth.value)
+                        val isDateBefore = isDateBefore(selectedDate, currentDate)
+
+                        if(disablePastDate){
+                            if(isDateBefore){
+                                selectedMonth.value = currentDate.month.value
+                            }
+                        }
+
                         onScrollFinished(
                             LocalDate.of(
                                 selectedYear.value,
@@ -135,11 +131,7 @@ fun WheelDatePicker(
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
-                    if(disableBackwards && selectedIndex < currentDate.month.value - 1 ) {
-                        return@WheelTextPicker currentDate.month.value - 1
-                    }else{
-                        return@WheelTextPicker selectedIndex
-                    }
+                    return@WheelTextPicker selectedMonth.value - 1
                 }
             )
             WheelTextPicker(
@@ -147,22 +139,22 @@ fun WheelDatePicker(
                 texts = yearTexts,
                 textStyle = textStyle,
                 textColor = textColor,
-                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 startIndex = yearRange,
                 onScrollFinished = { selectedIndex ->
-                    selectedYear.value =
-                        if(disableBackwards){
-                            if(yearTexts[selectedIndex].toInt() < currentDate.year ) {
-                                yearTexts[yearRange].toInt()
-                            }else{
-                                yearTexts[selectedIndex].toInt()
-                            }
-                        }else{
-                            yearTexts[selectedIndex].toInt()
-                        }
-                    dayTexts.value = calculateMonthDayTexts(selectedMonth.value, selectedYear.value)
                     try {
+                        dayTexts.value = calculateMonthDayTexts(selectedMonth.value, yearTexts[selectedIndex].toInt())
+
+                        selectedYear.value = yearTexts[selectedIndex].toInt()
+                        val selectedDate = LocalDate.of(selectedYear.value, selectedMonth.value, selectedDayOfMonth.value)
+                        val isDateBefore = isDateBefore(selectedDate, currentDate)
+
+                        if(disablePastDate){
+                            if(isDateBefore){
+                                selectedYear.value = yearTexts[yearRange].toInt()
+                            }
+                        }
+
                         onScrollFinished(
                             LocalDate.of(
                                 selectedYear.value,
@@ -173,11 +165,8 @@ fun WheelDatePicker(
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
-                    if(disableBackwards && yearTexts[selectedIndex].toInt() < currentDate.year ) {
-                        return@WheelTextPicker yearRange
-                    }else{
-                        return@WheelTextPicker selectedIndex
-                    }
+
+                    return@WheelTextPicker yearTexts.indexOf(selectedYear.value.toString())
                 }
             )
         }
@@ -209,4 +198,9 @@ private fun calculateMonthDayTexts(month: Int, year: Int): List<String> {
         12 -> { month31day }
         else -> { emptyList() }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+private fun isDateBefore(date: LocalDate, currentDate: LocalDate): Boolean{
+    return date.isBefore(currentDate)
 }

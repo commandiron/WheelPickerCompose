@@ -29,12 +29,11 @@ import java.time.LocalTime
 fun WheelDateTimePicker(
     modifier: Modifier = Modifier,
     currentDateTime: LocalDateTime = LocalDateTime.now(),
-    disableDateBackwards: Boolean = false,
-    disableTimeBackwards: Boolean = false,
+    disablePastDate: Boolean = false,
+    disablePastTime: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
-    infiniteLoopEnabled: Boolean = false,
     selectorEnabled: Boolean = true,
     selectorShape: Shape = RoundedCornerShape(16.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
@@ -56,24 +55,21 @@ fun WheelDateTimePicker(
         Row {
             WheelDatePicker(
                 currentDate = currentDateTime.toLocalDate(),
-                disableBackwards = disableDateBackwards,
+                disablePastDate = disablePastDate,
                 size = DpSize(size.width * 2 / 3, size.height),
                 textStyle = textStyle,
                 textColor = textColor,
-                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
-                onScrollFinished = {
-                    currentDate.value = it
-                    onScrollFinished(currentDate.value, currentTime.value)
-                }
-            )
+            ) { snappedDate ->
+                currentDate.value = snappedDate
+                onScrollFinished(currentDate.value, currentTime.value)
+            }
             WheelTimePicker(
                 currentTime = currentDateTime.toLocalTime(),
-                disableBackwards = disableTimeBackwards,
+                disablePastTime = disablePastTime,
                 size = DpSize(size.width / 3, size.height),
                 textStyle = textStyle,
                 textColor = textColor,
-                infiniteLoopEnabled = infiniteLoopEnabled,
                 selectorEnabled = false,
                 onScrollFinished = {
                     currentTime.value = it
