@@ -52,26 +52,17 @@ fun WheelDateTimePicker(
     }
     val selectedMonth = remember { mutableStateOf(currentDateTime.month.value)}
 
-    var yearTexts = listOf<String>()
     val yearRange = 100
-    for(i in 0 until (yearRange * 2) + 1){
-        yearTexts = yearTexts + (currentDateTime.year - yearRange + i).toString()
-    }
+    val yearTexts = IntRange(
+        start = currentDateTime.year - yearRange,
+        endInclusive = currentDateTime.year + yearRange
+    ).map { it.toString() }
     val selectedYear = remember { mutableStateOf(currentDateTime.year)}
 
-
-    val hourTexts: List<String> = listOf(
-        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
-        "15", "16", "17", "18", "19", "20", "21", "22", "23"
-    )
+    val hourTexts: List<String> = (0..23).map { it.toString().padStart(2, '0') }
     val selectedHour = remember { mutableStateOf(currentDateTime.hour) }
 
-    val minuteTexts: List<String> = listOf(
-        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
-        "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
-        "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44",
-        "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59",
-    )
+    val minuteTexts: List<String> = (0..59).map { it.toString().padStart(2, '0') }
     val selectedMinute = remember { mutableStateOf(currentDateTime.minute) }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center){
@@ -315,33 +306,6 @@ fun WheelDateTimePicker(
                 }
             }
         }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-private fun calculateMonthDayTexts(month: Int, year: Int): List<String> {
-
-    val isLeapYear = LocalDate.of(year, month, 1).isLeapYear
-
-    val month31day = (1..31).toList().map { it.toString() }
-    val month30day = (1..30).toList().map { it.toString() }
-    val month29day = (1..29).toList().map { it.toString() }
-    val month28day = (1..28).toList().map { it.toString() }
-
-    return when(month){
-        1 -> { month31day }
-        2 -> { if(isLeapYear) month29day else month28day }
-        3 -> { month31day }
-        4 -> { month30day }
-        5 -> { month31day }
-        6 -> { month30day }
-        7 -> { month31day }
-        8 -> { month31day }
-        9 -> { month30day }
-        10 -> { month31day }
-        11 -> { month30day }
-        12 -> { month31day }
-        else -> { emptyList() }
     }
 }
 

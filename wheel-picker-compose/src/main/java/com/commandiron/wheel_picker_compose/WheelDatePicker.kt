@@ -43,18 +43,18 @@ fun WheelDatePicker(
     val dayTexts = remember { mutableStateOf((1..31).toList().map { it.toString() }) }
     val selectedDayOfMonth = remember { mutableStateOf(currentDate.dayOfMonth)}
 
-    val monthTexts: List<String> = if(size.width < 250.dp){
+    val monthTexts: List<String> = if(size.width / 3 < 55.dp){
         DateFormatSymbols().shortMonths.toList()
     }else{
         DateFormatSymbols().months.toList()
     }
     val selectedMonth = remember { mutableStateOf(currentDate.month.value)}
 
-    var yearTexts = listOf<String>()
     val yearRange = 100
-    for(i in 0 until (yearRange * 2) + 1){
-        yearTexts = yearTexts + (currentDate.year - yearRange + i).toString()
-    }
+    val yearTexts = IntRange(
+        start = currentDate.year - yearRange,
+        endInclusive = currentDate.year + yearRange
+    ).map { it.toString() }
     val selectedYear = remember { mutableStateOf(currentDate.year)}
 
     Box(modifier = modifier, contentAlignment = Alignment.Center){
@@ -185,33 +185,6 @@ fun WheelDatePicker(
                 }
             )
         }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-private fun calculateMonthDayTexts(month: Int, year: Int): List<String> {
-
-    val isLeapYear = LocalDate.of(year, month, 1).isLeapYear
-
-    val month31day = (1..31).toList().map { it.toString() }
-    val month30day = (1..30).toList().map { it.toString() }
-    val month29day = (1..29).toList().map { it.toString() }
-    val month28day = (1..28).toList().map { it.toString() }
-
-    return when(month){
-        1 -> { month31day }
-        2 -> { if(isLeapYear) month29day else month28day }
-        3 -> { month31day }
-        4 -> { month30day }
-        5 -> { month31day }
-        6 -> { month30day }
-        7 -> { month31day }
-        8 -> { month31day }
-        9 -> { month30day }
-        10 -> { month31day }
-        11 -> { month30day }
-        12 -> { month31day }
-        else -> { emptyList() }
     }
 }
 
