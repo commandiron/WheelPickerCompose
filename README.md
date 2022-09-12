@@ -43,10 +43,10 @@ dependencies {
             
 ```kotlin  
 WheelDateTimePicker(
+    disablePastDate = true,
     size = DpSize(200.dp, 100.dp),
     textStyle = MaterialTheme.typography.titleSmall,
     textColor = Color(0xFFffc300),
-    infiniteLoopEnabled = true,
     selectorEnabled = true,
     selectorShape = RoundedCornerShape(0.dp),
     selectorColor = Color(0xFFf1faee).copy(alpha = 0.2f),
