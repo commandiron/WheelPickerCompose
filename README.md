@@ -43,7 +43,7 @@ dependencies {
             
 ```kotlin  
 WheelDateTimePicker(
-    disablePastDate = true,
+    disablePastDateTime = true,
     size = DpSize(200.dp, 100.dp),
     textStyle = MaterialTheme.typography.titleSmall,
     textColor = Color(0xFFffc300),
