@@ -54,7 +54,8 @@ fun WheelTextPicker(
                     }
                     else -> 0.2f
                 }
-            )
+            ),
+            maxLines = 1
         )
     }
 }

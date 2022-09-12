@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        WheelDateTimePicker { snappedDate, snappedTime -> }
+                        WheelDateTimePicker { snappedDateTime -> }
                         WheelDatePicker { snappedDate -> }
                         WheelTimePicker { snappedTime -> }
                         WheelTextPicker(texts = (1..6).map { "Text $it" })
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                             Card(Modifier.size(128.dp).padding(8.dp)) {}
                         }
 //                        WheelDateTimePicker(
-//                            disablePastDate = true,
+//                            disablePastDateTime = true,
 //                            size = DpSize(200.dp, 100.dp),
 //                            textStyle = MaterialTheme.typography.titleSmall,
 //                            textColor = Color(0xFFffc300),
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 //                            selectorShape = RoundedCornerShape(0.dp),
 //                            selectorColor = Color(0xFFf1faee).copy(alpha = 0.2f),
 //                            selectorBorder = BorderStroke(2.dp, Color(0xFFf1faee))
-//                        ) { snappedDate, snappedTime -> }
+//                        ) { snappedDateTime -> }
                     }
                 }
             }

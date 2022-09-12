@@ -50,7 +50,7 @@ fun WheelTimePicker(
         "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44",
         "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59",
     )
-    val selectedMinute = remember { mutableStateOf(0) }
+    val selectedMinute = remember { mutableStateOf(currentTime.minute) }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center){
         if(selectorEnabled){
@@ -71,17 +71,18 @@ fun WheelTimePicker(
                 startIndex = currentTime.hour,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
-                    selectedHour.value = selectedIndex
-                    val selectedTime = LocalTime.of(selectedHour.value, selectedMinute.value)
-                    val isTimeBefore = isTimeBefore(selectedTime, currentTime)
-
-                    if(disablePastTime){
-                        if(isTimeBefore){
-                            selectedHour.value = currentTime.hour
-                        }
-                    }
-
                     try {
+                        val selectedTime = LocalTime.of(selectedIndex, selectedMinute.value)
+                        val isTimeBefore = isTimeBefore(selectedTime, currentTime)
+
+                        if(disablePastTime){
+                            if(!isTimeBefore){
+                                selectedHour.value = selectedIndex
+                            }
+                        }else{
+                            selectedHour.value = selectedIndex
+                        }
+
                         onScrollFinished(
                             LocalTime.of(
                                 selectedHour.value,
@@ -91,6 +92,7 @@ fun WheelTimePicker(
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
+
                     return@WheelTextPicker selectedHour.value
                 }
             )
@@ -102,17 +104,18 @@ fun WheelTimePicker(
                 startIndex = currentTime.minute,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
-                    selectedMinute.value = selectedIndex
-                    val selectedTime = LocalTime.of(selectedHour.value, selectedMinute.value)
-                    val isTimeBefore = isTimeBefore(selectedTime, currentTime)
-
-                    if(disablePastTime){
-                        if(isTimeBefore){
-                            selectedMinute.value = currentTime.minute
-                        }
-                    }
-
                     try {
+                        val selectedTime = LocalTime.of(selectedHour.value, selectedIndex)
+                        val isTimeBefore = isTimeBefore(selectedTime, currentTime)
+
+                        if(disablePastTime){
+                            if(!isTimeBefore){
+                                selectedMinute.value = selectedIndex
+                            }
+                        }else{
+                            selectedMinute.value = selectedIndex
+                        }
+
                         onScrollFinished(
                             LocalTime.of(
                                 selectedHour.value,

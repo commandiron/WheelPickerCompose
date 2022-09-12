@@ -41,7 +41,7 @@ fun WheelPicker(
                 }else{
                     snappedIndex.value = snapperLayoutItemInfo.index + 1
                 }
-                onScrollFinished(snappedIndex.value)?.let {
+                onScrollFinished(if(snappedIndex.value < count) snappedIndex.value else count - 1)?.let {
                     lazyListState.scrollToItem(it)
                     snappedIndex.value = it
                 }
@@ -51,7 +51,7 @@ fun WheelPicker(
     LaunchedEffect(key1 = startIndex){
         lazyListState.scrollToItem(startIndex)
         snappedIndex.value = startIndex
-        onScrollFinished(snappedIndex.value)
+        onScrollFinished(if(snappedIndex.value < count) snappedIndex.value else count - 1)
     }
     Box(
         modifier = modifier,
