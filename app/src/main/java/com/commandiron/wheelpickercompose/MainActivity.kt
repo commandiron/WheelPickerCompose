@@ -33,26 +33,23 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-//                        WheelDateTimePicker { snappedDate, snappedTime ->
-//                            println(snappedDate)
-//                            println(snappedTime)
-//                        }
-//                        WheelDatePicker { snappedDate -> }
-//                        WheelTimePicker { snappedTime -> }
-//                        WheelTextPicker(texts = (1..6).map { it.toString() })
-//                        WheelPicker(count = 6) { index, snappedIndex ->
-//                            Card(Modifier.size(128.dp).padding(8.dp)) {}
-//                        }
-                        WheelDateTimePicker(
-                            disablePastDate = true,
-                            size = DpSize(200.dp, 100.dp),
-                            textStyle = MaterialTheme.typography.titleSmall,
-                            textColor = Color(0xFFffc300),
-                            selectorEnabled = true,
-                            selectorShape = RoundedCornerShape(0.dp),
-                            selectorColor = Color(0xFFf1faee).copy(alpha = 0.2f),
-                            selectorBorder = BorderStroke(2.dp, Color(0xFFf1faee))
-                        ) { snappedDate, snappedTime -> }
+                        WheelDateTimePicker { snappedDate, snappedTime -> }
+                        WheelDatePicker { snappedDate -> }
+                        WheelTimePicker { snappedTime -> }
+                        WheelTextPicker(texts = (1..6).map { it.toString() })
+                        WheelPicker(count = 6) { index, snappedIndex ->
+                            Card(Modifier.size(128.dp).padding(8.dp)) {}
+                        }
+//                        WheelDateTimePicker(
+//                            disablePastDate = true,
+//                            size = DpSize(200.dp, 100.dp),
+//                            textStyle = MaterialTheme.typography.titleSmall,
+//                            textColor = Color(0xFFffc300),
+//                            selectorEnabled = true,
+//                            selectorShape = RoundedCornerShape(0.dp),
+//                            selectorColor = Color(0xFFf1faee).copy(alpha = 0.2f),
+//                            selectorBorder = BorderStroke(2.dp, Color(0xFFf1faee))
+//                        ) { snappedDate, snappedTime -> }
                     }
                 }
             }
