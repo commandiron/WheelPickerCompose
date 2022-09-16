@@ -114,14 +114,16 @@ fun WheelDatePicker(
                 selectorEnabled = false,
                 startIndex = currentDate.month.value - 1,
                 onScrollFinished = { selectedIndex ->
-                    try {
-                        dayTexts.value = calculateMonthDayTexts(selectedIndex + 1, selectedYear.value)
 
+                    dayTexts.value = calculateMonthDayTexts(selectedIndex + 1, selectedYear.value)
+
+                    try {
                         val selectedDate = LocalDate.of(
                             selectedYear.value,
                             selectedIndex + 1,
                             selectedDayOfMonth.value
                         )
+
                         val isDateBefore = isDateBefore(selectedDate, currentDate)
 
                         if(disablePastDate){
@@ -140,6 +142,7 @@ fun WheelDatePicker(
                             )
                         )
                     }catch (e: Exception){
+                        selectedMonth.value = selectedIndex + 1
                         e.printStackTrace()
                     }
                     return@WheelTextPicker selectedMonth.value - 1
@@ -153,14 +156,14 @@ fun WheelDatePicker(
                 selectorEnabled = false,
                 startIndex = yearRange,
                 onScrollFinished = { selectedIndex ->
+                    dayTexts.value = calculateMonthDayTexts(selectedMonth.value, yearTexts[selectedIndex].toInt())
                     try {
-                        dayTexts.value = calculateMonthDayTexts(selectedMonth.value, yearTexts[selectedIndex].toInt())
-
                         val selectedDate = LocalDate.of(
                             yearTexts[selectedIndex].toInt(),
                             selectedMonth.value,
                             selectedDayOfMonth.value
                         )
+
                         val isDateBefore = isDateBefore(selectedDate, currentDate)
 
                         if(disablePastDate){
@@ -179,6 +182,7 @@ fun WheelDatePicker(
                             )
                         )
                     }catch (e: Exception){
+                        selectedYear.value = yearTexts[selectedIndex].toInt()
                         e.printStackTrace()
                     }
                     return@WheelTextPicker yearTexts.indexOf(selectedYear.value.toString())

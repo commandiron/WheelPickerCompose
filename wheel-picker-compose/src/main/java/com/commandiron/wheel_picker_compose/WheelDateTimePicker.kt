@@ -125,9 +125,10 @@ fun WheelDateTimePicker(
                 selectorEnabled = false,
                 startIndex = currentDateTime.month.value - 1,
                 onScrollFinished = { selectedIndex ->
-                    try {
-                        dayTexts.value = calculateMonthDayTexts(selectedIndex + 1, selectedYear.value)
 
+                    dayTexts.value = calculateMonthDayTexts(selectedIndex + 1, selectedYear.value)
+
+                    try {
                         val selectedDateTime = LocalDateTime.of(
                             selectedYear.value,
                             selectedIndex + 1,
@@ -135,6 +136,7 @@ fun WheelDateTimePicker(
                             selectedHour.value,
                             selectedMinute.value
                         )
+
                         val isDateTimeBefore = isDateTimeBefore(selectedDateTime, currentDateTime)
 
                         if(disablePastDateTime){
@@ -155,6 +157,7 @@ fun WheelDateTimePicker(
                             )
                         )
                     }catch (e: Exception){
+                        selectedMonth.value = selectedIndex + 1
                         e.printStackTrace()
                     }
                     return@WheelTextPicker selectedMonth.value - 1
@@ -168,10 +171,8 @@ fun WheelDateTimePicker(
                 selectorEnabled = false,
                 startIndex = yearRange,
                 onScrollFinished = { selectedIndex ->
+                    dayTexts.value = calculateMonthDayTexts(selectedMonth.value, yearTexts[selectedIndex].toInt())
                     try {
-                        dayTexts.value = calculateMonthDayTexts(selectedMonth.value, yearTexts[selectedIndex].toInt())
-
-
                         val selectedDateTime = LocalDateTime.of(
                             yearTexts[selectedIndex].toInt(),
                             selectedMonth.value,
@@ -179,6 +180,7 @@ fun WheelDateTimePicker(
                             selectedHour.value,
                             selectedMinute.value
                         )
+
                         val isDateTimeBefore = isDateTimeBefore(selectedDateTime, currentDateTime)
 
                         if(disablePastDateTime){
@@ -199,9 +201,9 @@ fun WheelDateTimePicker(
                             )
                         )
                     }catch (e: Exception){
+                        selectedYear.value = yearTexts[selectedIndex].toInt()
                         e.printStackTrace()
                     }
-
                     return@WheelTextPicker yearTexts.indexOf(selectedYear.value.toString())
                 }
             )
