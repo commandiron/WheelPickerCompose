@@ -5,7 +5,7 @@ Add Wheel Picker in Android Jetpack Compose.
 ## Usage
 |Picker|Usage|
 |------|-----|
-|<img src="https://user-images.githubusercontent.com/50905347/189122534-72e2140f-e5cf-414c-897d-36e6876555a1.gif" width="256" height="256">|```WheelDateTimePicker { snappedDate, snappedTime -> }```|
+|<img src="https://user-images.githubusercontent.com/50905347/189122534-72e2140f-e5cf-414c-897d-36e6876555a1.gif" width="256" height="256">|```WheelDateTimePicker { snappedDateTime -> }```|
 |<img src="https://user-images.githubusercontent.com/50905347/189132165-6d2611a2-4f41-467d-900a-34d87dbbc68c.gif" width="256" height="256">|```WheelDatePicker { snappedDate -> }```|
 |<img src="https://user-images.githubusercontent.com/50905347/189145244-887aac1c-17aa-4f65-9049-252898e28a30.gif" width="256" height="256">|```WheelTimePicker { snappedTime -> }```|
 |<img src="https://user-images.githubusercontent.com/50905347/189645296-cc9733fa-52bd-46e2-897a-9a256275209b.gif" width="256" height="256">|```WheelTextPicker(texts = (1..6).map { "Text $it" })```|
@@ -31,7 +31,7 @@ dependencyResolutionManagement {
 3. Add dependency
 ```groovy
 dependencies {
-        implementation 'com.github.commandiron:WheelPickerCompose:1.0.4'
+        implementation 'com.github.commandiron:WheelPickerCompose:1.0.5'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
             
 ```kotlin  
 WheelDateTimePicker(
-    disablePastDate = true,
+    disablePastDateTime = true,
     size = DpSize(200.dp, 100.dp),
     textStyle = MaterialTheme.typography.titleSmall,
     textColor = Color(0xFFffc300),
@@ -51,7 +51,7 @@ WheelDateTimePicker(
     selectorShape = RoundedCornerShape(0.dp),
     selectorColor = Color(0xFFf1faee).copy(alpha = 0.2f),
     selectorBorder = BorderStroke(2.dp, Color(0xFFf1faee))
-) { snappedDate, snappedTime -> }
+) { snappedDateTime -> }
 ```
 </td>
 <td>  
