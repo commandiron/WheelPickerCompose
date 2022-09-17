@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.*
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
+import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -41,6 +42,9 @@ class MainActivity : ComponentActivity() {
                             Card(Modifier.size(128.dp).padding(8.dp)) {}
                         }
 //                        WheelDateTimePicker(
+//                            currentDateTime = LocalDateTime.of(
+//                                2025, 10, 30, 5, 0
+//                            ),
 //                            disablePastDateTime = true,
 //                            size = DpSize(200.dp, 100.dp),
 //                            textStyle = MaterialTheme.typography.titleSmall,
