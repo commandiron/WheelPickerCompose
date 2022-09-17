@@ -31,7 +31,7 @@ dependencyResolutionManagement {
 3. Add dependency
 ```groovy
 dependencies {
-        implementation 'com.github.commandiron:WheelPickerCompose:1.0.5'
+        implementation 'com.github.commandiron:WheelPickerCompose:1.0.6'
 }
 ```
 
@@ -43,6 +43,9 @@ dependencies {
             
 ```kotlin  
 WheelDateTimePicker(
+    currentDateTime = LocalDateTime.of(
+        2025, 10, 30, 5, 0
+    ),
     disablePastDateTime = true,
     size = DpSize(200.dp, 100.dp),
     textStyle = MaterialTheme.typography.titleSmall,
@@ -56,7 +59,7 @@ WheelDateTimePicker(
 </td>
 <td>  
     
-<img src="https://user-images.githubusercontent.com/50905347/189645283-e26707d8-723b-4fba-a90b-bcd9c25dae96.gif" width="256" height="256">
+<img src="https://user-images.githubusercontent.com/50905347/190863946-3b095696-a4be-4d29-ad01-9489bb2ddb27.gif" width="256" height="256">
     
 </td>
 </tr>
