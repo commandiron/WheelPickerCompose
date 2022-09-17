@@ -44,11 +44,7 @@ dependencies {
 ```kotlin  
 WheelDateTimePicker(
     currentDateTime = LocalDateTime.of(
-        2025,
-        10,
-        30,
-        5,
-        0
+        2025, 10, 30, 5, 0
     ),
     disablePastDateTime = true,
     size = DpSize(200.dp, 100.dp),
@@ -59,7 +55,6 @@ WheelDateTimePicker(
     selectorColor = Color(0xFFf1faee).copy(alpha = 0.2f),
     selectorBorder = BorderStroke(2.dp, Color(0xFFf1faee))
 ) { snappedDateTime -> }
-
 ```
 </td>
 <td>  
