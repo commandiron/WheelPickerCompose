@@ -27,7 +27,7 @@ fun WheelPicker(
     selectorShape: Shape = RoundedCornerShape(0.dp),
     selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished: (snappedIndex: Int) -> Int? = {null},
+    onScrollFinished: (snappedIndex: Int) -> Int? = { null },
     content: @Composable BoxScope.(index: Int, snappedIndex: Int) -> Unit,
 ) {
     val layoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
