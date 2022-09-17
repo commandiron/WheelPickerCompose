@@ -59,7 +59,7 @@ WheelDateTimePicker(
 </td>
 <td>  
     
-<img src="https://user-images.githubusercontent.com/50905347/189645283-e26707d8-723b-4fba-a90b-bcd9c25dae96.gif" width="256" height="256">
+<img src="https://user-images.githubusercontent.com/50905347/190863946-3b095696-a4be-4d29-ad01-9489bb2ddb27.gif" width="256" height="256">
     
 </td>
 </tr>
