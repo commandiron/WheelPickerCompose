@@ -142,6 +142,8 @@ fun WheelDateTimePicker(
                         if(disablePastDateTime){
                             if(!isDateTimeBefore){
                                 selectedMonth.value = selectedIndex + 1
+                            }else{
+                                dayTexts.value = calculateMonthDayTexts(selectedMonth.value, selectedYear.value)
                             }
                         }else{
                             selectedMonth.value = selectedIndex + 1
