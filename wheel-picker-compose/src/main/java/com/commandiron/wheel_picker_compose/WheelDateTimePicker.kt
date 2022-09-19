@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -23,15 +22,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import java.text.DateFormatSymbols
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WheelDateTimePicker(
     modifier: Modifier = Modifier,
     currentDateTime: LocalDateTime = LocalDateTime.now(),
+    yearRange: Int = 100,
     disablePastDateTime: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -52,7 +50,6 @@ fun WheelDateTimePicker(
     }
     val selectedMonth = remember { mutableStateOf(currentDateTime.month.value)}
 
-    val yearRange = 100
     val yearTexts = IntRange(
         start = currentDateTime.year - yearRange,
         endInclusive = currentDateTime.year + yearRange
