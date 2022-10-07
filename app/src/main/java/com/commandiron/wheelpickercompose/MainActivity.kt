@@ -5,20 +5,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.*
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
-import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -42,10 +37,11 @@ class MainActivity : ComponentActivity() {
                             Card(Modifier.size(128.dp).padding(8.dp)) {}
                         }
 //                        WheelDateTimePicker(
-//                            currentDateTime = LocalDateTime.of(
+//                            startDateTime = LocalDateTime.of(
 //                                2025, 10, 30, 5, 0
 //                            ),
-//                            yearRange = 25,
+//                            minYear = 1950,
+//                            maxYear = 2050,
 //                            disablePastDateTime = true,
 //                            size = DpSize(200.dp, 100.dp),
 //                            textStyle = MaterialTheme.typography.titleSmall,

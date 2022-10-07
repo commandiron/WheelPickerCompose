@@ -27,8 +27,9 @@ import java.time.LocalDate
 @Composable
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
-    currentDate: LocalDate = LocalDate.now(),
-    yearRange: Int = 100,
+    startDate: LocalDate = LocalDate.now(),
+    minYear: Int = 1922,
+    maxYear: Int = 2122,
     disablePastDate: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -40,20 +41,21 @@ fun WheelDatePicker(
     onScrollFinished: (snappedDate: LocalDate) -> Unit = {},
 ) {
     val dayTexts = remember { mutableStateOf((1..31).toList().map { it.toString() }) }
-    val selectedDayOfMonth = remember { mutableStateOf(currentDate.dayOfMonth)}
+    val selectedDayOfMonth = remember { mutableStateOf(startDate.dayOfMonth)}
 
     val monthTexts: List<String> = if(size.width / 3 < 55.dp){
         DateFormatSymbols().shortMonths.toList()
     }else{
         DateFormatSymbols().months.toList()
     }
-    val selectedMonth = remember { mutableStateOf(currentDate.month.value)}
+    val selectedMonth = remember { mutableStateOf(startDate.month.value)}
 
-    val yearTexts = IntRange(
-        start = currentDate.year - yearRange,
-        endInclusive = currentDate.year + yearRange
-    ).map { it.toString() }
-    val selectedYear = remember { mutableStateOf(currentDate.year)}
+    val years = IntRange(
+        start = minYear,
+        endInclusive = maxYear,
+    )
+    val yearTexts = years.map { it.toString() }
+    val selectedYear = remember { mutableStateOf(startDate.year)}
 
     Box(modifier = modifier, contentAlignment = Alignment.Center){
         if(selectorEnabled){
@@ -72,7 +74,7 @@ fun WheelDatePicker(
                 textStyle = textStyle,
                 textColor = textColor,
                 selectorEnabled = false,
-                startIndex = currentDate.dayOfMonth - 1,
+                startIndex = startDate.dayOfMonth - 1,
                 onScrollFinished = { selectedIndex ->
                     try {
 
@@ -81,7 +83,7 @@ fun WheelDatePicker(
                             selectedMonth.value,
                             selectedIndex + 1
                         )
-                        val isDateBefore = isDateBefore(selectedDate, currentDate)
+                        val isDateBefore = isDateBefore(selectedDate, startDate)
 
                         if(disablePastDate){
                             if(!isDateBefore){
@@ -110,7 +112,7 @@ fun WheelDatePicker(
                 textStyle = textStyle,
                 textColor = textColor,
                 selectorEnabled = false,
-                startIndex = currentDate.month.value - 1,
+                startIndex = startDate.month.value - 1,
                 onScrollFinished = { selectedIndex ->
 
                     dayTexts.value = calculateMonthDayTexts(selectedIndex + 1, selectedYear.value)
@@ -122,7 +124,7 @@ fun WheelDatePicker(
                             selectedDayOfMonth.value
                         )
 
-                        val isDateBefore = isDateBefore(selectedDate, currentDate)
+                        val isDateBefore = isDateBefore(selectedDate, startDate)
 
                         if(disablePastDate){
                             if(!isDateBefore){
@@ -154,7 +156,11 @@ fun WheelDatePicker(
                 textStyle = textStyle,
                 textColor = textColor,
                 selectorEnabled = false,
-                startIndex = yearRange,
+                startIndex = if(years.indexOf(years.find { it == startDate.year }) == -1) {
+                    throw IllegalArgumentException(
+                        "startDate.year should greater than minYear and smaller than maxYear"
+                    )
+                } else years.indexOf(years.find { it == startDate.year }),
                 onScrollFinished = { selectedIndex ->
                     dayTexts.value = calculateMonthDayTexts(selectedMonth.value, yearTexts[selectedIndex].toInt())
                     try {
@@ -164,7 +170,7 @@ fun WheelDatePicker(
                             selectedDayOfMonth.value
                         )
 
-                        val isDateBefore = isDateBefore(selectedDate, currentDate)
+                        val isDateBefore = isDateBefore(selectedDate, startDate)
 
                         if(disablePastDate){
                             if(!isDateBefore){
