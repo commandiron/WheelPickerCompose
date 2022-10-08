@@ -27,7 +27,7 @@ import java.time.LocalTime
 @Composable
 fun WheelTimePicker(
     modifier: Modifier = Modifier,
-    currentTime: LocalTime = LocalTime.now(),
+    startTime: LocalTime = LocalTime.now(),
     disablePastTime: Boolean = false,
     size: DpSize = DpSize(128.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -39,10 +39,10 @@ fun WheelTimePicker(
     onScrollFinished : (snappedTime: LocalTime) -> Unit = {}
 ) {
     val hourTexts: List<String> = (0..23).map { it.toString().padStart(2, '0') }
-    val selectedHour = remember { mutableStateOf(currentTime.hour) }
+    val selectedHour = remember { mutableStateOf(startTime.hour) }
 
     val minuteTexts: List<String> = (0..59).map { it.toString().padStart(2, '0') }
-    val selectedMinute = remember { mutableStateOf(currentTime.minute) }
+    val selectedMinute = remember { mutableStateOf(startTime.minute) }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center){
         if(selectorEnabled){
@@ -60,12 +60,12 @@ fun WheelTimePicker(
                 texts = hourTexts,
                 textStyle = textStyle,
                 textColor = textColor,
-                startIndex = currentTime.hour,
+                startIndex = startTime.hour,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
                     try {
                         val selectedTime = LocalTime.of(selectedIndex, selectedMinute.value)
-                        val isTimeBefore = isTimeBefore(selectedTime, currentTime)
+                        val isTimeBefore = isTimeBefore(selectedTime, startTime)
 
                         if(disablePastTime){
                             if(!isTimeBefore){
@@ -93,12 +93,12 @@ fun WheelTimePicker(
                 texts = minuteTexts,
                 textStyle = textStyle,
                 textColor = textColor,
-                startIndex = currentTime.minute,
+                startIndex = startTime.minute,
                 selectorEnabled = false,
                 onScrollFinished = { selectedIndex ->
                     try {
                         val selectedTime = LocalTime.of(selectedHour.value, selectedIndex)
-                        val isTimeBefore = isTimeBefore(selectedTime, currentTime)
+                        val isTimeBefore = isTimeBefore(selectedTime, startTime)
 
                         if(disablePastTime){
                             if(!isTimeBefore){
