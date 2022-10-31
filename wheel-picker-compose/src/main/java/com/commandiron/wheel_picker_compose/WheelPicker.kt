@@ -19,9 +19,11 @@ import dev.chrisbanes.snapper.*
 @Composable
 fun WheelPicker(
     modifier: Modifier = Modifier,
-    lazyListState: LazyListState = rememberLazyListState(),
     size: DpSize = DpSize(128.dp, 128.dp),
     startIndex: Int = 0,
+    lazyListState: LazyListState = rememberLazyListState(
+        initialFirstVisibleItemIndex = startIndex
+    ),
     count: Int,
     selectorEnabled: Boolean = false,
     selectorShape: Shape = RoundedCornerShape(0.dp),
@@ -47,11 +49,6 @@ fun WheelPicker(
                 }
             }
         }
-    }
-    LaunchedEffect(key1 = startIndex){
-        lazyListState.scrollToItem(startIndex)
-        snappedIndex.value = startIndex
-        onScrollFinished(if(snappedIndex.value < count) snappedIndex.value else count - 1)
     }
     Box(
         modifier = modifier,
