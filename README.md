@@ -66,3 +66,6 @@ WheelDateTimePicker(
 </td>
 </tr>
 </table>
+
+## Todo ✔️
+   * seamless text alpha animation
