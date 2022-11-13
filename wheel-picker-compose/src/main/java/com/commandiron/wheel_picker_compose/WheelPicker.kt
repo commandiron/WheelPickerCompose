@@ -21,9 +21,6 @@ fun WheelPicker(
     modifier: Modifier = Modifier,
     size: DpSize = DpSize(128.dp, 128.dp),
     startIndex: Int = 0,
-    lazyListState: LazyListState = rememberLazyListState(
-        initialFirstVisibleItemIndex = startIndex
-    ),
     count: Int,
     selectorEnabled: Boolean = false,
     selectorShape: Shape = RoundedCornerShape(0.dp),
@@ -32,24 +29,21 @@ fun WheelPicker(
     onScrollFinished: (snappedIndex: Int) -> Int? = { null },
     content: @Composable BoxScope.(index: Int, snappedIndex: Int) -> Unit,
 ) {
-    val layoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState)
-    val snappedIndex = remember { mutableStateOf(startIndex)}
-    LaunchedEffect(lazyListState.isScrollInProgress, count) {
-        if (!lazyListState.isScrollInProgress) {
-            val snappedItem = layoutInfo.currentItem
-            snappedItem?.let {  snapperLayoutItemInfo ->
-                if(snapperLayoutItemInfo.offset == 0){
-                    snappedIndex.value = snapperLayoutItemInfo.index
-                }else{
-                    snappedIndex.value = snapperLayoutItemInfo.index + 1
-                }
-                onScrollFinished(if(snappedIndex.value < count) snappedIndex.value else count - 1)?.let {
-                    lazyListState.scrollToItem(it)
-                    snappedIndex.value = it
-                }
-            }
+    var snappedIndex by remember { mutableStateOf(0) }
+    val lazyListState = rememberLazyListState(
+        initialFirstVisibleItemIndex = startIndex
+    )
+    val snapperFlingBehavior = rememberSnapperFlingBehavior(
+        lazyListState = lazyListState,
+        snapIndex = {
+                snapperLayoutInfo: SnapperLayoutInfo,
+                snappedStartIndex: Int,
+                snappedTargetIndex: Int ->
+
+            snappedIndex = snappedTargetIndex
+            snappedTargetIndex
         }
-    }
+    )
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
@@ -69,9 +63,7 @@ fun WheelPicker(
                 .width(size.width),
             state = lazyListState,
             contentPadding = PaddingValues(vertical = size.height / 3),
-            flingBehavior = rememberSnapperFlingBehavior(
-                lazyListState = lazyListState
-            )
+            flingBehavior = snapperFlingBehavior
         ){
             items(count){ index ->
                 Box(
@@ -80,7 +72,7 @@ fun WheelPicker(
                         .width(size.width),
                     contentAlignment = Alignment.Center
                 ) {
-                    content(index, snappedIndex.value)
+                    content(index, lazyListState.layoutInfo.)
                 }
             }
         }
