@@ -5,17 +5,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.commandiron.wheel_picker_compose.*
-import com.commandiron.wheel_picker_compose.wheel_picker.WheelPicker
-import com.commandiron.wheel_picker_compose.wheel_picker.WheelPickerDefaults
+import com.commandiron.wheel_picker_compose.WheelTimePicker
+import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
+import java.time.LocalTime
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -31,17 +31,13 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        WheelPicker(
-                            count = 6,
-                            onScrollFinished = { snappedIndex ->
-                                println(snappedIndex)
-                                snappedIndex
-                            },
-                            selectorAttr = WheelPickerDefaults.selectorDefaults(
+                        WheelTimePicker(
+                            startTime = LocalTime.of(12,12),
+                            selectorProperties = WheelPickerDefaults.selectorProperties(
                                 enabled = true
-                            ),
-                        ) { index ->
-                            Text(text = "Test $index")
+                            )
+                        ) {
+                            println(it)
                         }
                     }
                 }

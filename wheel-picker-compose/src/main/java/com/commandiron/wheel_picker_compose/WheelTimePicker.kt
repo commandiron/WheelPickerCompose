@@ -2,25 +2,22 @@ package com.commandiron.wheel_picker_compose
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.commandiron.wheel_picker_compose.core.SelectorProperties
+import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -28,97 +25,105 @@ import java.time.LocalTime
 fun WheelTimePicker(
     modifier: Modifier = Modifier,
     startTime: LocalTime = LocalTime.now(),
-    disablePastTime: Boolean = false,
+    backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(128.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
-    selectorEnabled: Boolean = true,
-    selectorShape: Shape = RoundedCornerShape(16.dp),
-    selectorColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-    selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-    onScrollFinished : (snappedTime: LocalTime) -> Unit = {}
+    selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
+    onSnappedHourIndex : (snappedHourIndex: Int) -> Int? = { null },
+    onSnappedMinuteIndex : (snappedMinuteIndex: Int) -> Int? = { null },
+    onSnappedTime: (snappedTime: LocalTime) -> Unit
 ) {
     val hourTexts: List<String> = (0..23).map { it.toString().padStart(2, '0') }
-    val selectedHour = remember { mutableStateOf(startTime.hour) }
-
     val minuteTexts: List<String> = (0..59).map { it.toString().padStart(2, '0') }
-    val selectedMinute = remember { mutableStateOf(startTime.minute) }
+
+    var snappedTime by remember { mutableStateOf(startTime) }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center){
-        if(selectorEnabled){
+        if(selectorProperties.enabled().value){
             Surface(
                 modifier = Modifier
                     .size(size.width, size.height / 3),
-                shape = selectorShape,
-                color = selectorColor,
-                border = selectorBorder
+                shape = selectorProperties.shape().value,
+                color = selectorProperties.color().value,
+                border = selectorProperties.border().value
             ) {}
         }
         Row {
+            //Hour
             WheelTextPicker(
                 size = DpSize(size.width / 2, size.height),
                 texts = hourTexts,
-                textStyle = textStyle,
-                textColor = textColor,
+                style = textStyle,
+                color = textColor,
                 startIndex = startTime.hour,
-                selectorEnabled = false,
-                onScrollFinished = { selectedIndex ->
+                selectorProperties = WheelPickerDefaults.selectorProperties(
+                    enabled = false
+                ),
+                onScrollFinished = { snappedIndex ->
                     try {
-                        val selectedTime = LocalTime.of(selectedIndex, selectedMinute.value)
-                        val isTimeBefore = isTimeBefore(selectedTime, startTime)
 
-                        if(disablePastTime){
+                        val isTimeBefore = isTimeBefore(snappedTime.withHour(snappedIndex), startTime)
+
+                        if(backwardsDisabled){
                             if(!isTimeBefore){
-                                selectedHour.value = selectedIndex
+                                snappedTime = snappedTime.withHour(snappedIndex)
                             }
                         }else{
-                            selectedHour.value = selectedIndex
+                            snappedTime = snappedTime.withHour(snappedIndex)
                         }
 
-                        onScrollFinished(
-                            LocalTime.of(
-                                selectedHour.value,
-                                selectedMinute.value
-                            )
-                        )
+                        onSnappedHourIndex(
+                            snappedIndex
+                        )?.let {
+                            return@WheelTextPicker it
+                        }
+
+                        onSnappedTime(snappedTime)
+
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
 
-                    return@WheelTextPicker selectedHour.value
+                    return@WheelTextPicker snappedTime.hour
                 }
             )
+            //Minute
             WheelTextPicker(
                 size = DpSize(size.width / 2, size.height),
                 texts = minuteTexts,
-                textStyle = textStyle,
-                textColor = textColor,
+                style = textStyle,
+                color = textColor,
                 startIndex = startTime.minute,
-                selectorEnabled = false,
-                onScrollFinished = { selectedIndex ->
+                selectorProperties = WheelPickerDefaults.selectorProperties(
+                    enabled = false
+                ),
+                onScrollFinished = { snappedIndex ->
                     try {
-                        val selectedTime = LocalTime.of(selectedHour.value, selectedIndex)
-                        val isTimeBefore = isTimeBefore(selectedTime, startTime)
 
-                        if(disablePastTime){
+                        val isTimeBefore = isTimeBefore(snappedTime.withMinute(snappedIndex), startTime)
+
+                        if(backwardsDisabled){
                             if(!isTimeBefore){
-                                selectedMinute.value = selectedIndex
+                                snappedTime = snappedTime.withMinute(snappedIndex)
                             }
                         }else{
-                            selectedMinute.value = selectedIndex
+                            snappedTime = snappedTime.withMinute(snappedIndex)
                         }
 
-                        onScrollFinished(
-                            LocalTime.of(
-                                selectedHour.value,
-                                selectedMinute.value
-                            )
-                        )
+                        onSnappedMinuteIndex(
+                            snappedIndex
+                        )?.let {
+                            return@WheelTextPicker it
+                        }
+
+                        onSnappedTime(snappedTime)
+
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
 
-                    return@WheelTextPicker selectedMinute.value
+                    return@WheelTextPicker snappedTime.minute
                 }
             )
         }
