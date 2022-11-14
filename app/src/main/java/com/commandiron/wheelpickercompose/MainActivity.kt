@@ -33,11 +33,11 @@ class MainActivity : ComponentActivity() {
                         WheelPicker(
                             count = 6,
                             onScrollFinished = { snappedIndex ->
+                                println(snappedIndex)
                                 snappedIndex
                             },
                             selectorEnabled = true
-                        ) { index, snappedIndex ->
-                            println(snappedIndex)
+                        ) { index ->
                             Text(text = "Test $index")
                         }
                     }

@@ -27,35 +27,35 @@ fun WheelTextPicker(
     selectorBorder: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
     onScrollFinished: (snappedIndex: Int) -> Int? = { null },
 ) {
-    WheelPicker(
-        modifier = modifier,
-        size = size,
-        startIndex = startIndex,
-        count = texts.size,
-        selectorEnabled = selectorEnabled,
-        selectorShape = selectorShape,
-        selectorColor = selectorColor,
-        selectorBorder = selectorBorder,
-        onScrollFinished = onScrollFinished
-    ){ index, snappedIndex ->
-        Text(
-            text = texts[index],
-            style = textStyle,
-            color = textColor.copy(
-                alpha = when(snappedIndex){
-                    index + 1 -> {
-                        0.2f
-                    }
-                    index -> {
-                        1f
-                    }
-                    index - 1 -> {
-                        0.2f
-                    }
-                    else -> 0.2f
-                }
-            ),
-            maxLines = 1
-        )
-    }
+//    WheelPicker(
+//        modifier = modifier,
+//        size = size,
+//        startIndex = startIndex,
+//        count = texts.size,
+//        selectorEnabled = selectorEnabled,
+//        selectorShape = selectorShape,
+//        selectorColor = selectorColor,
+//        selectorBorder = selectorBorder,
+//        onScrollFinished = onScrollFinished
+//    ){ index, snappedIndex ->
+//        Text(
+//            text = texts[index],
+//            style = textStyle,
+//            color = textColor.copy(
+//                alpha = when(snappedIndex){
+//                    index + 1 -> {
+//                        0.2f
+//                    }
+//                    index -> {
+//                        1f
+//                    }
+//                    index - 1 -> {
+//                        0.2f
+//                    }
+//                    else -> 0.2f
+//                }
+//            ),
+//            maxLines = 1
+//        )
+//    }
 }
