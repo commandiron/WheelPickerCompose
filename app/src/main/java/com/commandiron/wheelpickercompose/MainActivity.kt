@@ -12,8 +12,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.*
+import com.commandiron.wheel_picker_compose.wheel_picker.WheelPicker
+import com.commandiron.wheel_picker_compose.wheel_picker.WheelPickerDefaults
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +37,9 @@ class MainActivity : ComponentActivity() {
                                 println(snappedIndex)
                                 snappedIndex
                             },
-                            selectorEnabled = true
+                            selectorAttr = WheelPickerDefaults.selectorDefaults(
+                                enabled = true
+                            ),
                         ) { index ->
                             Text(text = "Test $index")
                         }
