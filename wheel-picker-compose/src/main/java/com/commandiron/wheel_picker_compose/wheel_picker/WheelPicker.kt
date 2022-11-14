@@ -1,10 +1,9 @@
 package com.commandiron.wheel_picker_compose.wheel_picker
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -28,7 +27,7 @@ fun WheelPicker(
     size: DpSize = DpSize(128.dp, 128.dp),
     selectorAttr: SelectorAttr = WheelPickerDefaults.selectorDefaults(),
     onScrollFinished: (snappedIndex: Int) -> Int? = { null },
-    content: @Composable BoxScope.(index: Int) -> Unit,
+    content: @Composable LazyItemScope.(index: Int) -> Unit,
 ) {
     val lazyListState = rememberLazyListState(startIndex)
     val snapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState = lazyListState)
@@ -36,7 +35,7 @@ fun WheelPicker(
 
     LaunchedEffect(isScrollInProgress) {
         if(!isScrollInProgress) {
-            onScrollFinished(calculateSnappedItem(snapperLayoutInfo) ?: startIndex)?.let {
+            onScrollFinished(calculateSnappedItemIndex(snapperLayoutInfo) ?: startIndex)?.let {
                 lazyListState.scrollToItem(it)
             }
         }
@@ -65,22 +64,40 @@ fun WheelPicker(
                 lazyListState = lazyListState
             )
         ){
-            items(count){ index ->
-                Box(
-                    modifier = Modifier
-                        .height(size.height / 3)
-                        .width(size.width)
-                        .alpha(calculateAlpha(lazyListState, index)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    content(index)
-                }
+            wheelPickerItems(count, size, lazyListState, snapperLayoutInfo) { index ->
+                content(index)
             }
         }
     }
 }
 
-private fun calculateSnappedItem(snapperLayoutInfo: SnapperLayoutInfo): Int? {
+fun LazyListScope.wheelPickerItems(
+    count: Int,
+    size: DpSize,
+    lazyListState: LazyListState,
+    snapperLayoutInfo: SnapperLayoutInfo,
+    itemContent: @Composable LazyItemScope.(index: Int) -> Unit
+) {
+    items(count){ index ->
+        Box(
+            modifier = Modifier
+                .height(size.height / 3)
+                .width(size.width)
+                .alpha(
+                    calculateAnimatedAlpha(
+                            lazyListState = lazyListState,
+                            snappedItemIndex = calculateSnappedItemIndex(snapperLayoutInfo) ?: index,
+                            index = index
+                    )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            itemContent(index)
+        }
+    }
+}
+
+private fun calculateSnappedItemIndex(snapperLayoutInfo: SnapperLayoutInfo): Int? {
     var currentItemIndex = snapperLayoutInfo.currentItem?.index
     if(snapperLayoutInfo.currentItem?.offset != 0) {
         if(currentItemIndex != null) {
@@ -90,8 +107,23 @@ private fun calculateSnappedItem(snapperLayoutInfo: SnapperLayoutInfo): Int? {
     return currentItemIndex
 }
 
-private fun calculateAlpha(lazyListState: LazyListState, index: Int): Float{
-    return 0.5f
+@Composable
+private fun calculateAnimatedAlpha(lazyListState: LazyListState, snappedItemIndex: Int, index: Int): Float{
+
+    val firstVisibleItemScrollOffset = remember { derivedStateOf { lazyListState.firstVisibleItemScrollOffset } }.value
+
+    val lastIndex = remember { derivedStateOf { lazyListState.layoutInfo } }.value.totalItemsCount - 1
+
+    var resultAlpha = 0.2f
+
+    if(!lazyListState.isScrollInProgress) {
+        if(snappedItemIndex == index) {
+            resultAlpha = if(lastIndex == index) 1f else if(firstVisibleItemScrollOffset == 0) 1f else 0.2f
+        }
+    }
+    return animateFloatAsState(
+        targetValue = resultAlpha
+    ).value
 }
 
 object WheelPickerDefaults{
