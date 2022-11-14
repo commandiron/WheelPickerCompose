@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,7 +61,8 @@ fun WheelPicker(
         LazyColumn(
             modifier = Modifier
                 .height(size.height)
-                .width(size.width).border(1.dp, Color.Red),
+                .width(size.width)
+                .border(1.dp, Color.Red),
             state = lazyListState,
             contentPadding = PaddingValues(vertical = size.height / 3),
             flingBehavior = rememberSnapperFlingBehavior(
@@ -83,7 +85,7 @@ fun WheelPicker(
 
 private fun calculateSelectedItem(snapperLayoutInfo: SnapperLayoutInfo): Int? {
     val currentItemIndex = snapperLayoutInfo.currentItem?.index
-    return if(currentItemIndex != null) {
-        if(snapperLayoutInfo.currentItem?.offset != 0) currentItemIndex + 1 else currentItemIndex
-    } else null
+    val currentItemIndexWithOffset = currentItemIndex?.let { it + 1 }
+    return if(snapperLayoutInfo.currentItem?.offset != 0)
+        currentItemIndexWithOffset else currentItemIndex
 }
