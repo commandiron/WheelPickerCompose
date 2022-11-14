@@ -30,8 +30,7 @@ fun WheelTimePicker(
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onSnappedHourIndex : (snappedHourIndex: Int) -> Int? = { null },
-    onSnappedMinuteIndex : (snappedMinuteIndex: Int) -> Int? = { null },
+    onSnappedTimeIndex : (snappedTimeIndex: Int) -> Int? = { null },
     onSnappedTime: (snappedTime: LocalTime) -> Unit
 ) {
     val hourTexts: List<String> = (0..23).map { it.toString().padStart(2, '0') }
@@ -73,12 +72,7 @@ fun WheelTimePicker(
                             snappedTime = snappedTime.withHour(snappedIndex)
                         }
 
-                        onSnappedHourIndex(
-                            snappedIndex
-                        )?.let {
-                            return@WheelTextPicker it
-                        }
-
+                        onSnappedTimeIndex(snappedIndex)?.let { return@WheelTextPicker it }
                         onSnappedTime(snappedTime)
 
                     }catch (e: Exception){
@@ -111,12 +105,7 @@ fun WheelTimePicker(
                             snappedTime = snappedTime.withMinute(snappedIndex)
                         }
 
-                        onSnappedMinuteIndex(
-                            snappedIndex
-                        )?.let {
-                            return@WheelTextPicker it
-                        }
-
+                        onSnappedTimeIndex(snappedIndex)?.let { return@WheelTextPicker it }
                         onSnappedTime(snappedTime)
 
                     }catch (e: Exception){

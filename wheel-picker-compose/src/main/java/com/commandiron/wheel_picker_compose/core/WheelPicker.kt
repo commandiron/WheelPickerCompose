@@ -33,7 +33,7 @@ fun WheelPicker(
     val snapperLayoutInfo = rememberLazyListSnapperLayoutInfo(lazyListState = lazyListState)
     val isScrollInProgress = lazyListState.isScrollInProgress
 
-    LaunchedEffect(isScrollInProgress) {
+    LaunchedEffect(isScrollInProgress, count) {
         if(!isScrollInProgress) {
             onScrollFinished(calculateSnappedItemIndex(snapperLayoutInfo) ?: startIndex)?.let {
                 lazyListState.scrollToItem(it)
