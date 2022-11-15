@@ -5,11 +5,9 @@ Add Wheel Date - Time Picker in Android Jetpack Compose.
 ## Usage
 |Picker|Usage|
 |------|-----|
-|<img src="https://user-images.githubusercontent.com/50905347/189122534-72e2140f-e5cf-414c-897d-36e6876555a1.gif" width="256" height="256">|```WheelDateTimePicker { snappedDateTime -> }```|
-|<img src="https://user-images.githubusercontent.com/50905347/189132165-6d2611a2-4f41-467d-900a-34d87dbbc68c.gif" width="256" height="256">|```WheelDatePicker { snappedDate -> }```|
-|<img src="https://user-images.githubusercontent.com/50905347/189145244-887aac1c-17aa-4f65-9049-252898e28a30.gif" width="256" height="256">|```WheelTimePicker { snappedTime -> }```|
-|<img src="https://user-images.githubusercontent.com/50905347/189645296-cc9733fa-52bd-46e2-897a-9a256275209b.gif" width="256" height="256">|```WheelTextPicker(texts = (1..6).map { "Text $it" })```|
-|<img src="https://user-images.githubusercontent.com/50905347/189134369-8c01dba5-4331-474d-8010-d3926c8fe669.gif" width="256" height="256">|```WheelPicker(count = 6) { index, snappedIndex ->```<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;```Card(Modifier.size(128.dp).padding(8.dp)) {}```<br/>```}```|
+|<img src="https://user-images.githubusercontent.com/50905347/201921058-82c7813d-b9c4-448c-a296-62465845152d.gif" width="256" height="256">|```WheelDateTimePicker { snappedDateTime -> }```|
+|<img src="https://user-images.githubusercontent.com/50905347/201921069-14a8410b-5952-4130-80b0-71f9ca286a93.gif" width="256" height="256">|```WheelDatePicker { snappedDate -> }```|
+|<img src="https://user-images.githubusercontent.com/50905347/201921066-b94b9fcd-c447-4b01-833f-03600e20ed44.gif" width="256" height="256">|```WheelTimePicker { snappedTime -> }```|
 
 
 ## Setup
@@ -31,7 +29,7 @@ dependencyResolutionManagement {
 3. Add dependency
 ```groovy
 dependencies {
-        implementation 'com.github.commandiron:WheelPickerCompose:1.0.11'
+        implementation 'com.github.commandiron:WheelPickerCompose:1.1.0'
 }
 ```
 
@@ -48,15 +46,17 @@ WheelDateTimePicker(
     ),
     minYear = 1950,
     maxYear = 2050,
-    disablePastDateTime = true,
     size = DpSize(200.dp, 100.dp),
+    backwardsDisabled = true,
     textStyle = MaterialTheme.typography.titleSmall,
     textColor = Color(0xFFffc300),
-    selectorEnabled = true,
-    selectorShape = RoundedCornerShape(0.dp),
-    selectorColor = Color(0xFFf1faee).copy(alpha = 0.2f),
-    selectorBorder = BorderStroke(2.dp, Color(0xFFf1faee))
-) { snappedDateTime -> }
+    selectorProperties = WheelPickerDefaults.selectorProperties(
+        enabled = true,
+        shape = RoundedCornerShape(0.dp),
+        color = Color(0xFFf1faee).copy(alpha = 0.2f),
+        border = BorderStroke(2.dp, Color(0xFFf1faee))
+    )
+){ snappedDateTime -> }
 ```
 </td>
 <td>  
