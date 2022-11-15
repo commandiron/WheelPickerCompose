@@ -70,7 +70,9 @@ internal fun DefaultWheelTimePicker(
                             snappedTime = newTime
                         }
 
-                        onSnappedTime(SnappedTime.Hour(snappedTime, snappedTime.hour))?.let { return@WheelTextPicker it }
+                        onSnappedTime(
+                            SnappedTime.Hour(snappedTime, snappedTime.hour)
+                        )?.let { return@WheelTextPicker it }
 
                     }catch (e: Exception){
                         e.printStackTrace()
@@ -103,7 +105,9 @@ internal fun DefaultWheelTimePicker(
                             snappedTime = newTime
                         }
 
-                        onSnappedTime(SnappedTime.Minute(snappedTime, snappedTime.minute))?.let { return@WheelTextPicker it }
+                        onSnappedTime(
+                            SnappedTime.Minute(snappedTime, snappedTime.minute)
+                        )?.let { return@WheelTextPicker it }
 
                     }catch (e: Exception){
                         e.printStackTrace()

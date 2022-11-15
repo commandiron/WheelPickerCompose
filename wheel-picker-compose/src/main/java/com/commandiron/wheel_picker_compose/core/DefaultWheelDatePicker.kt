@@ -78,7 +78,9 @@ internal fun DefaultWheelDatePicker(
                         snappedDate = newDate
                     }
 
-                    onSnappedDate(SnappedDate.DayOfMonth(snappedDate, snappedDate.dayOfMonth - 1))?.let { return@WheelTextPicker it }
+                    onSnappedDate(
+                        SnappedDate.DayOfMonth(snappedDate, snappedDate.dayOfMonth - 1)
+                    )?.let { return@WheelTextPicker it }
 
                     return@WheelTextPicker snappedDate.dayOfMonth - 1
                 }
@@ -108,7 +110,9 @@ internal fun DefaultWheelDatePicker(
 
                     dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
 
-                    onSnappedDate(SnappedDate.Month(snappedDate, snappedDate.month.value - 1))?.let { return@WheelTextPicker it }
+                    onSnappedDate(
+                        SnappedDate.Month(snappedDate, snappedDate.month.value - 1)
+                    )?.let { return@WheelTextPicker it }
 
                     return@WheelTextPicker snappedDate.month.value - 1
                 }
