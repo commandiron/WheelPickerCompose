@@ -1,4 +1,4 @@
-package com.commandiron.wheel_picker_compose
+package com.commandiron.wheel_picker_compose.core
 
 import android.os.Build
 import androidx.annotation.RequiresApi
