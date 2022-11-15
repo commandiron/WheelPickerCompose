@@ -20,7 +20,7 @@ import java.time.LocalTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DefaultWheelTimePicker(
+internal fun DefaultWheelTimePicker(
     modifier: Modifier = Modifier,
     startTime: LocalTime = LocalTime.now(),
     backwardsDisabled: Boolean = false,
