@@ -61,11 +61,11 @@ WheelDateTimePicker(
 </td>
 <td>  
     
-<img src="https://user-images.githubusercontent.com/50905347/190863946-3b095696-a4be-4d29-ad01-9489bb2ddb27.gif" width="256" height="256">
+<img src="https://user-images.githubusercontent.com/50905347/201922097-86422287-cbd7-40ab-bf3c-5e0475828976.gif" width="256" height="256">
     
 </td>
 </tr>
 </table>
 
 ## Todo ✔️
-   * seamless text alpha animation
+   * seamless text alpha animation ✔️
