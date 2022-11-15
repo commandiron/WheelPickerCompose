@@ -117,8 +117,8 @@ private fun calculateAnimatedAlpha(lazyListState: LazyListState, snappedItemInde
 object WheelPickerDefaults{
     @Composable
     fun selectorProperties(
-        enabled: Boolean = false,
-        shape: Shape = RoundedCornerShape(0.dp),
+        enabled: Boolean = true,
+        shape: Shape = RoundedCornerShape(16.dp),
         color: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
         border: BorderStroke? = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
     ): SelectorProperties = DefaultSelectorProperties(

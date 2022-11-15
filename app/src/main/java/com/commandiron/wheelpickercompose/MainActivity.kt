@@ -31,13 +31,15 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        WheelDateTimePicker(
-                            backwardsDisabled = true,
-                            onSnappedDateTime = { snappedDateTime ->
-                                println(snappedDateTime.snappedLocalDateTime)
-                                snappedDateTime.snappedIndex
-                            }
-                        )
+                        WheelTimePicker {
+                            println(it)
+                        }
+                        WheelDatePicker {
+                            println(it)
+                        }
+                        WheelDateTimePicker {
+                            println(it)
+                        }
                     }
                 }
             }
