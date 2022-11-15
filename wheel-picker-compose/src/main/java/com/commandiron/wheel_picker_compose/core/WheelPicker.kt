@@ -24,7 +24,7 @@ import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 import kotlin.math.absoluteValue
 
 @Composable
-fun WheelPicker(
+internal fun WheelPicker(
     modifier: Modifier = Modifier,
     startIndex: Int = 0,
     count: Int,

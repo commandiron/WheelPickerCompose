@@ -14,7 +14,7 @@ import com.commandiron.wheel_picker_compose.core.WheelPicker
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 
 @Composable
-fun WheelTextPicker(
+internal fun WheelTextPicker(
     modifier: Modifier = Modifier,
     startIndex: Int = 0,
     size: DpSize = DpSize(128.dp, 128.dp),
