@@ -31,14 +31,14 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        WheelTimePicker {
-                            println(it)
+                        WheelTimePicker { snappedTime ->
+                            println(snappedTime)
                         }
-                        WheelDatePicker {
-                            println(it)
+                        WheelDatePicker { snappedDate ->
+                            println(snappedDate)
                         }
-                        WheelDateTimePicker {
-                            println(it)
+                        WheelDateTimePicker { snappedDateTime ->
+                            println(snappedDateTime)
                         }
                     }
                 }
