@@ -42,6 +42,7 @@ android {
 
 dependencies {
     implementation "androidx.compose.ui:ui:$compose_ui_version"
+    implementation "androidx.compose.ui:ui-util:$compose_ui_version"
     implementation "androidx.compose.material3:material3:1.0.0-alpha15"
 
     implementation "dev.chrisbanes.snapper:snapper:0.3.0"
