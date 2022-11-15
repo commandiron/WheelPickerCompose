@@ -32,10 +32,9 @@ fun WheelDatePicker(
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onSnappedDateIndex : (snappedDateIndex: Int) -> Int? = { null },
-    onSnappedDate: (snappedDate: LocalDate) -> Unit = {},
+    onSnappedDate : (snappedDate: SnappedDate) -> Int? = { _ -> null }
 ) {
-    val dayTexts = remember { mutableStateOf((1..31).toList().map { it.toString() }) }
+    var dayTexts by remember { mutableStateOf((1..31).toList().map { it.toString() }) }
     val monthTexts: List<String> = if(size.width / 3 < 55.dp){
         DateFormatSymbols().shortMonths.toList()
     }else{
@@ -61,7 +60,7 @@ fun WheelDatePicker(
             //Day of Month
             WheelTextPicker(
                 size = DpSize(size.width / 3, size.height),
-                texts = dayTexts.value,
+                texts = dayTexts,
                 style = textStyle,
                 color = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(
@@ -71,7 +70,6 @@ fun WheelDatePicker(
                 onScrollFinished = { snappedIndex ->
 
                     val newDate = snappedDate.withDayOfMonth(snappedIndex + 1)
-
                     val isDateBefore = isDateBefore(newDate, startDate)
 
                     if(backwardsDisabled) {
@@ -82,8 +80,7 @@ fun WheelDatePicker(
                         snappedDate = newDate
                     }
 
-                    onSnappedDateIndex(snappedDate.dayOfMonth - 1)?.let { return@WheelTextPicker it }
-                    onSnappedDate(snappedDate)
+                    onSnappedDate(SnappedDate.DayOfMonth(snappedDate, snappedDate.dayOfMonth - 1))?.let { return@WheelTextPicker it }
 
                     return@WheelTextPicker snappedDate.dayOfMonth - 1
                 }
@@ -101,7 +98,6 @@ fun WheelDatePicker(
                 onScrollFinished = { snappedIndex ->
 
                     val newDate = snappedDate.withMonth(snappedIndex + 1)
-
                     val isDateBefore = isDateBefore(newDate, startDate)
 
                     if(backwardsDisabled) {
@@ -112,10 +108,9 @@ fun WheelDatePicker(
                         snappedDate = newDate
                     }
 
-                    dayTexts.value = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
+                    dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
 
-                    onSnappedDateIndex(snappedDate.month.value - 1)?.let { return@WheelTextPicker it }
-                    onSnappedDate(snappedDate)
+                    onSnappedDate(SnappedDate.Month(snappedDate, snappedDate.month.value - 1))?.let { return@WheelTextPicker it }
 
                     return@WheelTextPicker snappedDate.month.value - 1
                 }
@@ -137,7 +132,6 @@ fun WheelDatePicker(
                 onScrollFinished = { snappedIndex ->
 
                     val newDate = snappedDate.withYear(yearTexts[snappedIndex].toInt())
-
                     val isDateBefore = isDateBefore(newDate, startDate)
 
                     if(backwardsDisabled) {
@@ -148,10 +142,9 @@ fun WheelDatePicker(
                         snappedDate = newDate
                     }
 
-                    dayTexts.value = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
+                    dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
 
-                    onSnappedDateIndex(yearTexts.indexOf(snappedDate.year.toString()))?.let { return@WheelTextPicker it }
-                    onSnappedDate(snappedDate)
+                    onSnappedDate(SnappedDate.Year(snappedDate, yearTexts.indexOf(snappedDate.year.toString())))?.let { return@WheelTextPicker it }
 
                     return@WheelTextPicker yearTexts.indexOf(snappedDate.year.toString())
                 }

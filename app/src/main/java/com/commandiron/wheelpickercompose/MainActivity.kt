@@ -13,11 +13,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.commandiron.wheel_picker_compose.WheelDatePicker
+import com.commandiron.wheel_picker_compose.WheelDateTimePicker
 import com.commandiron.wheel_picker_compose.WheelTimePicker
-import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
-import java.time.LocalDate
-import java.time.LocalTime
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -33,13 +31,13 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        WheelDatePicker(
-                            startDate = LocalDate.of(1972,10,25),
-                            minYear = 1971,
-                            maxYear = 2000
-                        ){
-                            println(it)
-                        }
+                        WheelDateTimePicker(
+                            backwardsDisabled = true,
+                            onSnappedDateTime = { snappedDateTime ->
+                                println(snappedDateTime.snappedLocalDateTime)
+                                snappedDateTime.snappedIndex
+                            }
+                        )
                     }
                 }
             }

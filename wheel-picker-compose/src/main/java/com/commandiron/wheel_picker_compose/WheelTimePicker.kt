@@ -30,8 +30,7 @@ fun WheelTimePicker(
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onSnappedTimeIndex : (snappedTimeIndex: Int) -> Int? = { null },
-    onSnappedTime: (snappedTime: LocalTime) -> Unit
+    onSnappedTime : (snappedTime: SnappedTime) -> Int? = { _ -> null },
 ) {
     val hourTexts: List<String> = (0..23).map { it.toString().padStart(2, '0') }
     val minuteTexts: List<String> = (0..59).map { it.toString().padStart(2, '0') }
@@ -62,18 +61,18 @@ fun WheelTimePicker(
                 onScrollFinished = { snappedIndex ->
                     try {
 
-                        val isTimeBefore = isTimeBefore(snappedTime.withHour(snappedIndex), startTime)
+                        val newTime = snappedTime.withHour(snappedIndex)
+                        val isTimeBefore = isTimeBefore(newTime, startTime)
 
                         if(backwardsDisabled){
                             if(!isTimeBefore){
-                                snappedTime = snappedTime.withHour(snappedIndex)
+                                snappedTime = newTime
                             }
                         }else{
-                            snappedTime = snappedTime.withHour(snappedIndex)
+                            snappedTime = newTime
                         }
 
-                        onSnappedTimeIndex(snappedIndex)?.let { return@WheelTextPicker it }
-                        onSnappedTime(snappedTime)
+                        onSnappedTime(SnappedTime.Hour(snappedTime,snappedTime.hour))?.let { return@WheelTextPicker it }
 
                     }catch (e: Exception){
                         e.printStackTrace()
@@ -95,18 +94,18 @@ fun WheelTimePicker(
                 onScrollFinished = { snappedIndex ->
                     try {
 
-                        val isTimeBefore = isTimeBefore(snappedTime.withMinute(snappedIndex), startTime)
+                        val newTime = snappedTime.withMinute(snappedIndex)
+                        val isTimeBefore = isTimeBefore(newTime, startTime)
 
                         if(backwardsDisabled){
                             if(!isTimeBefore){
-                                snappedTime = snappedTime.withMinute(snappedIndex)
+                                snappedTime = newTime
                             }
                         }else{
-                            snappedTime = snappedTime.withMinute(snappedIndex)
+                            snappedTime = newTime
                         }
 
-                        onSnappedTimeIndex(snappedIndex)?.let { return@WheelTextPicker it }
-                        onSnappedTime(snappedTime)
+                        onSnappedTime(SnappedTime.Minute(snappedTime, snappedTime.minute))?.let { return@WheelTextPicker it }
 
                     }catch (e: Exception){
                         e.printStackTrace()
