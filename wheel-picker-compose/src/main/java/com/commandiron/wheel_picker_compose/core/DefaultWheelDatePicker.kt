@@ -108,11 +108,15 @@ internal fun DefaultWheelDatePicker(
                         snappedDate = newDate
                     }
 
-                    dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
+                    val newDayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
 
-                    onSnappedDate(
-                        SnappedDate.Month(snappedDate, snappedDate.month.value - 1)
-                    )?.let { return@WheelTextPicker it }
+                    if(dayTexts != newDayTexts) {
+                        dayTexts = newDayTexts
+                    } else {
+                        onSnappedDate(
+                            SnappedDate.Month(snappedDate, snappedDate.month.value - 1)
+                        )?.let { return@WheelTextPicker it }
+                    }
 
                     return@WheelTextPicker snappedDate.month.value - 1
                 }
@@ -145,9 +149,13 @@ internal fun DefaultWheelDatePicker(
                         snappedDate = newDate
                     }
 
-                    dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
+                    val newDayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
 
-                    onSnappedDate(SnappedDate.Year(snappedDate, yearTexts.indexOf(snappedDate.year.toString())))?.let { return@WheelTextPicker it }
+                    if(dayTexts != newDayTexts) {
+                        dayTexts = newDayTexts
+                    } else {
+                        onSnappedDate(SnappedDate.Year(snappedDate, yearTexts.indexOf(snappedDate.year.toString())))?.let { return@WheelTextPicker it }
+                    }
 
                     return@WheelTextPicker yearTexts.indexOf(snappedDate.year.toString())
                 }
