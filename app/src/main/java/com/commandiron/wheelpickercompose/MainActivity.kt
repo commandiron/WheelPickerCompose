@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                             minYear = 1950,
                             maxYear = 2050,
                             size = DpSize(200.dp, 100.dp),
-                            backwardsDisabled = true,
+                            backwardsDisabled = false,
                             textStyle = MaterialTheme.typography.titleSmall,
                             textColor = Color(0xFFffc300),
                             selectorProperties = WheelPickerDefaults.selectorProperties(
@@ -63,7 +63,9 @@ class MainActivity : ComponentActivity() {
                                 color = Color(0xFFf1faee).copy(alpha = 0.2f),
                                 border = BorderStroke(2.dp, Color(0xFFf1faee))
                             )
-                        ){ snappedDateTime -> }
+                        ){ snappedDateTime ->
+                            println(snappedDateTime)
+                        }
                     }
                 }
             }
