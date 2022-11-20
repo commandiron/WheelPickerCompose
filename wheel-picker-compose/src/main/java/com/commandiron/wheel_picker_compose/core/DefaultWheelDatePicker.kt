@@ -133,7 +133,8 @@ internal fun DefaultWheelDatePicker(
                 } else years.indexOf(years.find { it == startDate.year }),
                 onScrollFinished = { snappedIndex ->
 
-                    val newDate = snappedDate.withYear(yearTexts[snappedIndex].toInt())
+                    val selectedYearText = yearTexts.getOrNull(snappedIndex) ?: yearTexts.last()
+                    val newDate = snappedDate.withYear(selectedYearText.toInt())
                     val isDateBefore = isDateBefore(newDate, startDate)
 
                     if(backwardsDisabled) {
