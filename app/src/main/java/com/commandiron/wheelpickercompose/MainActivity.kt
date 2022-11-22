@@ -51,8 +51,7 @@ class MainActivity : ComponentActivity() {
                             startDateTime = LocalDateTime.of(
                                 2025, 10, 30, 5, 0
                             ),
-                            minYear = 1950,
-                            maxYear = 2050,
+                            yearsRange = IntRange(1950, 2050),
                             size = DpSize(200.dp, 100.dp),
                             backwardsDisabled = false,
                             textStyle = MaterialTheme.typography.titleSmall,

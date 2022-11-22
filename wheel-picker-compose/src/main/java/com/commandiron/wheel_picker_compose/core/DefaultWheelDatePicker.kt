@@ -23,8 +23,7 @@ import java.time.LocalDate
 internal fun DefaultWheelDatePicker(
     modifier: Modifier = Modifier,
     startDate: LocalDate = LocalDate.now(),
-    minYear: Int = 1922,
-    maxYear: Int = 2122,
+    yearsRange: IntRange = IntRange(1922, 2122),
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -39,8 +38,7 @@ internal fun DefaultWheelDatePicker(
         DateFormatSymbols().months.toList()
     }
 
-    val years = IntRange(minYear, maxYear)
-    val yearTexts = years.map { it.toString() }
+    val years = yearsRange.map { it.toString() }
 
     var snappedDate by remember { mutableStateOf(startDate) }
 
@@ -120,20 +118,20 @@ internal fun DefaultWheelDatePicker(
             //Year
             WheelTextPicker(
                 size = DpSize(size.width / 3, size.height),
-                texts = yearTexts,
+                texts = years,
                 style = textStyle,
                 color = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(
                     enabled = false
                 ),
-                startIndex = if(years.indexOf(years.find { it == startDate.year }) == -1) {
+                startIndex = if(yearsRange.indexOf(yearsRange.find { it == startDate.year }) == -1) {
                     throw IllegalArgumentException(
                         "startDate.year should greater than minYear and smaller than maxYear"
                     )
-                } else years.indexOf(years.find { it == startDate.year }),
+                } else yearsRange.indexOf(yearsRange.find { it == startDate.year }),
                 onScrollFinished = { snappedIndex ->
 
-                    val selectedYearText = yearTexts.getOrNull(snappedIndex) ?: yearTexts.last()
+                    val selectedYearText = years.getOrNull(snappedIndex) ?: years.last()
                     val newDate = snappedDate.withYear(selectedYearText.toInt())
                     val isDateBefore = isDateBefore(newDate, startDate)
 
@@ -147,9 +145,9 @@ internal fun DefaultWheelDatePicker(
 
                     dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
 
-                    onSnappedDate(SnappedDate.Year(snappedDate, yearTexts.indexOf(snappedDate.year.toString())))?.let { return@WheelTextPicker it }
+                    onSnappedDate(SnappedDate.Year(snappedDate, years.indexOf(snappedDate.year.toString())))?.let { return@WheelTextPicker it }
 
-                    return@WheelTextPicker yearTexts.indexOf(snappedDate.year.toString())
+                    return@WheelTextPicker years.indexOf(snappedDate.year.toString())
                 }
             )
         }

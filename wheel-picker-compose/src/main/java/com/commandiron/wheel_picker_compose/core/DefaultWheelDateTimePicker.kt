@@ -22,8 +22,7 @@ import java.time.LocalDateTime
 internal fun DefaultWheelDateTimePicker(
     modifier: Modifier = Modifier,
     startDateTime: LocalDateTime = LocalDateTime.now(),
-    minYear: Int = 1922,
-    maxYear: Int = 2122,
+    yearsRange: IntRange = IntRange(1922, 2122),
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -34,7 +33,7 @@ internal fun DefaultWheelDateTimePicker(
 
     var snappedDateTime by remember { mutableStateOf(startDateTime) }
 
-    val yearTexts = IntRange(minYear, maxYear).map { it.toString() }
+    val years = yearsRange.map { it.toString() }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center){
         if(selectorProperties.enabled().value){
@@ -50,8 +49,7 @@ internal fun DefaultWheelDateTimePicker(
             //Date
             DefaultWheelDatePicker(
                 startDate = startDateTime.toLocalDate(),
-                minYear = minYear,
-                maxYear = maxYear,
+                yearsRange = yearsRange,
                 backwardsDisabled = false,
                 size = DpSize(size.width / 5 * 3, size.height),
                 textStyle = textStyle,
@@ -93,8 +91,8 @@ internal fun DefaultWheelDateTimePicker(
                             snappedDateTime.month.value - 1
                         }
                         is SnappedDate.Year -> {
-                            onSnappedDateTime(SnappedDateTime.Year(snappedDateTime, yearTexts.indexOf(snappedDateTime.year.toString())))
-                            yearTexts.indexOf(snappedDateTime.year.toString())
+                            onSnappedDateTime(SnappedDateTime.Year(snappedDateTime, years.indexOf(snappedDateTime.year.toString())))
+                            years.indexOf(snappedDateTime.year.toString())
                         }
                     }
                 }
