@@ -28,20 +28,18 @@ fun WheelDateTimePicker(
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
     onSnappedDateTime : (snappedDateTime: LocalDateTime) -> Unit = {}
 ) {
-    if(yearsRange != null) {
-        DefaultWheelDateTimePicker(
-            modifier,
-            startDateTime,
-            yearsRange,
-            backwardsDisabled,
-            size,
-            textStyle,
-            textColor,
-            selectorProperties,
-            onSnappedDateTime = { snappedDateTime ->
-                onSnappedDateTime(snappedDateTime.snappedLocalDateTime)
-                snappedDateTime.snappedIndex
-            }
-        )
-    }
+    DefaultWheelDateTimePicker(
+        modifier,
+        startDateTime,
+        yearsRange,
+        backwardsDisabled,
+        size,
+        textStyle,
+        textColor,
+        selectorProperties,
+        onSnappedDateTime = { snappedDateTime ->
+            onSnappedDateTime(snappedDateTime.snappedLocalDateTime)
+            snappedDateTime.snappedIndex
+        }
+    )
 }

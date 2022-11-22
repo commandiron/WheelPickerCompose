@@ -11,7 +11,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.core.DefaultWheelDatePicker
-import com.commandiron.wheel_picker_compose.core.DefaultWheelDateWithoutYearPicker
 import com.commandiron.wheel_picker_compose.core.SelectorProperties
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalDate
@@ -21,7 +20,7 @@ import java.time.LocalDate
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
     startDate: LocalDate = LocalDate.now(),
-    yearsRange: IntRange? = null,
+    yearsRange: IntRange? = IntRange(1922, 2122),
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -29,34 +28,18 @@ fun WheelDatePicker(
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
     onSnappedDate : (snappedDate: LocalDate) -> Unit = {}
 ) {
-    if(yearsRange != null) {
-        DefaultWheelDatePicker(
-            modifier,
-            startDate,
-            yearsRange,
-            backwardsDisabled,
-            size,
-            textStyle,
-            textColor,
-            selectorProperties,
-            onSnappedDate = { snappedDate ->
-                onSnappedDate(snappedDate.snappedLocalDate)
-                snappedDate.snappedIndex
-            }
-        )
-    } else {
-        DefaultWheelDateWithoutYearPicker(
-            modifier,
-            startDate,
-            backwardsDisabled,
-            size,
-            textStyle,
-            textColor,
-            selectorProperties,
-            onSnappedDate = { snappedDate ->
-                onSnappedDate(snappedDate.snappedLocalDate)
-                snappedDate.snappedIndex
-            }
-        )
-    }
+    DefaultWheelDatePicker(
+        modifier,
+        startDate,
+        yearsRange,
+        backwardsDisabled,
+        size,
+        textStyle,
+        textColor,
+        selectorProperties,
+        onSnappedDate = { snappedDate ->
+            onSnappedDate(snappedDate.snappedLocalDate)
+            snappedDate.snappedIndex
+        }
+    )
 }

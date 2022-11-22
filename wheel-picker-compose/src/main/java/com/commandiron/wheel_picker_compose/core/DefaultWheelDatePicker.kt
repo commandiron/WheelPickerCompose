@@ -23,7 +23,7 @@ import java.time.LocalDate
 internal fun DefaultWheelDatePicker(
     modifier: Modifier = Modifier,
     startDate: LocalDate = LocalDate.now(),
-    yearsRange: IntRange = IntRange(1922, 2122),
+    yearsRange: IntRange? = IntRange(1922, 2122),
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -38,7 +38,7 @@ internal fun DefaultWheelDatePicker(
         DateFormatSymbols().months.toList()
     }
 
-    val yearTexts = yearsRange.map { it.toString() }
+    val yearTexts = yearsRange?.map { it.toString() } ?: listOf()
 
     var snappedDate by remember { mutableStateOf(startDate) }
 
@@ -55,7 +55,7 @@ internal fun DefaultWheelDatePicker(
         Row {
             //Day of Month
             WheelTextPicker(
-                size = DpSize(size.width / 3, size.height),
+                size = DpSize(size.width / 3 / if(yearsRange == null) 2 else 1, size.height),
                 texts = dayTexts,
                 style = textStyle,
                 color = textColor,
@@ -116,40 +116,42 @@ internal fun DefaultWheelDatePicker(
                 }
             )
             //Year
-            WheelTextPicker(
-                size = DpSize(size.width / 3, size.height),
-                texts = yearTexts,
-                style = textStyle,
-                color = textColor,
-                selectorProperties = WheelPickerDefaults.selectorProperties(
-                    enabled = false
-                ),
-                startIndex = if(yearsRange.indexOf(yearsRange.find { it == startDate.year }) == -1) {
-                    throw IllegalArgumentException(
-                        "startDate.year should greater than minYear and smaller than maxYear"
-                    )
-                } else yearsRange.indexOf(yearsRange.find { it == startDate.year }),
-                onScrollFinished = { snappedIndex ->
+            yearsRange?.let { yearsRange ->
+                WheelTextPicker(
+                    size = DpSize(size.width / 3, size.height),
+                    texts = yearTexts,
+                    style = textStyle,
+                    color = textColor,
+                    selectorProperties = WheelPickerDefaults.selectorProperties(
+                        enabled = false
+                    ),
+                    startIndex = if(yearsRange.indexOf(yearsRange.find { it == startDate.year }) == -1) {
+                        throw IllegalArgumentException(
+                            "startDate.year should greater than minYear and smaller than maxYear"
+                        )
+                    } else yearsRange.indexOf(yearsRange.find { it == startDate.year }),
+                    onScrollFinished = { snappedIndex ->
 
-                    val selectedYearText = yearTexts.getOrNull(snappedIndex) ?: yearTexts.last()
-                    val newDate = snappedDate.withYear(selectedYearText.toInt())
-                    val isDateBefore = isDateBefore(newDate, startDate)
+                        val selectedYearText = yearTexts.getOrNull(snappedIndex) ?: yearTexts.last()
+                        val newDate = snappedDate.withYear(selectedYearText.toInt())
+                        val isDateBefore = isDateBefore(newDate, startDate)
 
-                    if(backwardsDisabled) {
-                        if(!isDateBefore) {
+                        if(backwardsDisabled) {
+                            if(!isDateBefore) {
+                                snappedDate = newDate
+                            }
+                        } else {
                             snappedDate = newDate
                         }
-                    } else {
-                        snappedDate = newDate
+
+                        dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
+
+                        onSnappedDate(SnappedDate.Year(snappedDate, yearTexts.indexOf(snappedDate.year.toString())))?.let { return@WheelTextPicker it }
+
+                        return@WheelTextPicker yearTexts.indexOf(snappedDate.year.toString())
                     }
-
-                    dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
-
-                    onSnappedDate(SnappedDate.Year(snappedDate, yearTexts.indexOf(snappedDate.year.toString())))?.let { return@WheelTextPicker it }
-
-                    return@WheelTextPicker yearTexts.indexOf(snappedDate.year.toString())
-                }
-            )
+                )
+            }
         }
     }
 }
