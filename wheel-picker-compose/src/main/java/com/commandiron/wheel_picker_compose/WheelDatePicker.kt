@@ -11,6 +11,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.core.DefaultWheelDatePicker
+import com.commandiron.wheel_picker_compose.core.DefaultWheelDateWithoutYearPicker
 import com.commandiron.wheel_picker_compose.core.SelectorProperties
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalDate
@@ -33,6 +34,20 @@ fun WheelDatePicker(
             modifier,
             startDate,
             yearsRange,
+            backwardsDisabled,
+            size,
+            textStyle,
+            textColor,
+            selectorProperties,
+            onSnappedDate = { snappedDate ->
+                onSnappedDate(snappedDate.snappedLocalDate)
+                snappedDate.snappedIndex
+            }
+        )
+    } else {
+        DefaultWheelDateWithoutYearPicker(
+            modifier,
+            startDate,
             backwardsDisabled,
             size,
             textStyle,
