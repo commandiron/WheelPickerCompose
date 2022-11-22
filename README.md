@@ -29,7 +29,7 @@ dependencyResolutionManagement {
 3. Add dependency
 ```groovy
 dependencies {
-    implementation 'com.github.commandiron:WheelPickerCompose:1.1.2'
+        implementation 'com.github.commandiron:WheelPickerCompose:1.1.2'
 }
 ```
 
@@ -62,6 +62,31 @@ WheelDateTimePicker(
     
 <img src="https://user-images.githubusercontent.com/50905347/201922097-86422287-cbd7-40ab-bf3c-5e0475828976.gif" width="256" height="256">
     
+</td>
+</tr>
+</table>
+
+## Customizations 
+
+<table>
+<tr>
+<td> 
+
+**Hide Year**
+    
+```kotlin  
+WheelDateTimePicker(
+    yearsRange = null   
+    )
+){ snappedDateTime -> }
+```
+
+</td>
+<td>  
+    
+<img src="https://user-images.githubusercontent.com/740393/203359785-b689933e-1230-4522-8f77-ff9ea1c6a606.png" width="256" height="256">
+
+
 </td>
 </tr>
 </table>
