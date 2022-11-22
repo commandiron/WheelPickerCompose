@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 fun WheelDateTimePicker(
     modifier: Modifier = Modifier,
     startDateTime: LocalDateTime = LocalDateTime.now(),
-    yearsRange: IntRange = IntRange(1922, 2122),
+    yearsRange: IntRange? = IntRange(1922, 2122),
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -28,18 +28,20 @@ fun WheelDateTimePicker(
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
     onSnappedDateTime : (snappedDateTime: LocalDateTime) -> Unit = {}
 ) {
-    DefaultWheelDateTimePicker(
-        modifier,
-        startDateTime,
-        yearsRange = yearsRange,
-        backwardsDisabled,
-        size,
-        textStyle,
-        textColor,
-        selectorProperties,
-        onSnappedDateTime = { snappedDateTime ->
-            onSnappedDateTime(snappedDateTime.snappedLocalDateTime)
-            snappedDateTime.snappedIndex
-        }
-    )
+    if(yearsRange != null) {
+        DefaultWheelDateTimePicker(
+            modifier,
+            startDateTime,
+            yearsRange,
+            backwardsDisabled,
+            size,
+            textStyle,
+            textColor,
+            selectorProperties,
+            onSnappedDateTime = { snappedDateTime ->
+                onSnappedDateTime(snappedDateTime.snappedLocalDateTime)
+                snappedDateTime.snappedIndex
+            }
+        )
+    }
 }
