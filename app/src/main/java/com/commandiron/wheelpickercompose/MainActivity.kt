@@ -20,8 +20,10 @@ import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.WheelDatePicker
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
 import com.commandiron.wheel_picker_compose.WheelTimePicker
+import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
+import java.sql.Time
 import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
@@ -51,9 +53,9 @@ class MainActivity : ComponentActivity() {
                             startDateTime = LocalDateTime.of(
                                 2025, 10, 30, 5, 0
                             ),
-                            yearsRange = IntRange(1950, 2050),
+                            yearsRange = null,
                             size = DpSize(200.dp, 100.dp),
-                            backwardsDisabled = false,
+                            backwardsDisabled = true,
                             textStyle = MaterialTheme.typography.titleSmall,
                             textColor = Color(0xFFffc300),
                             selectorProperties = WheelPickerDefaults.selectorProperties(

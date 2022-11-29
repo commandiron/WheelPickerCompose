@@ -2,6 +2,7 @@ package com.commandiron.wheel_picker_compose.core
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -31,7 +33,7 @@ internal fun DefaultWheelDateTimePicker(
     onSnappedDateTime : (snappedDateTime: SnappedDateTime) -> Int? = { _ -> null }
 ) {
 
-    var snappedDateTime by remember { mutableStateOf(startDateTime) }
+    var snappedDateTime by remember { mutableStateOf(startDateTime.truncatedTo(ChronoUnit.MINUTES)) }
 
     val yearTexts = yearsRange?.map { it.toString() } ?: listOf()
 
@@ -51,7 +53,10 @@ internal fun DefaultWheelDateTimePicker(
                 startDate = startDateTime.toLocalDate(),
                 yearsRange = yearsRange,
                 backwardsDisabled = false,
-                size = DpSize(size.width / 5 * 3, size.height),
+                size = DpSize(
+                    width = if(yearsRange == null ) size.width * 3 / 6 else size.width * 3 / 5 ,
+                    height = size.height
+                ),
                 textStyle = textStyle,
                 textColor = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(
@@ -101,7 +106,10 @@ internal fun DefaultWheelDateTimePicker(
             DefaultWheelTimePicker(
                 startTime = startDateTime.toLocalTime(),
                 backwardsDisabled = false,
-                size = DpSize(size.width / 5 * 2, size.height),
+                size = DpSize(
+                    width = if(yearsRange == null ) size.width * 3 / 6  else size.width * 2 / 5 ,
+                    height = size.height
+                ),
                 textStyle = textStyle,
                 textColor = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(

@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.core.DefaultWheelTimePicker
 import com.commandiron.wheel_picker_compose.core.SelectorProperties
+import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalTime
 
@@ -20,6 +21,7 @@ import java.time.LocalTime
 fun WheelTimePicker(
     modifier: Modifier = Modifier,
     startTime: LocalTime = LocalTime.now(),
+    timeFormat: TimeFormat = TimeFormat.HOUR_24,
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(128.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -30,6 +32,7 @@ fun WheelTimePicker(
     DefaultWheelTimePicker(
         modifier,
         startTime,
+        timeFormat,
         backwardsDisabled,
         size,
         textStyle,
