@@ -2,6 +2,7 @@ package com.commandiron.wheel_picker_compose.core
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -52,7 +53,10 @@ internal fun DefaultWheelDateTimePicker(
                 startDate = startDateTime.toLocalDate(),
                 yearsRange = yearsRange,
                 backwardsDisabled = false,
-                size = DpSize(size.width / 5 * 3, size.height),
+                size = DpSize(
+                    width = if(yearsRange == null ) size.width * 3 / 6 else size.width * 3 / 5 ,
+                    height = size.height
+                ),
                 textStyle = textStyle,
                 textColor = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(
@@ -102,7 +106,10 @@ internal fun DefaultWheelDateTimePicker(
             DefaultWheelTimePicker(
                 startTime = startDateTime.toLocalTime(),
                 backwardsDisabled = false,
-                size = DpSize(size.width / 5 * 2, size.height),
+                size = DpSize(
+                    width = if(yearsRange == null ) size.width * 3 / 6  else size.width * 2 / 5 ,
+                    height = size.height
+                ),
                 textStyle = textStyle,
                 textColor = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(

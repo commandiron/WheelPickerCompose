@@ -2,6 +2,7 @@ package com.commandiron.wheel_picker_compose.core
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -66,7 +67,10 @@ internal fun DefaultWheelDatePicker(
         Row {
             //Day of Month
             WheelTextPicker(
-                size = DpSize(size.width / 3 / if(yearsRange == null) 2 else 1, size.height),
+                size = DpSize(
+                    width = if(yearsRange == null) size.width / 2 else size.width / 3,
+                    height = size.height
+                ),
                 texts = dayOfMonths.map { it.text },
                 style = textStyle,
                 color = textColor,
@@ -108,7 +112,10 @@ internal fun DefaultWheelDatePicker(
             )
             //Month
             WheelTextPicker(
-                size = DpSize(size.width / 3, size.height),
+                size = DpSize(
+                    width = if(yearsRange == null) size.width / 2 else size.width / 3,
+                    height = size.height
+                ),
                 texts = months.map { it.text },
                 style = textStyle,
                 color = textColor,
@@ -155,7 +162,10 @@ internal fun DefaultWheelDatePicker(
             //Year
             years?.let { years ->
                 WheelTextPicker(
-                    size = DpSize(size.width / 3, size.height),
+                    size = DpSize(
+                        width = size.width / 3,
+                        height = size.height
+                    ),
                     texts = years.map { it.text },
                     style = textStyle,
                     color = textColor,
