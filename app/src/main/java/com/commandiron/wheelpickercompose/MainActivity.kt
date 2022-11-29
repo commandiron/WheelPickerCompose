@@ -46,10 +46,10 @@ class MainActivity : ComponentActivity() {
                             println(snappedTime)
                         }
                         WheelDatePicker { snappedDate ->
-//                            println(snappedDate)
+                            println(snappedDate)
                         }
                         WheelDateTimePicker { snappedDateTime ->
-//                            println(snappedDateTime)
+                            println(snappedDateTime)
                         }
                         WheelDateTimePicker(
                             startDateTime = LocalDateTime.of(
