@@ -30,7 +30,15 @@ internal fun DefaultWheelTimePicker(
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
     onSnappedTime : (snappedTime: SnappedTime) -> Int? = { _ -> null },
 ) {
-    val hourTexts: List<String> = (0..23).map { it.toString().padStart(2, '0') }
+
+    val hours = (0..23).map {
+        Hour(
+            text = it.toString().padStart(2, '0'),
+            value = it,
+            index = it
+        )
+    }
+
     val minuteTexts: List<String> = (0..59).map { it.toString().padStart(2, '0') }
 
     var snappedTime by remember { mutableStateOf(startTime) }
@@ -49,7 +57,7 @@ internal fun DefaultWheelTimePicker(
             //Hour
             WheelTextPicker(
                 size = DpSize(size.width / 2, size.height),
-                texts = hourTexts,
+                texts = hours.map { it.text },
                 style = textStyle,
                 color = textColor,
                 startIndex = startTime.hour,
@@ -57,9 +65,13 @@ internal fun DefaultWheelTimePicker(
                     enabled = false
                 ),
                 onScrollFinished = { snappedIndex ->
-                    try {
 
-                        val newTime = snappedTime.withHour(snappedIndex)
+                    val newHour = hours.find { it.index == snappedIndex }?.value
+
+                    newHour?.let {
+
+                        val newTime = snappedTime.withHour(newHour)
+
                         val isTimeBefore = isTimeBefore(newTime, startTime)
 
                         if(backwardsDisabled){
@@ -70,12 +82,16 @@ internal fun DefaultWheelTimePicker(
                             snappedTime = newTime
                         }
 
-                        onSnappedTime(
-                            SnappedTime.Hour(snappedTime, snappedTime.hour)
-                        )?.let { return@WheelTextPicker it }
+                        val newIndex = hours.find { it.value == snappedTime.hour }?.index
 
-                    }catch (e: Exception){
-                        e.printStackTrace()
+                        newIndex?.let {
+                            onSnappedTime(
+                                SnappedTime.Hour(
+                                    localTime = snappedTime,
+                                    index = newIndex
+                                )
+                            )?.let { return@WheelTextPicker it }
+                        }
                     }
 
                     return@WheelTextPicker snappedTime.hour
@@ -134,6 +150,12 @@ internal fun DefaultWheelTimePicker(
 private fun isTimeBefore(time: LocalTime, currentTime: LocalTime): Boolean{
     return time.isBefore(currentTime)
 }
+
+data class Hour(
+    val text: String,
+    val value: Int,
+    val index: Int
+)
 
 
 
