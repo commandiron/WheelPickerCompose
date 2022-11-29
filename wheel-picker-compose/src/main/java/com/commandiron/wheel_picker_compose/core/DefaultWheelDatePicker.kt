@@ -31,16 +31,27 @@ internal fun DefaultWheelDatePicker(
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
     onSnappedDate : (snappedDate: SnappedDate) -> Int? = { _ -> null }
 ) {
-    var dayTexts by remember { mutableStateOf((1..31).toList().map { it.toString() }) }
-    val monthTexts: List<String> = if(size.width / 3 < 55.dp){
-        DateFormatSymbols().shortMonths.toList()
-    }else{
-        DateFormatSymbols().months.toList()
+    var snappedDate by remember { mutableStateOf(startDate) }
+
+    var dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
+
+    val months = (1..12).map {
+        Month(
+            text = if(size.width / 3 < 55.dp){
+                DateFormatSymbols().shortMonths[it - 1]
+            } else DateFormatSymbols().months[it - 1],
+            value = it,
+            index = it - 1
+        )
     }
 
-    val yearTexts = yearsRange?.map { it.toString() } ?: listOf()
-
-    var snappedDate by remember { mutableStateOf(startDate) }
+    val years = yearsRange?.map {
+        Year(
+            text = it.toString(),
+            value = it,
+            index = yearsRange.indexOf(it)
+        )
+    }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center){
         if(selectorProperties.enabled().value){
@@ -56,84 +67,20 @@ internal fun DefaultWheelDatePicker(
             //Day of Month
             WheelTextPicker(
                 size = DpSize(size.width / 3 / if(yearsRange == null) 2 else 1, size.height),
-                texts = dayTexts,
+                texts = dayOfMonths.map { it.text },
                 style = textStyle,
                 color = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(
                     enabled = false
                 ),
-                startIndex = startDate.dayOfMonth - 1,
+                startIndex = dayOfMonths.find { it.value== startDate.dayOfMonth }?.index ?: 0,
                 onScrollFinished = { snappedIndex ->
 
-                    val newDate = snappedDate.withDayOfMonth(if(snappedIndex + 1 > dayTexts.size) snappedIndex else snappedIndex + 1)
-                    val isDateBefore = isDateBefore(newDate, startDate)
+                    val newDayOfMonth = dayOfMonths.find { it.index == snappedIndex }?.value
 
-                    if(backwardsDisabled) {
-                        if(!isDateBefore) {
-                            snappedDate = newDate
-                        }
-                    } else {
-                        snappedDate = newDate
-                    }
+                    newDayOfMonth?.let {
+                        val newDate = snappedDate.withDayOfMonth(newDayOfMonth)
 
-                    onSnappedDate(
-                        SnappedDate.DayOfMonth(snappedDate, snappedDate.dayOfMonth - 1)
-                    )?.let { return@WheelTextPicker it }
-
-                    return@WheelTextPicker snappedDate.dayOfMonth - 1
-                }
-            )
-            //Month
-            WheelTextPicker(
-                size = DpSize(size.width / 3, size.height),
-                texts = monthTexts,
-                style = textStyle,
-                color = textColor,
-                selectorProperties = WheelPickerDefaults.selectorProperties(
-                    enabled = false
-                ),
-                startIndex = startDate.month.value - 1,
-                onScrollFinished = { snappedIndex ->
-
-                    val newDate = snappedDate.withMonth(if(snappedIndex + 1 > 12) 12 else snappedIndex + 1)
-                    val isDateBefore = isDateBefore(newDate, startDate)
-
-                    if(backwardsDisabled) {
-                        if(!isDateBefore) {
-                            snappedDate = newDate
-                        }
-                    } else {
-                        snappedDate = newDate
-                    }
-
-                    dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
-
-                    onSnappedDate(
-                        SnappedDate.Month(snappedDate, snappedDate.month.value - 1)
-                    )?.let { return@WheelTextPicker it }
-
-                    return@WheelTextPicker snappedDate.month.value - 1
-                }
-            )
-            //Year
-            yearsRange?.let { yearsRange ->
-                WheelTextPicker(
-                    size = DpSize(size.width / 3, size.height),
-                    texts = yearTexts,
-                    style = textStyle,
-                    color = textColor,
-                    selectorProperties = WheelPickerDefaults.selectorProperties(
-                        enabled = false
-                    ),
-                    startIndex = if(yearsRange.indexOf(yearsRange.find { it == startDate.year }) == -1) {
-                        throw IllegalArgumentException(
-                            "startDate.year should greater than minYear and smaller than maxYear"
-                        )
-                    } else yearsRange.indexOf(yearsRange.find { it == startDate.year }),
-                    onScrollFinished = { snappedIndex ->
-
-                        val selectedYearText = yearTexts.getOrNull(snappedIndex) ?: yearTexts.last()
-                        val newDate = snappedDate.withYear(selectedYearText.toInt())
                         val isDateBefore = isDateBefore(newDate, startDate)
 
                         if(backwardsDisabled) {
@@ -144,11 +91,112 @@ internal fun DefaultWheelDatePicker(
                             snappedDate = newDate
                         }
 
-                        dayTexts = calculateMonthDayTexts(snappedDate.month.value, snappedDate.year)
+                        val newIndex =  dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
 
-                        onSnappedDate(SnappedDate.Year(snappedDate, yearTexts.indexOf(snappedDate.year.toString())))?.let { return@WheelTextPicker it }
+                        newIndex?.let {
+                            onSnappedDate(
+                                SnappedDate.DayOfMonth(
+                                    localDate = snappedDate,
+                                    index = newIndex
+                                )
+                            )?.let { return@WheelTextPicker it }
+                        }
+                    }
 
-                        return@WheelTextPicker yearTexts.indexOf(snappedDate.year.toString())
+                    return@WheelTextPicker dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
+                }
+            )
+            //Month
+            WheelTextPicker(
+                size = DpSize(size.width / 3, size.height),
+                texts = months.map { it.text },
+                style = textStyle,
+                color = textColor,
+                selectorProperties = WheelPickerDefaults.selectorProperties(
+                    enabled = false
+                ),
+                startIndex = months.find { it.value== startDate.monthValue }?.index ?: 0,
+                onScrollFinished = { snappedIndex ->
+
+                    val newMonth = months.find { it.index == snappedIndex }?.value
+
+                    newMonth?.let {
+
+                        val newDate = snappedDate.withMonth(newMonth)
+
+                        val isDateBefore = isDateBefore(newDate, startDate)
+
+                        if(backwardsDisabled) {
+                            if(!isDateBefore) {
+                                snappedDate = newDate
+                            }
+                        } else {
+                            snappedDate = newDate
+                        }
+
+                        dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
+
+                        val newIndex =  months.find { it.value == snappedDate.monthValue }?.index
+
+                        newIndex?.let {
+                            onSnappedDate(
+                                SnappedDate.Month(
+                                    localDate = snappedDate,
+                                    index = newIndex
+                                )
+                            )?.let { return@WheelTextPicker it }
+                        }
+                    }
+
+
+                    return@WheelTextPicker months.find { it.value == snappedDate.monthValue }?.index
+                }
+            )
+            //Year
+            years?.let { years ->
+                WheelTextPicker(
+                    size = DpSize(size.width / 3, size.height),
+                    texts = years.map { it.text },
+                    style = textStyle,
+                    color = textColor,
+                    selectorProperties = WheelPickerDefaults.selectorProperties(
+                        enabled = false
+                    ),
+                    startIndex = years.find { it.value == startDate.year }?.index ?:0,
+                    onScrollFinished = { snappedIndex ->
+
+                        val newYear = years.find { it.index == snappedIndex }?.value
+
+                        newYear?.let {
+
+                            val newDate = snappedDate.withYear(newYear)
+
+                            val isDateBefore = isDateBefore(newDate, startDate)
+
+                            if(backwardsDisabled) {
+                                if(!isDateBefore) {
+                                    snappedDate = newDate
+                                }
+                            } else {
+                                snappedDate = newDate
+                            }
+
+                            dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
+
+                            val newIndex =  years.find { it.value == snappedDate.year }?.index
+
+                            newIndex?.let {
+                                onSnappedDate(
+                                    SnappedDate.Year(
+                                        localDate = snappedDate,
+                                        index = newIndex
+                                    )
+                                )?.let { return@WheelTextPicker it }
+
+                            }
+                        }
+
+                        return@WheelTextPicker years.find { it.value == snappedDate.year }?.index
                     }
                 )
             }
@@ -159,4 +207,73 @@ internal fun DefaultWheelDatePicker(
 @RequiresApi(Build.VERSION_CODES.O)
 private fun isDateBefore(date: LocalDate, currentDate: LocalDate): Boolean{
     return date.isBefore(currentDate)
+}
+
+data class DayOfMonth(
+    val text: String,
+    val value: Int,
+    val index: Int
+)
+
+data class Month(
+    val text: String,
+    val value: Int,
+    val index: Int
+)
+
+data class Year(
+    val text: String,
+    val value: Int,
+    val index: Int
+)
+
+@RequiresApi(Build.VERSION_CODES.O)
+internal fun calculateDayOfMonths(month: Int, year: Int): List<DayOfMonth> {
+
+    val isLeapYear = LocalDate.of(year, month, 1).isLeapYear
+
+    val month31day = (1..31).map {
+        DayOfMonth(
+            text = it.toString(),
+            value = it,
+            index = it - 1
+        )
+    }
+    val month30day = (1..30).map {
+        DayOfMonth(
+            text = it.toString(),
+            value = it,
+            index = it - 1
+        )
+    }
+    val month29day = (1..29).map {
+        DayOfMonth(
+            text = it.toString(),
+            value = it,
+            index = it - 1
+        )
+    }
+    val month28day = (1..28).map {
+        DayOfMonth(
+            text = it.toString(),
+            value = it,
+            index = it - 1
+        )
+    }
+
+    return when(month){
+        1 -> { month31day }
+        2 -> { if(isLeapYear) month29day else month28day }
+        3 -> { month31day }
+        4 -> { month30day }
+        5 -> { month31day }
+        6 -> { month30day }
+        7 -> { month31day }
+        8 -> { month31day }
+        9 -> { month30day }
+        10 -> { month31day }
+        11 -> { month30day }
+        12 -> { month31day }
+        else -> { emptyList() }
+    }
 }
