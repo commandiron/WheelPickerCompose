@@ -17,6 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import java.time.LocalTime
+import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -31,7 +32,7 @@ internal fun DefaultWheelTimePicker(
     onSnappedTime : (snappedTime: SnappedTime) -> Int? = { _ -> null },
 ) {
 
-    var snappedTime by remember { mutableStateOf(startTime) }
+    var snappedTime by remember { mutableStateOf(startTime.truncatedTo(ChronoUnit.MINUTES)) }
 
     val hours = (0..23).map {
         Hour(

@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                         WheelTimePicker { snappedTime ->
                             println(snappedTime)
                         }
-                        WheelDatePicker(yearsRange = null) { snappedDate ->
+                        WheelDatePicker { snappedDate ->
                             println(snappedDate)
                         }
                         WheelDateTimePicker { snappedDateTime ->
