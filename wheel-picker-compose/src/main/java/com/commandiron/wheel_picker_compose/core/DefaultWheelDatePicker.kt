@@ -219,19 +219,19 @@ private fun isDateBefore(date: LocalDate, currentDate: LocalDate): Boolean{
     return date.isBefore(currentDate)
 }
 
-data class DayOfMonth(
+internal data class DayOfMonth(
     val text: String,
     val value: Int,
     val index: Int
 )
 
-data class Month(
+private data class Month(
     val text: String,
     val value: Int,
     val index: Int
 )
 
-data class Year(
+private data class Year(
     val text: String,
     val value: Int,
     val index: Int

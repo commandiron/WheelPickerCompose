@@ -20,8 +20,10 @@ import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.WheelDatePicker
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
 import com.commandiron.wheel_picker_compose.WheelTimePicker
+import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
+import java.sql.Time
 import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
@@ -38,14 +40,16 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        WheelTimePicker { snappedTime ->
+                        WheelTimePicker(
+                            timeFormat = TimeFormat.AM_PM
+                        ) { snappedTime ->
                             println(snappedTime)
                         }
                         WheelDatePicker { snappedDate ->
-                            println(snappedDate)
+//                            println(snappedDate)
                         }
                         WheelDateTimePicker { snappedDateTime ->
-                            println(snappedDateTime)
+//                            println(snappedDateTime)
                         }
                         WheelDateTimePicker(
                             startDateTime = LocalDateTime.of(
@@ -63,7 +67,7 @@ class MainActivity : ComponentActivity() {
                                 border = BorderStroke(2.dp, Color(0xFFf1faee))
                             )
                         ){ snappedDateTime ->
-                            println(snappedDateTime)
+//                            println(snappedDateTime)
                         }
                     }
                 }
