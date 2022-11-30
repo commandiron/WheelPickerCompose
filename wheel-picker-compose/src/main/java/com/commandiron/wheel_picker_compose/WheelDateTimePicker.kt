@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.core.DefaultWheelDateTimePicker
 import com.commandiron.wheel_picker_compose.core.SelectorProperties
+import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalDateTime
 
@@ -21,6 +22,7 @@ fun WheelDateTimePicker(
     modifier: Modifier = Modifier,
     startDateTime: LocalDateTime = LocalDateTime.now(),
     yearsRange: IntRange? = IntRange(1922, 2122),
+    timeFormat: TimeFormat = TimeFormat.HOUR_24,
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -32,6 +34,7 @@ fun WheelDateTimePicker(
         modifier,
         startDateTime,
         yearsRange,
+        timeFormat,
         backwardsDisabled,
         size,
         textStyle,

@@ -54,8 +54,8 @@ class MainActivity : ComponentActivity() {
                                 2025, 10, 30, 5, 0
                             ),
                             yearsRange = null,
-                            size = DpSize(200.dp, 100.dp),
                             backwardsDisabled = true,
+                            size = DpSize(200.dp, 100.dp),
                             textStyle = MaterialTheme.typography.titleSmall,
                             textColor = Color(0xFFffc300),
                             selectorProperties = WheelPickerDefaults.selectorProperties(
