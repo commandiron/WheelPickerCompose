@@ -117,7 +117,7 @@ internal fun DefaultWheelDateTimePicker(
                 selectorProperties = WheelPickerDefaults.selectorProperties(
                     enabled = false
                 ),
-                onSnappedTime = { snappedTime ->
+                onSnappedTime = { snappedTime, timeFormat ->
 
                     val newDateTime = when(snappedTime) {
                         is SnappedTime.Hour -> {
@@ -141,7 +141,7 @@ internal fun DefaultWheelDateTimePicker(
                     return@DefaultWheelTimePicker when(snappedTime) {
                         is SnappedTime.Hour -> {
                             onSnappedDateTime(SnappedDateTime.Hour(snappedDateTime, snappedDateTime.hour))
-                            snappedDateTime.hour
+                            if(timeFormat == TimeFormat.HOUR_24) snappedDateTime.hour else snappedDateTime.hour - 1
                         }
                         is SnappedTime.Minute -> {
                             onSnappedDateTime(SnappedDateTime.Minute(snappedDateTime, snappedDateTime.minute))

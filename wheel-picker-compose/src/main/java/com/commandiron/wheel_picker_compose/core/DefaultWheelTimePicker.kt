@@ -30,7 +30,7 @@ internal fun DefaultWheelTimePicker(
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onSnappedTime : (snappedTime: SnappedTime) -> Int? = { _ -> null },
+    onSnappedTime : (snappedTime: SnappedTime, timeFormat: TimeFormat) -> Int? = { _,_ -> null },
 ) {
 
     var snappedTime by remember { mutableStateOf(startTime.truncatedTo(ChronoUnit.MINUTES)) }
@@ -138,7 +138,8 @@ internal fun DefaultWheelTimePicker(
                                 SnappedTime.Hour(
                                     localTime = snappedTime,
                                     index = newIndex
-                                )
+                                ),
+                                timeFormat
                             )?.let { return@WheelTextPicker it }
                         }
                     }
@@ -197,7 +198,8 @@ internal fun DefaultWheelTimePicker(
                                     SnappedTime.Minute(
                                         localTime = snappedTime,
                                         index = newIndex
-                                    )
+                                    ),
+                                    timeFormat
                                 )?.let { return@WheelTextPicker it }
                             }
                         }
@@ -222,7 +224,13 @@ internal fun DefaultWheelTimePicker(
                     ),
                     onScrollFinished = { snappedIndex ->
 
-                        val newAmPm =  amPms.find { it.index == snappedIndex }
+                        val newAmPm =  amPms.find {
+                            if(snappedIndex == 2) {
+                                it.index == 1
+                            } else {
+                                it.index == snappedIndex
+                            }
+                        }
 
                         newAmPm?.let {
                             snappedAmPm = newAmPm
@@ -255,7 +263,8 @@ internal fun DefaultWheelTimePicker(
                                     SnappedTime.Hour(
                                         localTime = snappedTime,
                                         index = newIndex
-                                    )
+                                    ),
+                                    timeFormat
                                 )
                             }
                         }
@@ -310,6 +319,7 @@ private data class AmPmHour(
 )
 
 private fun hourToAmPmHour(hour: Int): Int {
+
     if(hour == 0) {
         return 12
     }
@@ -320,6 +330,7 @@ private fun hourToAmPmHour(hour: Int): Int {
 }
 
 private fun amPmHourToHour(amPmHour: Int, amPmValue: AmPmValue): Int {
+
     return when(amPmValue) {
         AmPmValue.AM -> {
             amPmHour

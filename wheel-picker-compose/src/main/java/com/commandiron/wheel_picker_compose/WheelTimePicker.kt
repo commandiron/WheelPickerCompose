@@ -38,7 +38,7 @@ fun WheelTimePicker(
         textStyle,
         textColor,
         selectorProperties,
-        onSnappedTime = { snappedTime ->
+        onSnappedTime = { snappedTime, _ ->
             onSnappedTime(snappedTime.snappedLocalTime)
             snappedTime.snappedIndex
         }
