@@ -31,7 +31,7 @@ internal fun DefaultWheelTimePicker(
     onSnappedTime: (snappedTime: SnappedTime, timeFormat: TimeFormat) -> Int? = { _, _ -> null },
 ) {
 
-    var snappedTime by remember { mutableStateOf(startTime/*.truncatedTo(ChronoUnit.MINUTES)*/) }
+    var snappedTime by remember { mutableStateOf(startTime) }
 
     val hours = (0..23).map {
         Hour(

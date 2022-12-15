@@ -40,8 +40,6 @@ data class CompatDateTime(val compatDate: CompatDate, val compatTime: CompatTime
     val month: Int get() = compatDate.month
     val year: Int get() = compatDate.year
 
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun toLocalDateTime(): LocalDateTime =
         LocalDateTime.of(
