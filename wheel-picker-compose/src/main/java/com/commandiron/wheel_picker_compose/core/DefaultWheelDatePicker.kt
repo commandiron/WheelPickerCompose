@@ -19,26 +19,25 @@ import androidx.compose.ui.unit.dp
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun DefaultWheelDatePicker(
     modifier: Modifier = Modifier,
-    startDate: LocalDate = LocalDate.now(),
+    startDate: CompatDate,
     yearsRange: IntRange? = IntRange(1922, 2122),
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onSnappedDate : (snappedDate: SnappedDate) -> Int? = { _ -> null }
+    onSnappedDate: (snappedDate: SnappedDate) -> Int? = { _ -> null }
 ) {
     var snappedDate by remember { mutableStateOf(startDate) }
 
-    var dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
+    var dayOfMonths = calculateDayOfMonths(snappedDate.month, snappedDate.year)
 
     val months = (1..12).map {
         Month(
-            text = if(size.width / 3 < 55.dp){
+            text = if (size.width / 3 < 55.dp) {
                 DateFormatSymbols().shortMonths[it - 1]
             } else DateFormatSymbols().months[it - 1],
             value = it,
@@ -54,8 +53,8 @@ internal fun DefaultWheelDatePicker(
         )
     }
 
-    Box(modifier = modifier, contentAlignment = Alignment.Center){
-        if(selectorProperties.enabled().value){
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        if (selectorProperties.enabled().value) {
             Surface(
                 modifier = Modifier
                     .size(size.width, size.height / 3),
@@ -68,7 +67,7 @@ internal fun DefaultWheelDatePicker(
             //Day of Month
             WheelTextPicker(
                 size = DpSize(
-                    width = if(yearsRange == null) size.width / 2 else size.width / 3,
+                    width = if (yearsRange == null) size.width / 2 else size.width / 3,
                     height = size.height
                 ),
                 texts = dayOfMonths.map { it.text },
@@ -77,25 +76,26 @@ internal fun DefaultWheelDatePicker(
                 selectorProperties = WheelPickerDefaults.selectorProperties(
                     enabled = false
                 ),
-                startIndex = dayOfMonths.find { it.value== startDate.dayOfMonth }?.index ?: 0,
+                startIndex = dayOfMonths.find { it.value == startDate.dayOfMonth }?.index ?: 0,
                 onScrollFinished = { snappedIndex ->
 
                     val newDayOfMonth = dayOfMonths.find { it.index == snappedIndex }?.value
 
                     newDayOfMonth?.let {
-                        val newDate = snappedDate.withDayOfMonth(newDayOfMonth)
+                        val newDate = snappedDate.copy(dayOfMonth = newDayOfMonth)
 
                         val isDateBefore = isDateBefore(newDate, startDate)
 
-                        if(backwardsDisabled) {
-                            if(!isDateBefore) {
+                        if (backwardsDisabled) {
+                            if (!isDateBefore) {
                                 snappedDate = newDate
                             }
                         } else {
                             snappedDate = newDate
                         }
 
-                        val newIndex =  dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
+                        val newIndex =
+                            dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
 
                         newIndex?.let {
                             onSnappedDate(
@@ -113,7 +113,7 @@ internal fun DefaultWheelDatePicker(
             //Month
             WheelTextPicker(
                 size = DpSize(
-                    width = if(yearsRange == null) size.width / 2 else size.width / 3,
+                    width = if (yearsRange == null) size.width / 2 else size.width / 3,
                     height = size.height
                 ),
                 texts = months.map { it.text },
@@ -122,28 +122,27 @@ internal fun DefaultWheelDatePicker(
                 selectorProperties = WheelPickerDefaults.selectorProperties(
                     enabled = false
                 ),
-                startIndex = months.find { it.value== startDate.monthValue }?.index ?: 0,
+                startIndex = months.find { it.value == startDate.month }?.index ?: 0,
                 onScrollFinished = { snappedIndex ->
 
                     val newMonth = months.find { it.index == snappedIndex }?.value
 
                     newMonth?.let {
-
-                        val newDate = snappedDate.withMonth(newMonth)
+                        val newDate = snappedDate.copy(month = newMonth)
 
                         val isDateBefore = isDateBefore(newDate, startDate)
 
-                        if(backwardsDisabled) {
-                            if(!isDateBefore) {
+                        if (backwardsDisabled) {
+                            if (!isDateBefore) {
                                 snappedDate = newDate
                             }
                         } else {
                             snappedDate = newDate
                         }
 
-                        dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
+                        dayOfMonths = calculateDayOfMonths(snappedDate.month, snappedDate.year)
 
-                        val newIndex =  months.find { it.value == snappedDate.monthValue }?.index
+                        val newIndex = months.find { it.value == snappedDate.month }?.index
 
                         newIndex?.let {
                             onSnappedDate(
@@ -156,7 +155,7 @@ internal fun DefaultWheelDatePicker(
                     }
 
 
-                    return@WheelTextPicker months.find { it.value == snappedDate.monthValue }?.index
+                    return@WheelTextPicker months.find { it.value == snappedDate.month }?.index
                 }
             )
             //Year
@@ -172,28 +171,28 @@ internal fun DefaultWheelDatePicker(
                     selectorProperties = WheelPickerDefaults.selectorProperties(
                         enabled = false
                     ),
-                    startIndex = years.find { it.value == startDate.year }?.index ?:0,
+                    startIndex = years.find { it.value == startDate.year }?.index ?: 0,
                     onScrollFinished = { snappedIndex ->
 
                         val newYear = years.find { it.index == snappedIndex }?.value
 
                         newYear?.let {
 
-                            val newDate = snappedDate.withYear(newYear)
+                            val newDate = snappedDate.copy(year = newYear)
 
                             val isDateBefore = isDateBefore(newDate, startDate)
 
-                            if(backwardsDisabled) {
-                                if(!isDateBefore) {
+                            if (backwardsDisabled) {
+                                if (!isDateBefore) {
                                     snappedDate = newDate
                                 }
                             } else {
                                 snappedDate = newDate
                             }
 
-                            dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
+                            dayOfMonths = calculateDayOfMonths(snappedDate.month, snappedDate.year)
 
-                            val newIndex =  years.find { it.value == snappedDate.year }?.index
+                            val newIndex = years.find { it.value == snappedDate.year }?.index
 
                             newIndex?.let {
                                 onSnappedDate(
@@ -214,9 +213,10 @@ internal fun DefaultWheelDatePicker(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-private fun isDateBefore(date: LocalDate, currentDate: LocalDate): Boolean{
-    return date.isBefore(currentDate)
+private fun isDateBefore(date: CompatDate, currentDate: CompatDate): Boolean {
+    return if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
+        date.toLocalDate().isBefore(currentDate.toLocalDate())
+    else date.toCalendarDate().before(currentDate.toCalendarDate())
 }
 
 internal data class DayOfMonth(
@@ -271,19 +271,45 @@ internal fun calculateDayOfMonths(month: Int, year: Int): List<DayOfMonth> {
         )
     }
 
-    return when(month){
-        1 -> { month31day }
-        2 -> { if(isLeapYear) month29day else month28day }
-        3 -> { month31day }
-        4 -> { month30day }
-        5 -> { month31day }
-        6 -> { month30day }
-        7 -> { month31day }
-        8 -> { month31day }
-        9 -> { month30day }
-        10 -> { month31day }
-        11 -> { month30day }
-        12 -> { month31day }
-        else -> { emptyList() }
+    return when (month) {
+        1 -> {
+            month31day
+        }
+        2 -> {
+            if (isLeapYear) month29day else month28day
+        }
+        3 -> {
+            month31day
+        }
+        4 -> {
+            month30day
+        }
+        5 -> {
+            month31day
+        }
+        6 -> {
+            month30day
+        }
+        7 -> {
+            month31day
+        }
+        8 -> {
+            month31day
+        }
+        9 -> {
+            month30day
+        }
+        10 -> {
+            month31day
+        }
+        11 -> {
+            month30day
+        }
+        12 -> {
+            month31day
+        }
+        else -> {
+            emptyList()
+        }
     }
 }

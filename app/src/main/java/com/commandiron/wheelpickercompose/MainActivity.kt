@@ -17,9 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import com.commandiron.wheel_picker_compose.WheelDatePicker
-import com.commandiron.wheel_picker_compose.WheelDateTimePicker
-import com.commandiron.wheel_picker_compose.WheelTimePicker
+import com.commandiron.wheel_picker_compose.*
 import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
@@ -27,7 +25,6 @@ import java.sql.Time
 import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -40,35 +37,51 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        WheelTimePicker { snappedTime ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            WheelTimePicker { snappedTime ->
+                                println(snappedTime)
+                            }
+                        } else WheelTimePickerCompat { snappedTime ->
                             println(snappedTime)
                         }
-                        WheelDatePicker { snappedDate ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            WheelDatePicker { snappedDate ->
+                                println(snappedDate)
+                            }
+                        } else WheelDatePickerCompat { snappedDate ->
                             println(snappedDate)
                         }
-                        WheelDateTimePicker(
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            WheelDateTimePicker(
+                                timeFormat = TimeFormat.AM_PM
+                            ) { snappedDateTime ->
+                                println(snappedDateTime)
+                            }
+                        } else WheelDateTimePickerCompat(
                             timeFormat = TimeFormat.AM_PM
                         ) { snappedDateTime ->
                             println(snappedDateTime)
                         }
-                        WheelDateTimePicker(
-                            startDateTime = LocalDateTime.of(
-                                2025, 10, 30, 5, 0
-                            ),
-                            yearsRange = null,
-                            backwardsDisabled = true,
-                            timeFormat = TimeFormat.AM_PM,
-                            size = DpSize(200.dp, 100.dp),
-                            textStyle = MaterialTheme.typography.titleSmall,
-                            textColor = Color(0xFFffc300),
-                            selectorProperties = WheelPickerDefaults.selectorProperties(
-                                enabled = true,
-                                shape = RoundedCornerShape(0.dp),
-                                color = Color(0xFFf1faee).copy(alpha = 0.2f),
-                                border = BorderStroke(2.dp, Color(0xFFf1faee))
-                            )
-                        ){ snappedDateTime ->
-                            println(snappedDateTime)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            WheelDateTimePicker(
+                                startDateTime = LocalDateTime.of(
+                                    2025, 10, 30, 5, 0
+                                ),
+                                yearsRange = null,
+                                backwardsDisabled = true,
+                                timeFormat = TimeFormat.AM_PM,
+                                size = DpSize(200.dp, 100.dp),
+                                textStyle = MaterialTheme.typography.titleSmall,
+                                textColor = Color(0xFFffc300),
+                                selectorProperties = WheelPickerDefaults.selectorProperties(
+                                    enabled = true,
+                                    shape = RoundedCornerShape(0.dp),
+                                    color = Color(0xFFf1faee).copy(alpha = 0.2f),
+                                    border = BorderStroke(2.dp, Color(0xFFf1faee))
+                                )
+                            ){ snappedDateTime ->
+                                println(snappedDateTime)
+                            }
                         }
                     }
                 }

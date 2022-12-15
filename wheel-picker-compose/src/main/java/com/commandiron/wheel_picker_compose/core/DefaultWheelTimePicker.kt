@@ -17,23 +17,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import java.time.LocalTime
-import java.time.temporal.ChronoUnit
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun DefaultWheelTimePicker(
     modifier: Modifier = Modifier,
-    startTime: LocalTime = LocalTime.now(),
+    startTime: CompatTime,
     timeFormat: TimeFormat = TimeFormat.HOUR_24,
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(128.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onSnappedTime : (snappedTime: SnappedTime, timeFormat: TimeFormat) -> Int? = { _,_ -> null },
+    onSnappedTime: (snappedTime: SnappedTime, timeFormat: TimeFormat) -> Int? = { _, _ -> null },
 ) {
 
-    var snappedTime by remember { mutableStateOf(startTime.truncatedTo(ChronoUnit.MINUTES)) }
+    var snappedTime by remember { mutableStateOf(startTime/*.truncatedTo(ChronoUnit.MINUTES)*/) }
 
     val hours = (0..23).map {
         Hour(
@@ -77,10 +75,10 @@ internal fun DefaultWheelTimePicker(
         )
     }
 
-    Box(modifier = modifier, contentAlignment = Alignment.Center){
-        if(selectorProperties.enabled().value){
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        if (selectorProperties.enabled().value) {
             Surface(
-                modifier = Modifier.size(size.width,size.height / 3),
+                modifier = Modifier.size(size.width, size.height / 3),
                 shape = selectorProperties.shape().value,
                 color = selectorProperties.color().value,
                 border = selectorProperties.border().value
@@ -90,21 +88,21 @@ internal fun DefaultWheelTimePicker(
             //Hour
             WheelTextPicker(
                 size = DpSize(
-                    width = size.width / if(timeFormat == TimeFormat.HOUR_24) 2 else 3,
+                    width = size.width / if (timeFormat == TimeFormat.HOUR_24) 2 else 3,
                     height = size.height
                 ),
-                texts = if(timeFormat == TimeFormat.HOUR_24) hours.map { it.text } else amPmHours.map { it.text },
+                texts = if (timeFormat == TimeFormat.HOUR_24) hours.map { it.text } else amPmHours.map { it.text },
                 style = textStyle,
                 color = textColor,
-                startIndex =  if(timeFormat == TimeFormat.HOUR_24) {
+                startIndex = if (timeFormat == TimeFormat.HOUR_24) {
                     hours.find { it.value == startTime.hour }?.index ?: 0
-                } else amPmHours.find { it.value ==  localTimeToAmPmHour(startTime) }?.index ?: 0,
+                } else amPmHours.find { it.value == localTimeToAmPmHour(startTime) }?.index ?: 0,
                 selectorProperties = WheelPickerDefaults.selectorProperties(
                     enabled = false
                 ),
                 onScrollFinished = { snappedIndex ->
 
-                    val newHour = if(timeFormat == TimeFormat.HOUR_24) {
+                    val newHour = if (timeFormat == TimeFormat.HOUR_24) {
                         hours.find { it.index == snappedIndex }?.value
                     } else {
                         amPmHourToHour24(
@@ -116,7 +114,7 @@ internal fun DefaultWheelTimePicker(
 
                     newHour?.let {
 
-                        val newTime = snappedTime.withHour(newHour)
+                        val newTime = snappedTime.copy(hour = newHour)
 
                         val isTimeBefore = isTimeBefore(newTime, startTime)
 
@@ -128,10 +126,10 @@ internal fun DefaultWheelTimePicker(
                             snappedTime = newTime
                         }
 
-                        val newIndex = if(timeFormat == TimeFormat.HOUR_24) {
+                        val newIndex = if (timeFormat == TimeFormat.HOUR_24) {
                             hours.find { it.value == snappedTime.hour }?.index
                         } else {
-                            amPmHours.find { it.value ==  localTimeToAmPmHour(snappedTime)}?.index
+                            amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.index
                         }
 
                         newIndex?.let {
@@ -145,17 +143,17 @@ internal fun DefaultWheelTimePicker(
                         }
                     }
 
-                    return@WheelTextPicker if(timeFormat == TimeFormat.HOUR_24) {
+                    return@WheelTextPicker if (timeFormat == TimeFormat.HOUR_24) {
                         hours.find { it.value == snappedTime.hour }?.index
                     } else {
-                        amPmHours.find { it.value ==  localTimeToAmPmHour(snappedTime)}?.index
+                        amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.index
                     }
                 }
             )
             //Minute
             WheelTextPicker(
                 size = DpSize(
-                    width = size.width / if(timeFormat == TimeFormat.HOUR_24) 2 else 3,
+                    width = size.width / if (timeFormat == TimeFormat.HOUR_24) 2 else 3,
                     height = size.height
                 ),
                 texts = minutes.map { it.text },
@@ -169,11 +167,12 @@ internal fun DefaultWheelTimePicker(
 
                     val newMinute = minutes.find { it.index == snappedIndex }?.value
 
-                    val newHour = if(timeFormat == TimeFormat.HOUR_24) {
+                    val newHour = if (timeFormat == TimeFormat.HOUR_24) {
                         hours.find { it.value == snappedTime.hour }?.value
                     } else {
                         amPmHourToHour24(
-                            amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.value ?: 0,
+                            amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.value
+                                ?: 0,
                             snappedTime.minute,
                             snappedAmPm.value
                         )
@@ -181,15 +180,15 @@ internal fun DefaultWheelTimePicker(
 
                     newMinute?.let {
                         newHour?.let {
-                            val newTime = snappedTime.withMinute(newMinute).withHour(newHour)
+                            val newTime = snappedTime.copy(hour = newHour, minute = newMinute)
 
                             val isTimeBefore = isTimeBefore(newTime, startTime)
 
-                            if(backwardsDisabled){
-                                if(!isTimeBefore){
+                            if (backwardsDisabled) {
+                                if (!isTimeBefore) {
                                     snappedTime = newTime
                                 }
-                            }else{
+                            } else {
                                 snappedTime = newTime
                             }
 
@@ -211,7 +210,7 @@ internal fun DefaultWheelTimePicker(
                 }
             )
             //AM_PM
-            if(timeFormat == TimeFormat.AM_PM) {
+            if (timeFormat == TimeFormat.AM_PM) {
                 WheelTextPicker(
                     size = DpSize(
                         width = size.width / 3,
@@ -220,14 +219,15 @@ internal fun DefaultWheelTimePicker(
                     texts = amPms.map { it.text },
                     style = textStyle,
                     color = textColor,
-                    startIndex = amPms.find { it.value == amPmValueFromTime(startTime) }?.index ?:0,
+                    startIndex = amPms.find { it.value == amPmValueFromTime(startTime) }?.index
+                        ?: 0,
                     selectorProperties = WheelPickerDefaults.selectorProperties(
                         enabled = false
                     ),
                     onScrollFinished = { snappedIndex ->
 
-                        val newAmPm =  amPms.find {
-                            if(snappedIndex == 2) {
+                        val newAmPm = amPms.find {
+                            if (snappedIndex == 2) {
                                 it.index == 1
                             } else {
                                 it.index == snappedIndex
@@ -241,21 +241,22 @@ internal fun DefaultWheelTimePicker(
                         val newMinute = minutes.find { it.value == snappedTime.minute }?.value
 
                         val newHour = amPmHourToHour24(
-                            amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.value ?: 0,
+                            amPmHours.find { it.value == localTimeToAmPmHour(snappedTime) }?.value
+                                ?: 0,
                             snappedTime.minute,
                             snappedAmPm.value
                         )
 
                         newMinute?.let {
-                            val newTime = snappedTime.withMinute(newMinute).withHour(newHour)
+                            val newTime = snappedTime.copy(hour = newHour, minute = newMinute)
 
                             val isTimeBefore = isTimeBefore(newTime, startTime)
 
-                            if(backwardsDisabled){
-                                if(!isTimeBefore){
+                            if (backwardsDisabled) {
+                                if (!isTimeBefore) {
                                     snappedTime = newTime
                                 }
-                            }else{
+                            } else {
                                 snappedTime = newTime
                             }
 
@@ -301,9 +302,10 @@ internal fun DefaultWheelTimePicker(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-private fun isTimeBefore(time: LocalTime, currentTime: LocalTime): Boolean{
-    return time.isBefore(currentTime)
+private fun isTimeBefore(time: CompatTime, currentTime: CompatTime): Boolean {
+    return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O)
+        time.toLocalTime().isBefore(currentTime.toLocalTime())
+    else time.toCalendarTime().before(currentTime.toCalendarTime())
 }
 
 enum class TimeFormat {
@@ -315,75 +317,79 @@ private data class Hour(
     val value: Int,
     val index: Int
 )
+
 private data class AmPmHour(
     val text: String,
     val value: Int,
     val index: Int
 )
 
-@RequiresApi(Build.VERSION_CODES.O)
-internal fun localTimeToAmPmHour(localTime: LocalTime): Int {
+internal fun localTimeToAmPmHour(compatTime: CompatTime): Int {
 
-    if(
+    if (
         isBetween(
-            localTime,
-            LocalTime.of(0,0),
-            LocalTime.of(0,59)
+            compatTime,
+            CompatTime(0, 0),
+            CompatTime(0, 59)
         )
     ) {
-        return localTime.hour + 12
+        return compatTime.hour + 12
     }
 
-    if(
+    if (
         isBetween(
-            localTime,
-            LocalTime.of(1,0),
-            LocalTime.of(11,59)
+            compatTime,
+            CompatTime(1, 0),
+            CompatTime(11, 59)
         )
     ) {
-        return localTime.hour
+        return compatTime.hour
     }
 
-    if(
+    if (
         isBetween(
-            localTime,
-            LocalTime.of(12,0),
-            LocalTime.of(12,59)
+            compatTime,
+            CompatTime(12, 0),
+            CompatTime(12, 59)
         )
     ) {
-        return localTime.hour
+        return compatTime.hour
     }
 
-    if(
+    if (
         isBetween(
-            localTime,
-            LocalTime.of(13,0),
-            LocalTime.of(23,59)
+            compatTime,
+            CompatTime(13, 0),
+            CompatTime(23, 59)
         )
     ) {
-        return localTime.hour - 12
+        return compatTime.hour - 12
     }
 
-    return localTime.hour
+    return compatTime.hour
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-private fun isBetween(localTime: LocalTime, startTime: LocalTime, endTime: LocalTime): Boolean {
-    return localTime in startTime..endTime
+private fun isBetween(localTime: CompatTime, startTime: CompatTime, endTime: CompatTime): Boolean {
+    return if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+        localTime.toLocalTime() in startTime.toLocalTime()..endTime.toLocalTime()
+    }
+    else {
+        localTime.toCalendarTime() in startTime.toCalendarTime()..endTime.toCalendarTime()
+    }
 }
 
 private fun amPmHourToHour24(amPmHour: Int, amPmMinute: Int, amPmValue: AmPmValue): Int {
 
-    return when(amPmValue) {
+    return when (amPmValue) {
         AmPmValue.AM -> {
-            if(amPmHour == 12 && amPmMinute <= 59) {
+            if (amPmHour == 12 && amPmMinute <= 59) {
                 0
             } else {
                 amPmHour
             }
         }
         AmPmValue.PM -> {
-            if(amPmHour == 12 && amPmMinute <= 59) {
+            if (amPmHour == 12 && amPmMinute <= 59) {
                 amPmHour
             } else {
                 amPmHour + 12
@@ -408,9 +414,8 @@ internal enum class AmPmValue {
     AM, PM
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-private fun amPmValueFromTime(time: LocalTime): AmPmValue {
-    return if(time.hour > 11) AmPmValue.PM else AmPmValue.AM
+private fun amPmValueFromTime(time: CompatTime): AmPmValue {
+    return if (time.hour > 11) AmPmValue.PM else AmPmValue.AM
 }
 
 
