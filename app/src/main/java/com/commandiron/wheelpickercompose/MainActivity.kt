@@ -46,7 +46,9 @@ class MainActivity : ComponentActivity() {
                         WheelDatePicker { snappedDate ->
                             println(snappedDate)
                         }
-                        WheelDateTimePicker { snappedDateTime ->
+                        WheelDateTimePicker(
+                            timeFormat = TimeFormat.AM_PM
+                        ) { snappedDateTime ->
                             println(snappedDateTime)
                         }
                         WheelDateTimePicker(
@@ -55,6 +57,7 @@ class MainActivity : ComponentActivity() {
                             ),
                             yearsRange = null,
                             backwardsDisabled = true,
+                            timeFormat = TimeFormat.AM_PM,
                             size = DpSize(200.dp, 100.dp),
                             textStyle = MaterialTheme.typography.titleSmall,
                             textColor = Color(0xFFffc300),

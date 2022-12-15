@@ -141,7 +141,8 @@ internal fun DefaultWheelDateTimePicker(
                     return@DefaultWheelTimePicker when(snappedTime) {
                         is SnappedTime.Hour -> {
                             onSnappedDateTime(SnappedDateTime.Hour(snappedDateTime, snappedDateTime.hour))
-                            if(timeFormat == TimeFormat.HOUR_24) snappedDateTime.hour else snappedDateTime.hour - 1
+                            if(timeFormat == TimeFormat.HOUR_24) snappedDateTime.hour else
+                            localTimeToAmPmHour(snappedDateTime.toLocalTime()) - 1
                         }
                         is SnappedTime.Minute -> {
                             onSnappedDateTime(SnappedDateTime.Minute(snappedDateTime, snappedDateTime.minute))

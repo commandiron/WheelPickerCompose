@@ -322,7 +322,7 @@ private data class AmPmHour(
 )
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun localTimeToAmPmHour(localTime: LocalTime): Int {
+internal fun localTimeToAmPmHour(localTime: LocalTime): Int {
 
     if(
         isBetween(
