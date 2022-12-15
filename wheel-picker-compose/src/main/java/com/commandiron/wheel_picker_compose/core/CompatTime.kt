@@ -22,7 +22,7 @@ data class CompatTime(val hour: Int, val minute: Int) {
 data class CompatDate(val dayOfMonth: Int, val month: Int, val year: Int) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun toLocalDate(): LocalDate =
-        LocalDate.of(dayOfMonth, month, year)
+        LocalDate.of(year, month, dayOfMonth)
 
     fun toCalendarDate(): Calendar =
         Calendar.getInstance().apply {

@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import java.text.DateFormatSymbols
 import java.time.LocalDate
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 @Composable
 internal fun DefaultWheelDatePicker(
@@ -237,10 +239,16 @@ private data class Year(
     val index: Int
 )
 
-@RequiresApi(Build.VERSION_CODES.O)
 internal fun calculateDayOfMonths(month: Int, year: Int): List<DayOfMonth> {
 
-    val isLeapYear = LocalDate.of(year, month, 1).isLeapYear
+    val isLeapYear = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        LocalDate.of(year, month, 1).isLeapYear
+    } else {
+        //REMIND: Check if this makes sense. would casting to GregorianCalendar work anytime?
+        (Calendar.getInstance().apply {
+            set(year, month, 1)
+        } as? GregorianCalendar)?.isLeapYear(year) ?: false
+    }
 
     val month31day = (1..31).map {
         DayOfMonth(
@@ -272,44 +280,18 @@ internal fun calculateDayOfMonths(month: Int, year: Int): List<DayOfMonth> {
     }
 
     return when (month) {
-        1 -> {
-            month31day
-        }
-        2 -> {
-            if (isLeapYear) month29day else month28day
-        }
-        3 -> {
-            month31day
-        }
-        4 -> {
-            month30day
-        }
-        5 -> {
-            month31day
-        }
-        6 -> {
-            month30day
-        }
-        7 -> {
-            month31day
-        }
-        8 -> {
-            month31day
-        }
-        9 -> {
-            month30day
-        }
-        10 -> {
-            month31day
-        }
-        11 -> {
-            month30day
-        }
-        12 -> {
-            month31day
-        }
-        else -> {
-            emptyList()
-        }
+        1 -> { month31day }
+        2 -> { if (isLeapYear) month29day else month28day }
+        3 -> { month31day }
+        4 -> { month30day }
+        5 -> { month31day }
+        6 -> { month30day }
+        7 -> { month31day }
+        8 -> { month31day }
+        9 -> { month30day }
+        10 -> { month31day }
+        11 -> { month30day }
+        12 -> { month31day }
+        else -> { emptyList() }
     }
 }
