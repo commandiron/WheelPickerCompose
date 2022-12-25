@@ -33,6 +33,18 @@ dependencies {
     implementation 'com.github.commandiron:WheelPickerCompose:1.1.8-alpha'
 }
 ```
+4. To support < API 26 (optional)
+```groovy
+compileOptions {
+    coreLibraryDesugaringEnabled true
+    //
+}
+//
+dependencies {
+    //
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.6"
+}
+```
 
 ## Features
 
