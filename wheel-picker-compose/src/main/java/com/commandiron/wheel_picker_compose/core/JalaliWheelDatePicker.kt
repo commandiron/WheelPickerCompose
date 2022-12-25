@@ -1,5 +1,8 @@
 package com.commandiron.wheel_picker_compose.core
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -16,11 +19,12 @@ import androidx.compose.ui.unit.dp
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-internal fun DefaultWheelDatePicker(
+internal fun JalaliWheelDatePicker(
     modifier: Modifier = Modifier,
     startDate: LocalDate = LocalDate.now(),
-    yearsRange: IntRange? = IntRange(1922, 2122),
+    yearsRange: IntRange? = IntRange(1300, 1500),
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -29,32 +33,26 @@ internal fun DefaultWheelDatePicker(
     onSnappedDate: (snappedDate: SnappedDate) -> Int? = { _ -> null }
 ) {
     var snappedDate by remember { mutableStateOf(startDate) }
-
     var dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
+    val monthNames =
+        arrayOf("فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند")
 
     val months = (1..12).map {
         Month(
-            text = if (size.width / 3 < 55.dp) {
-                DateFormatSymbols().shortMonths[it - 1]
-            } else DateFormatSymbols().months[it - 1],
-            value = it,
-            index = it - 1
+            text = monthNames[it - 1], value = it, index = it - 1
         )
     }
 
     val years = yearsRange?.map {
         Year(
-            text = it.toString(),
-            value = it,
-            index = yearsRange.indexOf(it)
+            text = it.toString(), value = it, index = yearsRange.indexOf(it)
         )
     }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         if (selectorProperties.enabled().value) {
             Surface(
-                modifier = Modifier
-                    .size(size.width, size.height / 3),
+                modifier = Modifier.size(size.width, size.height / 3),
                 shape = selectorProperties.shape().value,
                 color = selectorProperties.color().value,
                 border = selectorProperties.border().value
@@ -62,11 +60,9 @@ internal fun DefaultWheelDatePicker(
         }
         Row {
             //Day of Month
-            WheelTextPicker(
-                size = DpSize(
-                    width = if (yearsRange == null) size.width / 2 else size.width / 3,
-                    height = size.height
-                ),
+            WheelTextPicker(size = DpSize(
+                width = if (yearsRange == null) size.width / 2 else size.width / 3, height = size.height
+            ),
                 texts = dayOfMonths.map { it.text },
                 style = textStyle,
                 color = textColor,
@@ -96,22 +92,18 @@ internal fun DefaultWheelDatePicker(
                         newIndex?.let {
                             onSnappedDate(
                                 SnappedDate.DayOfMonth(
-                                    localDate = snappedDate,
-                                    index = newIndex
+                                    localDate = snappedDate, index = newIndex
                                 )
                             )?.let { return@WheelTextPicker it }
                         }
                     }
 
                     return@WheelTextPicker dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
-                }
-            )
+                })
             //Month
-            WheelTextPicker(
-                size = DpSize(
-                    width = if (yearsRange == null) size.width / 2 else size.width / 3,
-                    height = size.height
-                ),
+            WheelTextPicker(size = DpSize(
+                width = if (yearsRange == null) size.width / 2 else size.width / 3, height = size.height
+            ),
                 texts = months.map { it.text },
                 style = textStyle,
                 color = textColor,
@@ -144,8 +136,7 @@ internal fun DefaultWheelDatePicker(
                         newIndex?.let {
                             onSnappedDate(
                                 SnappedDate.Month(
-                                    localDate = snappedDate,
-                                    index = newIndex
+                                    localDate = snappedDate, index = newIndex
                                 )
                             )?.let { return@WheelTextPicker it }
                         }
@@ -153,15 +144,12 @@ internal fun DefaultWheelDatePicker(
 
 
                     return@WheelTextPicker months.find { it.value == snappedDate.monthValue }?.index
-                }
-            )
+                })
             //Year
             years?.let { years ->
-                WheelTextPicker(
-                    size = DpSize(
-                        width = size.width / 3,
-                        height = size.height
-                    ),
+                WheelTextPicker(size = DpSize(
+                    width = size.width / 3, height = size.height
+                ),
                     texts = years.map { it.text },
                     style = textStyle,
                     color = textColor,
@@ -194,8 +182,7 @@ internal fun DefaultWheelDatePicker(
                             newIndex?.let {
                                 onSnappedDate(
                                     SnappedDate.Year(
-                                        localDate = snappedDate,
-                                        index = newIndex
+                                        localDate = snappedDate, index = newIndex
                                     )
                                 )?.let { return@WheelTextPicker it }
 
@@ -203,102 +190,48 @@ internal fun DefaultWheelDatePicker(
                         }
 
                         return@WheelTextPicker years.find { it.value == snappedDate.year }?.index
-                    }
-                )
+                    })
             }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 private fun isDateBefore(date: LocalDate, currentDate: LocalDate): Boolean {
     return date.isBefore(currentDate)
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 private fun calculateDayOfMonths(month: Int, year: Int): List<DayOfMonth> {
-
-    val isLeapYear = LocalDate.of(year, month, 1).isLeapYear
-
     val month31day = (1..31).map {
         DayOfMonth(
-            text = it.toString(),
-            value = it,
-            index = it - 1
+            text = it.toString(), value = it, index = it - 1
         )
     }
     val month30day = (1..30).map {
         DayOfMonth(
-            text = it.toString(),
-            value = it,
-            index = it - 1
+            text = it.toString(), value = it, index = it - 1
         )
     }
     val month29day = (1..29).map {
         DayOfMonth(
-            text = it.toString(),
-            value = it,
-            index = it - 1
+            text = it.toString(), value = it, index = it - 1
         )
     }
-    val month28day = (1..28).map {
-        DayOfMonth(
-            text = it.toString(),
-            value = it,
-            index = it - 1
-        )
-    }
-
     return when (month) {
-        1 -> {
-            month31day
-        }
-
-        2 -> {
-            if (isLeapYear) month29day else month28day
-        }
-
-        3 -> {
-            month31day
-        }
-
-        4 -> {
-            month30day
-        }
-
-        5 -> {
-            month31day
-        }
-
-        6 -> {
-            month30day
-        }
-
-        7 -> {
-            month31day
-        }
-
-        8 -> {
-            month31day
-        }
-
-        9 -> {
-            month30day
-        }
-
-        10 -> {
-            month31day
-        }
-
-        11 -> {
-            month30day
-        }
-
-        12 -> {
-            month31day
-        }
-
-        else -> {
-            emptyList()
-        }
+        1, 2, 3, 4, 5, 6 -> month31day
+        7, 8, 9, 10, 11 -> month30day
+        12 -> if (isLeapYear(year)) month30day else month29day
+        else -> month30day
     }
+}
+
+private fun isLeapYear(year: Int): Boolean {
+    val matches = intArrayOf(1, 5, 9, 13, 17, 22, 26, 30)
+    val reminder = year % 33
+    for (match in matches) {
+        if (reminder == match) return true
+    }
+    return false
 }
