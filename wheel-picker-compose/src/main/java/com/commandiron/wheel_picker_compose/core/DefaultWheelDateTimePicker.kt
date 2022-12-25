@@ -1,8 +1,5 @@
 package com.commandiron.wheel_picker_compose.core
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -19,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun DefaultWheelDateTimePicker(
     modifier: Modifier = Modifier,
@@ -155,7 +151,6 @@ internal fun DefaultWheelDateTimePicker(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 private fun isDateTimeBefore(date: LocalDateTime, currentDateTime: LocalDateTime): Boolean{
     return date.isBefore(currentDateTime)
 }

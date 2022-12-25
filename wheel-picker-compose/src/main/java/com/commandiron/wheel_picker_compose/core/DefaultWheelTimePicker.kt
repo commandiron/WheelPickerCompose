@@ -1,7 +1,5 @@
 package com.commandiron.wheel_picker_compose.core
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -19,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun DefaultWheelTimePicker(
     modifier: Modifier = Modifier,
@@ -301,7 +298,6 @@ internal fun DefaultWheelTimePicker(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 private fun isTimeBefore(time: LocalTime, currentTime: LocalTime): Boolean{
     return time.isBefore(currentTime)
 }
@@ -321,7 +317,6 @@ private data class AmPmHour(
     val index: Int
 )
 
-@RequiresApi(Build.VERSION_CODES.O)
 internal fun localTimeToAmPmHour(localTime: LocalTime): Int {
 
     if(
@@ -367,7 +362,6 @@ internal fun localTimeToAmPmHour(localTime: LocalTime): Int {
     return localTime.hour
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 private fun isBetween(localTime: LocalTime, startTime: LocalTime, endTime: LocalTime): Boolean {
     return localTime in startTime..endTime
 }
@@ -408,7 +402,6 @@ internal enum class AmPmValue {
     AM, PM
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 private fun amPmValueFromTime(time: LocalTime): AmPmValue {
     return if(time.hour > 11) AmPmValue.PM else AmPmValue.AM
 }

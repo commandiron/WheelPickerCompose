@@ -1,8 +1,5 @@
 package com.commandiron.wheel_picker_compose.core
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -19,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import java.text.DateFormatSymbols
 import java.time.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun DefaultWheelDatePicker(
     modifier: Modifier = Modifier,
@@ -214,7 +210,6 @@ internal fun DefaultWheelDatePicker(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 private fun isDateBefore(date: LocalDate, currentDate: LocalDate): Boolean{
     return date.isBefore(currentDate)
 }
@@ -237,7 +232,6 @@ private data class Year(
     val index: Int
 )
 
-@RequiresApi(Build.VERSION_CODES.O)
 internal fun calculateDayOfMonths(month: Int, year: Int): List<DayOfMonth> {
 
     val isLeapYear = LocalDate.of(year, month, 1).isLeapYear

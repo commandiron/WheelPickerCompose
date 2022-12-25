@@ -8,7 +8,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        minSdk 23
+        minSdk 21
         targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -22,6 +22,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -45,6 +46,8 @@ dependencies {
     implementation "androidx.compose.material3:material3:1.0.0-alpha15"
 
     implementation "dev.chrisbanes.snapper:snapper:0.3.0"
+
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.6"
 }
 
 afterEvaluate {
@@ -55,7 +58,7 @@ afterEvaluate {
 
                 groupId = 'com.github.commandiron'
                 artifactId = 'wheel-picker-compose'
-                version = '1.1.7'
+                version = '1.1.8-alpha'
             }
         }
     }

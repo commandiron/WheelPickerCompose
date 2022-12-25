@@ -1,7 +1,5 @@
 package com.commandiron.wheel_picker_compose
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -16,7 +14,6 @@ import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalDateTime
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WheelDateTimePicker(
     modifier: Modifier = Modifier,
