@@ -1,6 +1,7 @@
 package com.commandiron.wheel_picker_compose.core
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -16,26 +17,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import saman.zamani.persiandate.PersianDate
 import java.text.DateFormatSymbols
 import java.time.LocalDate
+import kotlin.math.log
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 internal fun JalaliWheelDatePicker(
     modifier: Modifier = Modifier,
-    startDate: LocalDate = LocalDate.now(),
+    startDate: PersianDate = PersianDate(),
     yearsRange: IntRange? = IntRange(1300, 1500),
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
-    onSnappedDate: (snappedDate: SnappedDate) -> Int? = { _ -> null }
+    onSnappedDate: (snappedDate: JalaliSnappedDate) -> Int? = { _ -> null }
 ) {
     var snappedDate by remember { mutableStateOf(startDate) }
-    var dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
-    val monthNames =
-        arrayOf("فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند")
+    var dayOfMonths = calculateDayOfMonths(snappedDate.shMonth, snappedDate.shYear)
+    val monthNames = snappedDate.monthList()
 
     val months = (1..12).map {
         Month(
@@ -69,15 +71,15 @@ internal fun JalaliWheelDatePicker(
                 selectorProperties = WheelPickerDefaults.selectorProperties(
                     enabled = false
                 ),
-                startIndex = dayOfMonths.find { it.value == startDate.dayOfMonth }?.index ?: 0,
+                startIndex = dayOfMonths.find { it.value == startDate.shDay }?.index ?: 0,
                 onScrollFinished = { snappedIndex ->
 
                     val newDayOfMonth = dayOfMonths.find { it.index == snappedIndex }?.value
 
                     newDayOfMonth?.let {
-                        val newDate = snappedDate.withDayOfMonth(newDayOfMonth)
-
-                        val isDateBefore = isDateBefore(newDate, startDate)
+                        val newDate = PersianDate(snappedDate.time)
+                        newDate.shDay = it
+                        val isDateBefore = newDate.before(startDate)
 
                         if (backwardsDisabled) {
                             if (!isDateBefore) {
@@ -87,18 +89,18 @@ internal fun JalaliWheelDatePicker(
                             snappedDate = newDate
                         }
 
-                        val newIndex = dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
+                        val newIndex = dayOfMonths.find { it.value == snappedDate.shDay }?.index
 
                         newIndex?.let {
                             onSnappedDate(
-                                SnappedDate.DayOfMonth(
+                                JalaliSnappedDate.DayOfMonth(
                                     localDate = snappedDate, index = newIndex
                                 )
                             )?.let { return@WheelTextPicker it }
                         }
                     }
 
-                    return@WheelTextPicker dayOfMonths.find { it.value == snappedDate.dayOfMonth }?.index
+                    return@WheelTextPicker dayOfMonths.find { it.value == snappedDate.shDay }?.index
                 })
             //Month
             WheelTextPicker(size = DpSize(
@@ -110,16 +112,17 @@ internal fun JalaliWheelDatePicker(
                 selectorProperties = WheelPickerDefaults.selectorProperties(
                     enabled = false
                 ),
-                startIndex = months.find { it.value == startDate.monthValue }?.index ?: 0,
+                startIndex = months.find { it.value == startDate.shMonth }?.index ?: 0,
                 onScrollFinished = { snappedIndex ->
 
                     val newMonth = months.find { it.index == snappedIndex }?.value
 
                     newMonth?.let {
-
-                        val newDate = snappedDate.withMonth(newMonth)
-
-                        val isDateBefore = isDateBefore(newDate, startDate)
+                        val newDate = PersianDate(snappedDate.time)
+                        newDate.shMonth = it
+                        if (snappedDate.shDay > newDate.monthDays)
+                            newDate.shDay = newDate.monthDays
+                        val isDateBefore = newDate.before(startDate)
 
                         if (backwardsDisabled) {
                             if (!isDateBefore) {
@@ -129,13 +132,13 @@ internal fun JalaliWheelDatePicker(
                             snappedDate = newDate
                         }
 
-                        dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
+                        dayOfMonths = calculateDayOfMonths(snappedDate.shMonth, snappedDate.shYear)
 
-                        val newIndex = months.find { it.value == snappedDate.monthValue }?.index
+                        val newIndex = months.find { it.value == snappedDate.shMonth }?.index
 
                         newIndex?.let {
                             onSnappedDate(
-                                SnappedDate.Month(
+                                JalaliSnappedDate.Month(
                                     localDate = snappedDate, index = newIndex
                                 )
                             )?.let { return@WheelTextPicker it }
@@ -143,7 +146,7 @@ internal fun JalaliWheelDatePicker(
                     }
 
 
-                    return@WheelTextPicker months.find { it.value == snappedDate.monthValue }?.index
+                    return@WheelTextPicker months.find { it.value == snappedDate.shMonth }?.index
                 })
             //Year
             years?.let { years ->
@@ -156,16 +159,17 @@ internal fun JalaliWheelDatePicker(
                     selectorProperties = WheelPickerDefaults.selectorProperties(
                         enabled = false
                     ),
-                    startIndex = years.find { it.value == startDate.year }?.index ?: 0,
+                    startIndex = years.find { it.value == startDate.shYear }?.index ?: 0,
                     onScrollFinished = { snappedIndex ->
 
                         val newYear = years.find { it.index == snappedIndex }?.value
 
                         newYear?.let {
-
-                            val newDate = snappedDate.withYear(newYear)
-
-                            val isDateBefore = isDateBefore(newDate, startDate)
+                            val newDate = PersianDate(snappedDate.time)
+                            newDate.shYear = it
+                            if (snappedDate.shDay > newDate.monthDays)
+                                newDate.shDay = newDate.monthDays
+                            val isDateBefore = newDate.before(startDate)
 
                             if (backwardsDisabled) {
                                 if (!isDateBefore) {
@@ -175,13 +179,13 @@ internal fun JalaliWheelDatePicker(
                                 snappedDate = newDate
                             }
 
-                            dayOfMonths = calculateDayOfMonths(snappedDate.month.value, snappedDate.year)
+                            dayOfMonths = calculateDayOfMonths(snappedDate.shMonth, snappedDate.shYear)
 
-                            val newIndex = years.find { it.value == snappedDate.year }?.index
+                            val newIndex = years.find { it.value == snappedDate.shYear }?.index
 
                             newIndex?.let {
                                 onSnappedDate(
-                                    SnappedDate.Year(
+                                    JalaliSnappedDate.Year(
                                         localDate = snappedDate, index = newIndex
                                     )
                                 )?.let { return@WheelTextPicker it }
@@ -189,7 +193,7 @@ internal fun JalaliWheelDatePicker(
                             }
                         }
 
-                        return@WheelTextPicker years.find { it.value == snappedDate.year }?.index
+                        return@WheelTextPicker years.find { it.value == snappedDate.shYear }?.index
                     })
             }
         }
@@ -197,41 +201,13 @@ internal fun JalaliWheelDatePicker(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun isDateBefore(date: LocalDate, currentDate: LocalDate): Boolean {
-    return date.isBefore(currentDate)
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
 private fun calculateDayOfMonths(month: Int, year: Int): List<DayOfMonth> {
-    val month31day = (1..31).map {
-        DayOfMonth(
-            text = it.toString(), value = it, index = it - 1
-        )
-    }
-    val month30day = (1..30).map {
-        DayOfMonth(
-            text = it.toString(), value = it, index = it - 1
-        )
-    }
-    val month29day = (1..29).map {
-        DayOfMonth(
-            text = it.toString(), value = it, index = it - 1
-        )
-    }
-    return when (month) {
-        1, 2, 3, 4, 5, 6 -> month31day
-        7, 8, 9, 10, 11 -> month30day
-        12 -> if (isLeapYear(year)) month30day else month29day
-        else -> month30day
-    }
-}
+    val monthLen = PersianDate().getMonthDays(year, month)
+    Log.d("ahmad", PersianDate().monthList()[month - 1] + ":" + monthLen.toString())
 
-private fun isLeapYear(year: Int): Boolean {
-    val matches = intArrayOf(1, 5, 9, 13, 17, 22, 26, 30)
-    val reminder = year % 33
-    for (match in matches) {
-        if (reminder == match) return true
+    return (1..monthLen).map {
+        DayOfMonth(
+            text = it.toString(), value = it, index = it - 1
+        )
     }
-    return false
 }

@@ -11,3 +11,7 @@ internal data class Month(
 internal data class Year(
     val text: String, val value: Int, val index: Int
 )
+
+enum class CalendarSystem {
+    GREGORIAN, JALALI
+}
