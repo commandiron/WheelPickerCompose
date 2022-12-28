@@ -79,7 +79,7 @@ internal fun JalaliWheelDatePicker(
                     newDayOfMonth?.let {
                         val newDate = PersianDate(snappedDate.time)
                         newDate.shDay = it
-                        val isDateBefore = newDate.before(startDate)
+                        val isDateBefore = startDate.before(newDate)
 
                         if (backwardsDisabled) {
                             if (!isDateBefore) {
@@ -122,7 +122,8 @@ internal fun JalaliWheelDatePicker(
                         newDate.shMonth = it
                         if (snappedDate.shDay > newDate.monthDays)
                             newDate.shDay = newDate.monthDays
-                        val isDateBefore = newDate.before(startDate)
+                        val isDateBefore = startDate.before(newDate)
+
 
                         if (backwardsDisabled) {
                             if (!isDateBefore) {
@@ -169,7 +170,7 @@ internal fun JalaliWheelDatePicker(
                             newDate.shYear = it
                             if (snappedDate.shDay > newDate.monthDays)
                                 newDate.shDay = newDate.monthDays
-                            val isDateBefore = newDate.before(startDate)
+                            val isDateBefore = startDate.before(newDate)
 
                             if (backwardsDisabled) {
                                 if (!isDateBefore) {
@@ -198,6 +199,15 @@ internal fun JalaliWheelDatePicker(
             }
         }
     }
+}
+
+private fun isDateBefore(startDate: PersianDate, newDate: PersianDate): Boolean {
+    Log.d("ahmad", "newDate: ${newDate.shDay}/${newDate.shMonth}/${newDate.shYear}")
+    Log.d("ahmad", "startDate: ${startDate.shDay}/${startDate.shMonth}/${startDate.shYear}")
+    if (newDate.shYear < startDate.shYear) return true
+    if (newDate.shMonth < startDate.shMonth) return true
+    if (newDate.shDay < startDate.shDay) return true
+    return false
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
