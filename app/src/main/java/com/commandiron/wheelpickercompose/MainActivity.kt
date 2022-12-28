@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         WheelTimePicker { snappedTime ->
                             println(snappedTime)
                         }
-                        WheelDatePicker(calendarSystem = CalendarSystem.JALALI) { snappedDate: LocalDate ->
+                        WheelDatePicker() { snappedDate: LocalDate ->
                             println(snappedDate)
                         }
                         WheelDateTimePicker(
