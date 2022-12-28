@@ -28,10 +28,8 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs += [
-                "-Xopt-in=dev.chrisbanes.snapper.ExperimentalSnapperApi",
-                "-Xjvm-default=compatibility"
-        ]
+        freeCompilerArgs += ["-Xopt-in=dev.chrisbanes.snapper.ExperimentalSnapperApi",
+                             "-Xjvm-default=compatibility"]
     }
     buildFeatures {
         compose true
@@ -48,12 +46,14 @@ dependencies {
     implementation "dev.chrisbanes.snapper:snapper:0.3.0"
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.6"
+
+    implementation 'com.github.samanzamani:PersianDate:1.5.4'
 }
 
 afterEvaluate {
-    publishing{
+    publishing {
         publications {
-            release(MavenPublication){
+            release(MavenPublication) {
                 from components.release
 
                 groupId = 'com.github.commandiron'
