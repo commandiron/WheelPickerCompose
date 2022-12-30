@@ -17,10 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import saman.zamani.persiandate.PersianDate
-import java.text.DateFormatSymbols
-import java.time.LocalDate
-import kotlin.math.log
+import com.commandiron.wheel_picker_compose.core.persianDate.PersianDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
