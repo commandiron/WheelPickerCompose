@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                         WheelTimePicker { snappedTime ->
                             println(snappedTime)
                         }
-                        WheelDatePicker { snappedDate ->
+                        WheelDatePicker(rowCount = 5) { snappedDate ->
                             println(snappedDate)
                         }
                         WheelDateTimePicker(

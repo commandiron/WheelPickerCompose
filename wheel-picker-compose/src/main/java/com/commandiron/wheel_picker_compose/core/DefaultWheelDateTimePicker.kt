@@ -24,6 +24,7 @@ internal fun DefaultWheelDateTimePicker(
     timeFormat: TimeFormat = TimeFormat.HOUR_24,
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
+    rowCount: Int = 3,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
@@ -38,7 +39,7 @@ internal fun DefaultWheelDateTimePicker(
         if(selectorProperties.enabled().value){
             Surface(
                 modifier = Modifier
-                    .size(size.width, size.height / 3),
+                    .size(size.width, size.height / rowCount),
                 shape = selectorProperties.shape().value,
                 color = selectorProperties.color().value,
                 border = selectorProperties.border().value
@@ -54,6 +55,7 @@ internal fun DefaultWheelDateTimePicker(
                     width = if(yearsRange == null ) size.width * 3 / 6 else size.width * 3 / 5 ,
                     height = size.height
                 ),
+                rowCount = rowCount,
                 textStyle = textStyle,
                 textColor = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(
@@ -108,6 +110,7 @@ internal fun DefaultWheelDateTimePicker(
                     width = if(yearsRange == null ) size.width * 3 / 6  else size.width * 2 / 5 ,
                     height = size.height
                 ),
+                rowCount = rowCount,
                 textStyle = textStyle,
                 textColor = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(

@@ -23,6 +23,7 @@ internal fun DefaultWheelDatePicker(
     yearsRange: IntRange? = IntRange(1922, 2122),
     backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
+    rowCount: Int = 3,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
@@ -54,7 +55,7 @@ internal fun DefaultWheelDatePicker(
         if(selectorProperties.enabled().value){
             Surface(
                 modifier = Modifier
-                    .size(size.width, size.height / 3),
+                    .size(size.width, size.height / rowCount),
                 shape = selectorProperties.shape().value,
                 color = selectorProperties.color().value,
                 border = selectorProperties.border().value
@@ -68,6 +69,7 @@ internal fun DefaultWheelDatePicker(
                     height = size.height
                 ),
                 texts = dayOfMonths.map { it.text },
+                rowCount = rowCount,
                 style = textStyle,
                 color = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(
@@ -113,6 +115,7 @@ internal fun DefaultWheelDatePicker(
                     height = size.height
                 ),
                 texts = months.map { it.text },
+                rowCount = rowCount,
                 style = textStyle,
                 color = textColor,
                 selectorProperties = WheelPickerDefaults.selectorProperties(
@@ -163,6 +166,7 @@ internal fun DefaultWheelDatePicker(
                         height = size.height
                     ),
                     texts = years.map { it.text },
+                    rowCount = rowCount,
                     style = textStyle,
                     color = textColor,
                     selectorProperties = WheelPickerDefaults.selectorProperties(
