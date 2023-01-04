@@ -39,11 +39,11 @@ class MainActivity : ComponentActivity() {
                         WheelTimePicker { snappedTime ->
                             println(snappedTime)
                         }
-                        WheelDatePicker(rowCount = 5) { snappedDate ->
+                        WheelDatePicker() { snappedDate ->
                             println(snappedDate)
                         }
                         WheelDateTimePicker(
-                            timeFormat = TimeFormat.AM_PM
+                            timeFormat = TimeFormat.AM_PM,
                         ) { snappedDateTime ->
                             println(snappedDateTime)
                         }
@@ -55,6 +55,7 @@ class MainActivity : ComponentActivity() {
                             backwardsDisabled = true,
                             timeFormat = TimeFormat.AM_PM,
                             size = DpSize(200.dp, 100.dp),
+                            rowCount = 5,
                             textStyle = MaterialTheme.typography.titleSmall,
                             textColor = Color(0xFFffc300),
                             selectorProperties = WheelPickerDefaults.selectorProperties(
