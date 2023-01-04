@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                         }
                         WheelDateTimePicker(
                             startDateTime = LocalDateTime.of(
-                                2025, 10, 30, 5, 0
+                                2025, 10, 20, 5, 30
                             ),
                             yearsRange = null,
                             backwardsDisabled = true,
