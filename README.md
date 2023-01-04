@@ -59,6 +59,7 @@ WheelDateTimePicker(
     ),
     yearsRange = IntRange(1950, 2050),
     size = DpSize(200.dp, 100.dp),
+    rowCount = 5,
     backwardsDisabled = true,
     textStyle = MaterialTheme.typography.titleSmall,
     textColor = Color(0xFFffc300),
