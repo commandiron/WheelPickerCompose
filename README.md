@@ -30,7 +30,7 @@ dependencyResolutionManagement {
 3. Add dependency
 ```groovy
 dependencies {
-    implementation 'com.github.commandiron:WheelPickerCompose:1.1.8-alpha'
+    implementation 'com.github.commandiron:WheelPickerCompose:1.1.8'
 }
 ```
 4. < API 26 (optional)
