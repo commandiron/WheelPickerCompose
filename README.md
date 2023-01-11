@@ -2,7 +2,7 @@
 
 Add Wheel Date - Time Picker in Android Jetpack Compose.
 
-<img src="art/wheel_picer_compose_cover2"> 
+<img src="art/wheel_picer_compose_cover2.png"> 
 
 ## Usage
 |Picker|Usage|
