@@ -20,8 +20,9 @@ import java.time.LocalDate
 internal fun DefaultWheelDatePicker(
     modifier: Modifier = Modifier,
     startDate: LocalDate = LocalDate.now(),
+    minDate: LocalDate = LocalDate.MIN,
+    maxDate: LocalDate = LocalDate.MAX,
     yearsRange: IntRange? = IntRange(1922, 2122),
-    backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     rowCount: Int = 3,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -83,13 +84,7 @@ internal fun DefaultWheelDatePicker(
                     newDayOfMonth?.let {
                         val newDate = snappedDate.withDayOfMonth(newDayOfMonth)
 
-                        val isDateBefore = isDateBefore(newDate, startDate)
-
-                        if(backwardsDisabled) {
-                            if(!isDateBefore) {
-                                snappedDate = newDate
-                            }
-                        } else {
+                        if(!newDate.isBefore(minDate) && !newDate.isAfter(maxDate)) {
                             snappedDate = newDate
                         }
 
@@ -130,13 +125,7 @@ internal fun DefaultWheelDatePicker(
 
                         val newDate = snappedDate.withMonth(newMonth)
 
-                        val isDateBefore = isDateBefore(newDate, startDate)
-
-                        if(backwardsDisabled) {
-                            if(!isDateBefore) {
-                                snappedDate = newDate
-                            }
-                        } else {
+                        if(!newDate.isBefore(minDate) && !newDate.isAfter(maxDate)) {
                             snappedDate = newDate
                         }
 
@@ -181,13 +170,7 @@ internal fun DefaultWheelDatePicker(
 
                             val newDate = snappedDate.withYear(newYear)
 
-                            val isDateBefore = isDateBefore(newDate, startDate)
-
-                            if(backwardsDisabled) {
-                                if(!isDateBefore) {
-                                    snappedDate = newDate
-                                }
-                            } else {
+                            if(!newDate.isBefore(minDate) && !newDate.isAfter(maxDate)) {
                                 snappedDate = newDate
                             }
 
@@ -212,10 +195,6 @@ internal fun DefaultWheelDatePicker(
             }
         }
     }
-}
-
-private fun isDateBefore(date: LocalDate, currentDate: LocalDate): Boolean{
-    return date.isBefore(currentDate)
 }
 
 internal data class DayOfMonth(

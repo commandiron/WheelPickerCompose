@@ -39,20 +39,20 @@ class MainActivity : ComponentActivity() {
                         WheelTimePicker { snappedTime ->
                             println(snappedTime)
                         }
-                        WheelDatePicker() { snappedDate ->
+                        WheelDatePicker { snappedDate ->
                             println(snappedDate)
                         }
-                        WheelDateTimePicker(
-                            timeFormat = TimeFormat.AM_PM,
-                        ) { snappedDateTime ->
+                        WheelDateTimePicker { snappedDateTime ->
                             println(snappedDateTime)
                         }
                         WheelDateTimePicker(
                             startDateTime = LocalDateTime.of(
                                 2025, 10, 20, 5, 30
                             ),
-                            yearsRange = null,
-                            backwardsDisabled = true,
+                            minDateTime = LocalDateTime.now(),
+                            maxDateTime = LocalDateTime.of(
+                                2025, 10, 20, 5, 30
+                            ),
                             timeFormat = TimeFormat.AM_PM,
                             size = DpSize(200.dp, 100.dp),
                             rowCount = 5,

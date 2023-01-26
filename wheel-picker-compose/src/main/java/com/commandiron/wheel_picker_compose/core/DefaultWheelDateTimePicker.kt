@@ -20,9 +20,10 @@ import java.time.temporal.ChronoUnit
 internal fun DefaultWheelDateTimePicker(
     modifier: Modifier = Modifier,
     startDateTime: LocalDateTime = LocalDateTime.now(),
+    minDateTime: LocalDateTime = LocalDateTime.MIN,
+    maxDateTime: LocalDateTime = LocalDateTime.MAX,
     yearsRange: IntRange? = IntRange(1922, 2122),
     timeFormat: TimeFormat = TimeFormat.HOUR_24,
-    backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     rowCount: Int = 3,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -50,7 +51,6 @@ internal fun DefaultWheelDateTimePicker(
             DefaultWheelDatePicker(
                 startDate = startDateTime.toLocalDate(),
                 yearsRange = yearsRange,
-                backwardsDisabled = false,
                 size = DpSize(
                     width = if(yearsRange == null ) size.width * 3 / 6 else size.width * 3 / 5 ,
                     height = size.height
@@ -75,13 +75,7 @@ internal fun DefaultWheelDateTimePicker(
                         }
                     }
 
-                    val isDateTimeBefore = isDateTimeBefore(newDateTime, startDateTime)
-
-                    if(backwardsDisabled) {
-                        if(!isDateTimeBefore) {
-                            snappedDateTime = newDateTime
-                        }
-                    } else {
+                    if(!newDateTime.isBefore(minDateTime) && !newDateTime.isAfter(maxDateTime)) {
                         snappedDateTime = newDateTime
                     }
 
@@ -105,7 +99,6 @@ internal fun DefaultWheelDateTimePicker(
             DefaultWheelTimePicker(
                 startTime = startDateTime.toLocalTime(),
                 timeFormat = timeFormat,
-                backwardsDisabled = false,
                 size = DpSize(
                     width = if(yearsRange == null ) size.width * 3 / 6  else size.width * 2 / 5 ,
                     height = size.height
@@ -127,13 +120,7 @@ internal fun DefaultWheelDateTimePicker(
                         }
                     }
 
-                    val isDateTimeBefore = isDateTimeBefore(newDateTime, startDateTime)
-
-                    if(backwardsDisabled) {
-                        if(!isDateTimeBefore) {
-                            snappedDateTime = newDateTime
-                        }
-                    } else {
+                    if(!newDateTime.isBefore(minDateTime) && !newDateTime.isAfter(maxDateTime)) {
                         snappedDateTime = newDateTime
                     }
 
@@ -152,10 +139,6 @@ internal fun DefaultWheelDateTimePicker(
             )
         }
     }
-}
-
-private fun isDateTimeBefore(date: LocalDateTime, currentDateTime: LocalDateTime): Boolean{
-    return date.isBefore(currentDateTime)
 }
 
 

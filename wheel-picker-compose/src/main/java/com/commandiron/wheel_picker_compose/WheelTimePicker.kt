@@ -18,8 +18,9 @@ import java.time.LocalTime
 fun WheelTimePicker(
     modifier: Modifier = Modifier,
     startTime: LocalTime = LocalTime.now(),
+    minTime: LocalTime = LocalTime.MIN,
+    maxTime: LocalTime = LocalTime.MAX,
     timeFormat: TimeFormat = TimeFormat.HOUR_24,
-    backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(128.dp, 128.dp),
     rowCount: Int = 3,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -30,8 +31,9 @@ fun WheelTimePicker(
     DefaultWheelTimePicker(
         modifier,
         startTime,
+        minTime,
+        maxTime,
         timeFormat,
-        backwardsDisabled,
         size,
         rowCount,
         textStyle,

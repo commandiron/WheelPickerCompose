@@ -17,8 +17,9 @@ import java.time.LocalDate
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
     startDate: LocalDate = LocalDate.now(),
+    minDate: LocalDate = LocalDate.MIN,
+    maxDate: LocalDate = LocalDate.MAX,
     yearsRange: IntRange? = IntRange(1922, 2122),
-    backwardsDisabled: Boolean = false,
     size: DpSize = DpSize(256.dp, 128.dp),
     rowCount: Int = 3,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
@@ -29,8 +30,9 @@ fun WheelDatePicker(
     DefaultWheelDatePicker(
         modifier,
         startDate,
+        minDate,
+        maxDate,
         yearsRange,
-        backwardsDisabled,
         size,
         rowCount,
         textStyle,
