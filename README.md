@@ -21,12 +21,15 @@ Add Wheel Date - Time Picker in Android Jetpack Compose.
 ```kotlin  
 WheelDateTimePicker(
     startDateTime = LocalDateTime.of(
-        2025, 10, 30, 5, 0
+        2025, 10, 20, 5, 30
     ),
-    yearsRange = IntRange(1950, 2050),
+    minDateTime = LocalDateTime.now(),
+    maxDateTime = LocalDateTime.of(
+        2025, 10, 20, 5, 30
+    ),
+    timeFormat = TimeFormat.AM_PM,
     size = DpSize(200.dp, 100.dp),
     rowCount = 5,
-    backwardsDisabled = true,
     textStyle = MaterialTheme.typography.titleSmall,
     textColor = Color(0xFFffc300),
     selectorProperties = WheelPickerDefaults.selectorProperties(
@@ -65,7 +68,7 @@ dependencyResolutionManagement {
 3. Add dependency
 ```groovy
 dependencies {
-    implementation 'com.github.commandiron:WheelPickerCompose:1.1.8'
+    implementation 'com.github.commandiron:WheelPickerCompose:1.1.9'
 }
 ```
 4. < API 26 (optional)
@@ -80,7 +83,3 @@ dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.6"
 }
 ```
-
-## Todo ✔️
-   * seamless text alpha animation ✔️
-   * add row count gif ❌
