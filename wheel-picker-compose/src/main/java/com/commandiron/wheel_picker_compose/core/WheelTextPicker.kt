@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun WheelTextPicker(
+fun WheelTextPicker(
     modifier: Modifier = Modifier,
     startIndex: Int = 0,
     size: DpSize = DpSize(128.dp, 128.dp),
