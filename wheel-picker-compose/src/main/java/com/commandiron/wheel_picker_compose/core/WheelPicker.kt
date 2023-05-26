@@ -143,8 +143,13 @@ private fun calculateAnimatedRotationX(
     val layoutInfo = remember { derivedStateOf { lazyListState.layoutInfo } }.value
     val viewPortHeight = layoutInfo.viewportSize.height.toFloat()
     val singleViewPortHeight = viewPortHeight / rowCount
+    val animatedRotationX = -20f * (distanceToIndexSnap / singleViewPortHeight)
 
-    return -20f * (distanceToIndexSnap / singleViewPortHeight)
+    return if (animatedRotationX.isNaN()) {
+        0f
+    } else {
+        animatedRotationX
+    }
 }
 
 object WheelPickerDefaults{
