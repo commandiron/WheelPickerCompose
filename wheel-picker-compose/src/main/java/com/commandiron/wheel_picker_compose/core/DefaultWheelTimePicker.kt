@@ -87,12 +87,14 @@ internal fun DefaultWheelTimePicker(
         }
         Row {
             //Hour
+            val hoursTexts = if(timeFormat == TimeFormat.HOUR_24) hours.map { it.text } else amPmHours.map { it.text }
             WheelTextPicker(
                 size = DpSize(
                     width = size.width / if(timeFormat == TimeFormat.HOUR_24) 2 else 3,
                     height = size.height
                 ),
-                texts = if(timeFormat == TimeFormat.HOUR_24) hours.map { it.text } else amPmHours.map { it.text },
+                texts = hoursTexts,
+                contentDescriptions = hoursTexts.map { "$it:00" },
                 rowCount = rowCount,
                 style = textStyle,
                 color = textColor,
@@ -153,6 +155,7 @@ internal fun DefaultWheelTimePicker(
                     height = size.height
                 ),
                 texts = minutes.map { it.text },
+                contentDescriptions = minutes.map { "${it.text}min" },
                 rowCount = rowCount,
                 style = textStyle,
                 color = textColor,
