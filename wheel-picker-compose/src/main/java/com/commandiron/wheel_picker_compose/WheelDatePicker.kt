@@ -12,11 +12,13 @@ import com.commandiron.wheel_picker_compose.core.DefaultWheelDatePicker
 import com.commandiron.wheel_picker_compose.core.SelectorProperties
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalDate
+import java.util.Locale
 
 @Composable
 fun WheelDatePicker(
     modifier: Modifier = Modifier,
     startDate: LocalDate = LocalDate.now(),
+    dateLocale: Locale = Locale.getDefault(),
     minDate: LocalDate = LocalDate.MIN,
     maxDate: LocalDate = LocalDate.MAX,
     yearsRange: IntRange? = IntRange(1922, 2122),
@@ -30,6 +32,7 @@ fun WheelDatePicker(
     DefaultWheelDatePicker(
         modifier,
         startDate,
+        dateLocale,
         minDate,
         maxDate,
         yearsRange,

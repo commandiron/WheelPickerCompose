@@ -14,13 +14,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 
 @Composable
 internal fun DefaultWheelTimePicker(
     modifier: Modifier = Modifier,
     startTime: LocalTime = LocalTime.now(),
+    dateLocale: Locale = Locale.getDefault(),
     minTime: LocalTime = LocalTime.MIN,
     maxTime: LocalTime = LocalTime.MAX,
     timeFormat: TimeFormat = TimeFormat.HOUR_24,
@@ -59,12 +63,12 @@ internal fun DefaultWheelTimePicker(
 
     val amPms = listOf(
         AmPm(
-            text = "AM",
+            text = amPmStringByLocale(AmPmValue.AM, dateLocale),
             value = AmPmValue.AM,
             index = 0
         ),
         AmPm(
-            text = "PM",
+            text = amPmStringByLocale(AmPmValue.PM, dateLocale),
             value = AmPmValue.PM,
             index = 1
         )
@@ -387,6 +391,19 @@ internal enum class AmPmValue {
 
 private fun amPmValueFromTime(time: LocalTime): AmPmValue {
     return if(time.hour > 11) AmPmValue.PM else AmPmValue.AM
+}
+
+private fun amPmStringByLocale(amPmValue: AmPmValue, locale: Locale): String {
+    val amPmTime = with(LocalDate.now()) {
+        if (amPmValue == AmPmValue.AM) {
+            atTime(0, 0)
+        } else {
+            atTime(12, 0)
+        }
+    }
+    val timeFormat = DateTimeFormatter.ofPattern("a", locale)
+
+    return amPmTime.format(timeFormat)
 }
 
 

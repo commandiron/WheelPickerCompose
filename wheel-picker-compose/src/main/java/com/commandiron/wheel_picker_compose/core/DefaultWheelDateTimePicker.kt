@@ -15,11 +15,13 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import java.util.Locale
 
 @Composable
 internal fun DefaultWheelDateTimePicker(
     modifier: Modifier = Modifier,
     startDateTime: LocalDateTime = LocalDateTime.now(),
+    dateLocale: Locale = Locale.getDefault(),
     minDateTime: LocalDateTime = LocalDateTime.MIN,
     maxDateTime: LocalDateTime = LocalDateTime.MAX,
     yearsRange: IntRange? = IntRange(1922, 2122),
@@ -50,6 +52,7 @@ internal fun DefaultWheelDateTimePicker(
             //Date
             DefaultWheelDatePicker(
                 startDate = startDateTime.toLocalDate(),
+                dateLocale = dateLocale,
                 yearsRange = yearsRange,
                 size = DpSize(
                     width = if(yearsRange == null ) size.width * 3 / 6 else size.width * 3 / 5 ,
@@ -98,6 +101,7 @@ internal fun DefaultWheelDateTimePicker(
             //Time
             DefaultWheelTimePicker(
                 startTime = startDateTime.toLocalTime(),
+                dateLocale = dateLocale,
                 timeFormat = timeFormat,
                 size = DpSize(
                     width = if(yearsRange == null ) size.width * 3 / 6  else size.width * 2 / 5 ,
