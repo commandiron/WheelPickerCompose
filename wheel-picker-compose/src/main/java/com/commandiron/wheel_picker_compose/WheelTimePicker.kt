@@ -13,11 +13,13 @@ import com.commandiron.wheel_picker_compose.core.SelectorProperties
 import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalTime
+import java.util.Locale
 
 @Composable
 fun WheelTimePicker(
     modifier: Modifier = Modifier,
     startTime: LocalTime = LocalTime.now(),
+    dateLocale: Locale = Locale.getDefault(),
     minTime: LocalTime = LocalTime.MIN,
     maxTime: LocalTime = LocalTime.MAX,
     timeFormat: TimeFormat = TimeFormat.HOUR_24,
@@ -31,6 +33,7 @@ fun WheelTimePicker(
     DefaultWheelTimePicker(
         modifier,
         startTime,
+        dateLocale,
         minTime,
         maxTime,
         timeFormat,

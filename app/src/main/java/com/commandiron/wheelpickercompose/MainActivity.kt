@@ -22,6 +22,7 @@ import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import com.commandiron.wheelpickercompose.ui.theme.WheelPickerComposeTheme
 import java.time.LocalDateTime
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +50,7 @@ class MainActivity : ComponentActivity() {
                             startDateTime = LocalDateTime.of(
                                 2025, 10, 20, 5, 30
                             ),
+                            dateLocale = Locale.US,
                             minDateTime = LocalDateTime.now(),
                             maxDateTime = LocalDateTime.of(
                                 2025, 10, 20, 5, 30

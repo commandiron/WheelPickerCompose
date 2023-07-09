@@ -15,11 +15,13 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import java.text.DateFormatSymbols
 import java.time.LocalDate
+import java.util.Locale
 
 @Composable
 internal fun DefaultWheelDatePicker(
     modifier: Modifier = Modifier,
     startDate: LocalDate = LocalDate.now(),
+    dateLocale: Locale = Locale.getDefault(),
     minDate: LocalDate = LocalDate.MIN,
     maxDate: LocalDate = LocalDate.MAX,
     yearsRange: IntRange? = IntRange(1922, 2122),
@@ -37,8 +39,8 @@ internal fun DefaultWheelDatePicker(
     val months = (1..12).map {
         Month(
             text = if(size.width / 3 < 55.dp){
-                DateFormatSymbols().shortMonths[it - 1]
-            } else DateFormatSymbols().months[it - 1],
+                DateFormatSymbols(dateLocale).shortMonths[it - 1]
+            } else DateFormatSymbols(dateLocale).months[it - 1],
             value = it,
             index = it - 1
         )
