@@ -48,6 +48,44 @@ WheelDateTimePicker(
 </td>
 </tr>
 </table>
+<table>
+<tr>
+<td>
+            
+```kotlin  
+GroupedWheelDateTimePicker(
+    startDateTime = LocalDateTime.of(
+        2023, 6, 22, 5, 30
+    ),
+    minDateTime = LocalDateTime.of(
+        2023, 4, 20, 5, 30
+    ),
+    maxDateTime = LocalDateTime.of(
+        2023, 10, 20, 5, 30
+    ),
+    todayLabel = "Today",
+    dateFormat = DateTimeFormatter.ofPattern("EEE d MMM yy"),
+    timeFormat = TimeFormat.HOUR_24,
+    size = DpSize(300.dp, 200.dp),
+    rowCount = 5,
+    textStyle = MaterialTheme.typography.bodyLarge,
+    textColor = Color(0xFFFFFFFF),
+    selectorProperties = WheelPickerDefaults.selectorProperties(
+        enabled = true,
+        shape = RoundedCornerShape(5.dp),
+        color = Color(0xFF036AB3).copy(alpha = 0.2f),
+        border = BorderStroke(1.dp, Color(0xFF036AB3))
+    )
+) { println(it) }
+```
+</td>
+<td>  
+            
+<img src="https://github.com/KDVL/WheelPickerCompose/assets/26932740/67c63d6d-6247-4c64-ba1f-1b2aa17ec6fe" width="256" height="256">
+
+</td>
+</tr>
+</table>
 
 ## Setup
 1. Open the file `settings.gradle` (it looks like that)
