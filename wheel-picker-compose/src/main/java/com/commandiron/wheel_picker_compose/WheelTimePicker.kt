@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.commandiron.wheel_picker_compose.core.DefaultWheelTimePicker
 import com.commandiron.wheel_picker_compose.core.SelectorProperties
 import com.commandiron.wheel_picker_compose.core.TimeFormat
+import com.commandiron.wheel_picker_compose.core.TimeRangeConfig
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalTime
 
@@ -26,6 +27,7 @@ fun WheelTimePicker(
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
+    timeRangeConfig: TimeRangeConfig = TimeRangeConfig(),
     onSnappedTime : (snappedTime: LocalTime) -> Unit = {},
 ) {
     DefaultWheelTimePicker(
@@ -39,6 +41,7 @@ fun WheelTimePicker(
         textStyle,
         textColor,
         selectorProperties,
+        timeRangeConfig,
         onSnappedTime = { snappedTime, _ ->
             onSnappedTime(snappedTime.snappedLocalTime)
             snappedTime.snappedIndex
