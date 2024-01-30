@@ -29,31 +29,32 @@ internal fun DefaultWheelTimePicker(
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     textColor: Color = LocalContentColor.current,
     selectorProperties: SelectorProperties = WheelPickerDefaults.selectorProperties(),
+    timeRangeConfig: TimeRangeConfig = TimeRangeConfig(),
     onSnappedTime : (snappedTime: SnappedTime, timeFormat: TimeFormat) -> Int? = { _,_ -> null },
 ) {
 
     var snappedTime by remember { mutableStateOf(startTime.truncatedTo(ChronoUnit.MINUTES)) }
 
-    val hours = (0..23).map {
+    val hours = (timeRangeConfig.startHour..timeRangeConfig.endHour).mapIndexed { index, i ->
         Hour(
-            text = it.toString().padStart(2, '0'),
-            value = it,
-            index = it
+            text = i.toString().padStart(2, '0'),
+            value = i,
+            index = index
         )
     }
-    val amPmHours = (1..12).map {
+    val amPmHours = (timeRangeConfig.startHourAmPm..timeRangeConfig.endHourAmPm).mapIndexed { index, i ->
         AmPmHour(
-            text = it.toString(),
-            value = it,
-            index = it - 1
+            text = i.toString(),
+            value = i,
+            index = index
         )
     }
 
-    val minutes = (0..59).map {
+    val minutes = (timeRangeConfig.startMinute..timeRangeConfig.endMinute).mapIndexed { index, i ->
         Minute(
-            text = it.toString().padStart(2, '0'),
-            value = it,
-            index = it
+            text = i.toString().padStart(2, '0'),
+            value = i,
+            index = index
         )
     }
 
